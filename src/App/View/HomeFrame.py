@@ -1,15 +1,15 @@
 from tkinter import Frame, Button
+from .Window import Window
 from .WidgetUtils import packAllChildWidgets, packForgetAllChildWidgets
 from .DictionaryFrame import DictionaryFrame
 from .SectionFrame import SectionFrame
 from typing import Callable
 
-
 class HomeFrame(Frame):
     
-    def __init__(self, window, changeFrame = None):
+    def __init__(self, window : Window):
         super().__init__(window)
-        self.changeFrame = changeFrame
+        self.window = window
         self.getDictionaryData : Callable = None
         self.getSectionsData : Callable = None
         self.dictionaryButton = Button(self, text="Dictionary", command=self.onDictionaryButtonPressed)
@@ -19,17 +19,13 @@ class HomeFrame(Frame):
         self.getDictionaryData = method
         
     def onDictionaryButtonPressed(self) -> None:
-        if self.changeFrame:
-            parent = self.master
-            self.changeFrame(DictionaryFrame(parent, self.getDictionaryData())) if self.getDictionaryData else self.changeFrame(DictionaryFrame(parent))
+        self.window._newFrameNavigated(DictionaryFrame(self.window, self.getDictionaryData())) if self.getDictionaryData else self.changeFrame(DictionaryFrame(self.window))
     
     def setGetSectionsData(self, method : Callable) -> None:
         self.getSectionsData = method
         
     def onSectionsButtonPressed(self) -> None:
-        if self.changeFrame:
-            parent = self.master
-            self.changeFrame(SectionFrame(parent, self.getSectionsData())) if self.getSectionsData else self.changeFrame(SectionFrame(parent))
+        self.window._newFrameNavigated(SectionFrame(self.window, self.getSectionsData())) if self.getSectionsData else self.changeFrame(SectionFrame(self.window))
             
     def pack(self) -> None:
         packAllChildWidgets(self)

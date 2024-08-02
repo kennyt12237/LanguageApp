@@ -1,18 +1,19 @@
 from .NavigationFrame import NavigationFrame
 from .HomeFrame import HomeFrame
+from .Window import Window
 from .WidgetUtils import packAllChildWidgets
 
-from tkinter import Frame, Tk
 from typing import Callable
-
+        
 class BasicView():
     
-    def __init__(self, tk : Tk = Tk()):
-        self.window = tk
+    def __init__(self, window : Window = Window()):
+        self.window : Window = window
         self.navigationFrame = NavigationFrame(self.window)
-        self.homeFrame = HomeFrame(self.window, self.changeFrame)
-        self.navigationFrame.setDefaultFrame(self.homeFrame)
-        self.navigationFrame.setFrameHeader(self.homeFrame)
+        self.homeFrame = HomeFrame(self.window)
+        self.window.setDefaultFrame(self.homeFrame)
+        # self.navigationFrame.setDefaultFrame(self.homeFrame)
+        # self.navigationFrame.setFrameHeader(self.homeFrame)
         packAllChildWidgets(self.window)
         
     def mainloop(self) -> None:
@@ -23,6 +24,3 @@ class BasicView():
     
     def attachToSectionButton(self, method : Callable) -> None:
         self.homeFrame.setGetSectionsData(method)
-        
-    def changeFrame(self, newFrame : Frame) -> None:
-        self.navigationFrame.newFrameNavigated(newFrame)
