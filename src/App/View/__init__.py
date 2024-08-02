@@ -4,3 +4,4 @@ from .HomeFrame import *
 from .NavigationFrame import *
 from .SectionContentFrame import *
 from .WidgetUtils import *
+from .Window import *
