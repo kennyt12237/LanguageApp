@@ -3,22 +3,42 @@ from .Window import Window
 
 class NavigationFrame(Frame):
         
-    def __init__(self, window, initFrame : Frame = None) -> None:
+    def __init__(self, window) -> None:
         super().__init__(window)
         self.window : Window = window
         self.backButton = Button(self, text="<-", command=self.backButtonPressed)
         self.frameLabel = Label(self)
-        self.frameLabel.pack()
+        self.window.bindForFrameChange(self.onFrameChanged)
         
-    def setFrameHeader(self, frame : Frame) -> None:
+    def pack(self) -> None:
+        self.frameLabel.pack()
+        super().pack()
+        
+    def __packButton(self) -> None:
+        self.backButton.pack()
+        
+    def __unpackButton(self) -> None:
+        self.backButton.pack_forget()
+        
+    def onFrameChanged(self, event) -> None:
+        currentFrame = self.window.getCurrentFrame()
+        self._newFrameNavigated(currentFrame)
+    
+    def __determineBackButtonChange(self) -> None:
+        if self.window.getNumberOfFramesNavigated() == 1:
+            self.__unpackButton()
+            return
+        self.__packButton()
+
+    def __setFrameHeader(self, frame : Frame) -> None:
         self.frameLabel.config(text=type(frame).__name__)
         
-    def newFrameNavigated(self, newFrame : Frame) -> None:
-        if self.backButton.winfo_ismapped() == 0:
-            self.backButton.pack()
-        self.setFrameHeader(newFrame)
+    def setDefaultFrame(self, defaultFrame : Frame) -> None:
+        self.__setFrameHeader(defaultFrame)
         
-    def backButtonPressed(self) -> Frame:        
-        self.frameLabel.config(text=type().__name__)
-        if len(self.frameStack) == 1:
-            self.backButton.pack_forget()
+    def _newFrameNavigated(self, nextFrame : Frame) -> None:
+        self.__determineBackButtonChange()
+        self.__setFrameHeader(nextFrame)
+       
+    def backButtonPressed(self) -> None:
+        self.window.returnToPreviousFrame()

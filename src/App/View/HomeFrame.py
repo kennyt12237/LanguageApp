@@ -19,13 +19,13 @@ class HomeFrame(Frame):
         self.getDictionaryData = method
         
     def onDictionaryButtonPressed(self) -> None:
-        self.window._newFrameNavigated(DictionaryFrame(self.window, self.getDictionaryData())) if self.getDictionaryData else self.changeFrame(DictionaryFrame(self.window))
+        self.window.newFrameNavigated(DictionaryFrame(self.window, self.getDictionaryData()))
     
     def setGetSectionsData(self, method : Callable) -> None:
         self.getSectionsData = method
         
     def onSectionsButtonPressed(self) -> None:
-        self.window._newFrameNavigated(SectionFrame(self.window, self.getSectionsData())) if self.getSectionsData else self.changeFrame(SectionFrame(self.window))
+        self.window.newFrameNavigated(SectionFrame(self.window, self.getSectionsData()))
             
     def pack(self) -> None:
         packAllChildWidgets(self)
