@@ -20,7 +20,6 @@ class Window(Tk):
         self.bind(self.FRAME_CHANGED_EVENT, event)
     
     def __changeFrame(self,  nextFrame : Frame, currentFrame : Frame = None) -> None:
-        print(currentFrame)
         if currentFrame != None:
             currentFrame.pack_forget()
         nextFrame.pack()
