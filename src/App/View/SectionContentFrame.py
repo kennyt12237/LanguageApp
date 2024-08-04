@@ -1,8 +1,11 @@
 from tkinter import Frame, Button
-from .WidgetUtils import packAllChildWidgets
+
+from .Window import Window
 from .DictionaryFrame import DictionaryFrame
 from .GrammarFrame import GrammarFrame
-from .Window import Window
+from .SentenceFrame import SentenceFrame
+
+from .WidgetUtils import packAllChildWidgets
 
 class SectionContentFrame(Frame):
     
@@ -13,13 +16,16 @@ class SectionContentFrame(Frame):
         self.data : dict[str,list[dict[str,str]]] = sectionData
         self.wordButton = Button(self, text="Words", command=lambda:self.onWordButtonPressed(self.data["words"]))
         self.grammarButton = Button(self, text="Grammars", command=lambda:self.onGrammarButtonPressed(self.data["grammars"]))
-        self.sentenceButton = Button(self, text="Sentences")
+        self.sentenceButton = Button(self, text="Sentences", command=lambda:self.onSentenceButtonPressed(self.data["sentences"]))
         
     def onWordButtonPressed(self, words : list[dict[str,str]]) -> None:
         self.window.newFrameNavigated(DictionaryFrame(self.window, words))
 
     def onGrammarButtonPressed(self, grammars : list[dict[str,str]]) -> None:
         self.window.newFrameNavigated(GrammarFrame(self.window, grammars))
+        
+    def onSentenceButtonPressed(self, sentences : list[dict[str,str]]) -> None:
+        self.window.newFrameNavigated(SentenceFrame(self.window, sentences))
         
     def pack(self) -> None:
         packAllChildWidgets(self)
