@@ -10,14 +10,14 @@ class Controller():
         self.dataTransformer = dataTransformer
         
     def start(self) -> None:
-        self._loadModels("src\ChineseWordList.csv","src\ChineseGrammarList.csv", "src\sections")
+        self._loadModels("src\ChineseWordList.tsv","src\ChineseGrammarList.tsv", "src\sections")
         self._attachListeners()
         self.view.mainloop()
         
     def _loadModels(self, wordPath : str, grammarPath : str, sectionPath : str) -> None:
-        self.model.loadDictionaryDataFromCSV(wordPath)
-        self.model.loadGrammarDataFromCSV(grammarPath)
-        self.model.loadSectionsFolderFromCSV(sectionPath)
+        self.model.loadDictionaryDataFromTSV(wordPath)
+        self.model.loadGrammarDataFromTSV(grammarPath)
+        self.model.loadSectionsFolderFromTSV(sectionPath)
         
     def _attachListeners(self) -> None:
         self.view.attachToDictionaryButton(self.requestDictionaryData)

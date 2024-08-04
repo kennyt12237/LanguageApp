@@ -15,7 +15,7 @@ class DictionaryModel():
         self.words = wordList
         
     def _processLineWithData(self, line : str) -> Word:
-        data = line.strip().split(",")
+        data = line.strip().split("\t")
         character = data[0]
         pinyin = data[1]
         characterType = WordTypeMap.get(data[2].lower())

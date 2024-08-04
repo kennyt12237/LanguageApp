@@ -18,15 +18,15 @@ class SectionModel():
     
     def _loadSection(self, sectionPath : str, dm : DictionaryModel, gm : GrammarModel) -> Section:        
         fileToMethod = {
-            'words.csv' : self._loadWords,
-            'grammars.csv' : self._loadGrammars,
-            'sentences.csv' : self._loadSentences,
+            'words.tsv' : self._loadWords,
+            'grammars.tsv' : self._loadGrammars,
+            'sentences.tsv' : self._loadSentences,
         }
                 
         fileToVariable = {
-            'words.csv' : [],
-            'grammars.csv' : [],
-            'sentences.csv' : {}
+            'words.tsv' : [],
+            'grammars.tsv' : [],
+            'sentences.tsv' : {}
         }
         for file in os.listdir(sectionPath):
             filename = str(file).lower()
@@ -44,7 +44,7 @@ class SectionModel():
         file = open(filePath, "r", encoding="utf-8")
         file.readline()
         for line in file:
-            content = line.strip().split(",")
+            content = line.strip().split("\t")
             word = dm.findWordByCharacterAndPinyin(content[0], content[1])
             wordList.append(word)
         return wordList
@@ -54,7 +54,7 @@ class SectionModel():
         file = open(filePath, "r", encoding="utf-8")
         file.readline()
         for line in file:
-            content = line.strip().split(",")
+            content = line.strip().split("\t")
             g = gm.findGrammarByCharacterAndNumber(content[0], int(content[1]))
             if g:
                 grammarList.append(g)
@@ -65,7 +65,7 @@ class SectionModel():
         file = open(filePath, "r", encoding="utf-8")
         file.readline()
         for line in file:
-            content = line.strip().split(",")
+            content = line.strip().split("\t")
             sentences[content[0]] = content[1]
         return sentences
     

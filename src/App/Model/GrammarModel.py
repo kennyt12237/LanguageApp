@@ -11,7 +11,7 @@ class GrammarModel():
         file = open(filePath, "r", encoding="utf-8")
         file.readline()
         for line in file:
-            content = line.strip().split(",")
+            content = line.strip().split("\t")
             word = dm.findWordByCharacterAndPinyin(content[0], content[1])
             newGrammar = Grammar(word,int(content[2]),content[3])
             word.addGrammar(newGrammar)
