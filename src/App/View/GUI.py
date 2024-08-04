@@ -6,11 +6,14 @@ from tkinter import Frame
 from .WidgetUtils import packAllChildWidgets
 
 from typing import Callable
+import ctypes
         
 class BasicView():
     
     def __init__(self, window : Window = Window()):
+        ctypes.windll.shcore.SetProcessDpiAwareness(1)
         self.window : Window = window
+        self.window.call("tk", 'scaling', '2')
         self.navigationFrame = NavigationFrame(self.window)
         self.homeFrame = HomeFrame(self.window)
         self._setDefaultFrame(self.homeFrame)
