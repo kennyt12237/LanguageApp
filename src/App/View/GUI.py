@@ -17,8 +17,6 @@ class BasicView():
         self.navigationFrame = NavigationFrame(self.window)
         self.homeFrame = HomeFrame(self.window)
         self._setDefaultFrame(self.homeFrame)
-        # self.navigationFrame.setDefaultFrame(self.homeFrame)
-        # self.navigationFrame.setFrameHeader(self.homeFrame)
         packAllChildWidgets(self.window)
         
     def mainloop(self) -> None:
