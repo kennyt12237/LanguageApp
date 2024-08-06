@@ -18,16 +18,10 @@ class SectionFrame(Frame):
         self.window.newFrameNavigated(SectionContentFrame(self.window, title=text, sectionData=sectionData))
             
     def _createButtons(self) -> None:
+        buttonCount = 0
         for key in self.sections:
-            Button(self, text=key, command=lambda key=key: self.createSectionContentFrame(text=key,sectionData = self.sections[key]))
+            Button(self, text=key, command=lambda key=key: self.createSectionContentFrame(text=key,sectionData = self.sections[key])).grid(row=buttonCount, column=0)
+            buttonCount = buttonCount + 1
     
     def getName(self) -> None:
         return self.name
-    
-    def pack(self) -> None:
-        packAllChildWidgets(self)
-        super().pack()
-        
-    def pack_forget(self) -> None:
-        packForgetAllChildWidgets(self)
-        super().pack_forget()
