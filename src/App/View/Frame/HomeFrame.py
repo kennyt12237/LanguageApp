@@ -4,7 +4,7 @@ from typing import Callable
 from .DictionaryFrame import DictionaryFrame
 from .SectionFrame import SectionFrame
 from ..Window import Window
-from ..Utils import packAllChildWidgets, packForgetAllChildWidgets, convertPixelsToTextUnit
+from ..Utils import convertPixelsToTextUnit
 
 class HomeFrame(Frame):
     
@@ -41,14 +41,6 @@ class HomeFrame(Frame):
 
     def getName(self) -> None:
         return self.name
-      
-    # def pack(self) -> None:
-    #     packAllChildWidgets(self)
-    #     super().pack()
-        
-    # def pack_forget(self) -> None:
-    #     packForgetAllChildWidgets(self)
-    #     super().pack_forget()
         
     def setDictionaryButtonSize(self, widthPixels : int, heightPixels : int) -> None:
         width, height = convertPixelsToTextUnit(self.dictionaryButton, widthPixels, heightPixels)
