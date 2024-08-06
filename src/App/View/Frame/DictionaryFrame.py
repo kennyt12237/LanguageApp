@@ -1,7 +1,7 @@
-from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
-
 from tkinter import Frame, Label
 import json
+
+from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 class DictionaryFrame(Frame):
     

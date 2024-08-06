@@ -1,4 +1,5 @@
 from tkinter import Frame, Button, Label
+
 from ..Window import Window
 
 class NavigationFrame(Frame):

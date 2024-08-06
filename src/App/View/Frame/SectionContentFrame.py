@@ -1,10 +1,10 @@
 from tkinter import Frame, Button
 
-from ..Window import Window
 from .DictionaryFrame import DictionaryFrame
 from .GrammarFrame import GrammarFrame
 from .SentenceFrame import SentenceFrame
 
+from ..Window import Window
 from ..Utils import packAllChildWidgets
 
 class SectionContentFrame(Frame):

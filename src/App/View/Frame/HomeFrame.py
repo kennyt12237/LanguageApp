@@ -1,9 +1,11 @@
 from tkinter import Frame, Button
-from ..Window import Window
-from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
+from typing import Callable
+
 from .DictionaryFrame import DictionaryFrame
 from .SectionFrame import SectionFrame
-from typing import Callable
+from ..Window import Window
+from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
+
 
 class HomeFrame(Frame):
     

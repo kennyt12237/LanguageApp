@@ -1,8 +1,8 @@
 from tkinter import Frame, Label
-from ..Window import Window
-
-from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 import json
+
+from ..Window import Window
+from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 class GrammarFrame(Frame):
     

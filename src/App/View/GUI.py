@@ -1,12 +1,11 @@
-from .Frame import NavigationFrame, HomeFrame
-from .Window import Window
-
 from tkinter import Frame
-from .Utils import packAllChildWidgets
-
 from typing import Callable
 import ctypes
-        
+
+from .Frame import NavigationFrame, HomeFrame
+from .Window import Window
+from .Utils import packAllChildWidgets
+
 class BasicView():
     
     def __init__(self, window : Window = Window()):

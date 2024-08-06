@@ -1,10 +1,9 @@
-from tkinter import Frame, Label, Button, Event
+from tkinter import Frame, Label, Button
+from typing import Callable
+import json
 
 from ..Window import Window
 from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
-
-from typing import Callable
-import json
 
 class SentenceFrame(Frame):
     
