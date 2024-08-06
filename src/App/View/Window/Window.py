@@ -11,7 +11,6 @@ class Window(Tk):
         
     def setDefaultFrame(self, defaultFrame : Frame) -> None:
         self.frameStack = [defaultFrame]
-        self.__changeFrame(nextFrame=defaultFrame)
         
     def __triggerFrameChangedEvent(self) -> None:
         self.event_generate(self.FRAME_CHANGED_EVENT)

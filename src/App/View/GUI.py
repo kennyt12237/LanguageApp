@@ -16,13 +16,13 @@ class BasicView():
         self.homeFrame = HomeFrame(self.window)
         self._setDefaultFrame(self.homeFrame)
         packAllChildWidgets(self.window)
-        
+
     def mainloop(self) -> None:
         self.window.mainloop()
         
     def _setDefaultFrame(self, defaultFrame : Frame) -> None:
-        self.window.setDefaultFrame(defaultFrame)
         self.navigationFrame.setDefaultFrame(defaultFrame)
+        self.window.setDefaultFrame(defaultFrame)
         
     def attachToDictionaryButton(self, method : Callable) -> None:
         self.homeFrame.setGetDictionaryData(method)
