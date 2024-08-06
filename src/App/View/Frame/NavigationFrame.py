@@ -1,4 +1,4 @@
-from tkinter import Frame, Button, Label
+from tkinter import Frame, Button, Label, LEFT, RIGHT
 
 from ..Window import Window
 
@@ -10,11 +10,8 @@ class NavigationFrame(Frame):
         self.name = name
         self.backButton = Button(self, text="<-", command=self.backButtonPressed)
         self.frameLabel = Label(self)
+        self.frameLabel.grid(row=0, column=1)
         self.window.bindForFrameChange(self.onFrameChanged)
-        
-    def pack(self) -> None:
-        self.frameLabel.pack()
-        super().pack()
         
     def onFrameChanged(self, event) -> None:
         currentFrame = self.window.getCurrentFrame()
@@ -22,9 +19,9 @@ class NavigationFrame(Frame):
     
     def __determineBackButtonChange(self) -> None:
         if self.window.getNumberOfFramesNavigated() == 1:
-            self.backButton.pack_forget()
+            self.backButton.grid_forget()
             return
-        self.backButton.pack()
+        self.backButton.grid(row=0, column=0)
 
     def __setFrameHeader(self, frame : Frame) -> None:
         self.frameLabel.config(text=frame.getName())
