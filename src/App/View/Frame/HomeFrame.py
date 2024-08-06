@@ -17,6 +17,8 @@ class HomeFrame(Frame):
         self.getSectionsData : Callable = None
         self.dictionaryButton = Button(self, text="Dictionary", command=self.onDictionaryButtonPressed)
         self.sectionButton = Button(self, text="Sections", command=self.onSectionsButtonPressed)
+        self.dictionaryButton.grid(row=0, column=0)
+        self.sectionButton.grid(row=1,column=0)
         self.setWidgetSizeRelativeToScreen(defaultWidgetSize)
         
     def setWidgetSizeRelativeToScreen(self, relativeSize : float) -> None:
@@ -40,13 +42,13 @@ class HomeFrame(Frame):
     def getName(self) -> None:
         return self.name
       
-    def pack(self) -> None:
-        packAllChildWidgets(self)
-        super().pack()
+    # def pack(self) -> None:
+    #     packAllChildWidgets(self)
+    #     super().pack()
         
-    def pack_forget(self) -> None:
-        packForgetAllChildWidgets(self)
-        super().pack_forget()
+    # def pack_forget(self) -> None:
+    #     packForgetAllChildWidgets(self)
+    #     super().pack_forget()
         
     def setDictionaryButtonSize(self, widthPixels : int, heightPixels : int) -> None:
         width, height = convertPixelsToTextUnit(self.dictionaryButton, widthPixels, heightPixels)
