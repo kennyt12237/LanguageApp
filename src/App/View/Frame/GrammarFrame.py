@@ -2,7 +2,6 @@ from tkinter import Frame, Label
 import json
 
 from ..Window import Window
-from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 class GrammarFrame(Frame):
     
@@ -14,21 +13,15 @@ class GrammarFrame(Frame):
         self._createLabels(self.grammarData)
         
     def _createLabels(self, grammarData : list[dict[str,str]] = None) -> None:
+        labelCount = 0
         for grammar in grammarData:
             labelText = ""
             for value in grammar.values():
                 if len(labelText) > 0:
                     labelText += " "
                 labelText += str(value).strip()
-            Label(self, text=labelText)
+            Label(self, text=labelText).grid(row=labelCount, column=0)
+            labelCount = labelCount + 1
 
     def getName(self) -> None:
         return self.name
-    
-    def pack(self) -> None:
-        packAllChildWidgets(self)
-        super().pack()
-        
-    def pack_forget(self) -> None:
-        packForgetAllChildWidgets(self)
-        super().pack_forget()
