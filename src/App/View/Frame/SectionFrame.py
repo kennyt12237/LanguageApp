@@ -3,7 +3,6 @@ import json
 
 from ..Window import Window
 from .SectionContentFrame import SectionContentFrame
-from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 class SectionFrame(Frame):
     
