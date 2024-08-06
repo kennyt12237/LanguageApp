@@ -7,11 +7,12 @@ from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 class SentenceFrame(Frame):
     
-    def __init__(self, window : Window, sentenceData : list[dict[str,str]] = None, initIndex : int = 0) -> None:
+    def __init__(self, window : Window, sentenceData : list[dict[str,str]] = None, initIndex : int = 0, name : str = "Sentences") -> None:
         super().__init__(window)
         self.window = window
         self.initIndex = initIndex
         self.sentenceData : list[dict[str,str]] = json.loads(sentenceData)
+        self.name = name
         self.sentenceDataFrame = SentenceDataFrame(self, self._getSentenceDataIndexSentence(self.initIndex), self._getSentenceDataIndexMeaning(self.initIndex))
         self.sentenceNavigationFrame = SentenceNavigationFrame(self, self.initIndex + 1, len(self.sentenceData), self.changeSentenceDataFrame)
         
@@ -28,6 +29,9 @@ class SentenceFrame(Frame):
     
     def _getSentenceDataIndexMeaning(self, index : int) -> str:
         return list(self.sentenceData[index].values())[1]
+
+    def getName(self) -> None:
+        return self.name
     
     def pack(self) -> None:
         packAllChildWidgets(self)

@@ -6,9 +6,10 @@ from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 class GrammarFrame(Frame):
     
-    def __init__(self, window : Window, grammarData : list[dict[str,str]] = None) -> None:
+    def __init__(self, window : Window, grammarData : list[dict[str,str]] = None, name : str = "Grammar") -> None:
         super().__init__(window)
         self.window : Window = window
+        self.name = name
         self.grammarData : list[dict[str,str]] = json.loads(grammarData)
         self._createLabels(self.grammarData)
         
@@ -20,7 +21,10 @@ class GrammarFrame(Frame):
                     labelText += " "
                 labelText += str(value).strip()
             Label(self, text=labelText)
-        
+
+    def getName(self) -> None:
+        return self.name
+    
     def pack(self) -> None:
         packAllChildWidgets(self)
         super().pack()

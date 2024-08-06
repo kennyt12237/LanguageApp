@@ -9,9 +9,10 @@ from ..Utils import packAllChildWidgets
 
 class SectionContentFrame(Frame):
     
-    def __init__(self, window : Window, title : str, sectionData = None) -> None:
+    def __init__(self, window : Window, title : str, sectionData = None, name : str = "Section Content") -> None:
         super().__init__(window)
         self.window : Window = window
+        self.name = name
         self.title : str = title
         self.data : dict[str,list[dict[str,str]]] = sectionData
         self.wordButton = Button(self, text="Words", command=lambda:self.onWordButtonPressed(self.data["words"]))
@@ -27,6 +28,9 @@ class SectionContentFrame(Frame):
     def onSentenceButtonPressed(self, sentences : list[dict[str,str]]) -> None:
         self.window.newFrameNavigated(SentenceFrame(self.window, sentences))
         
+    def getName(self) -> None:
+        return self.name
+    
     def pack(self) -> None:
         packAllChildWidgets(self)
         super().pack()

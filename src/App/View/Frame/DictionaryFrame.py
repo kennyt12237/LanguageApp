@@ -5,8 +5,9 @@ from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 class DictionaryFrame(Frame):
     
-    def __init__(self, window, data : json = None):
+    def __init__(self, window, data : json = None, name : str = "Dictionary"):
         super().__init__(window)
+        self.name = name
         self.dictionary : list[dict[str,str]] = json.loads(data)
         self._createLabels()
         
@@ -19,6 +20,9 @@ class DictionaryFrame(Frame):
                 labelText += values.strip()
             Label(self, text=labelText)
         
+    def getName(self) -> None:
+        return self.name
+    
     def pack(self) -> None:
         packAllChildWidgets(self)
         super().pack()

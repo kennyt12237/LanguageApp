@@ -9,14 +9,15 @@ from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 class HomeFrame(Frame):
     
-    def __init__(self, window : Window):
+    def __init__(self, window : Window, name : str = "Home"):
         super().__init__(window)
         self.window = window
+        self.name = name
         self.getDictionaryData : Callable = None
         self.getSectionsData : Callable = None
         self.dictionaryButton = Button(self, text="Dictionary", command=self.onDictionaryButtonPressed)
         self.sectionsButton = Button(self, text="Sections", command=self.onSectionsButtonPressed)
-        
+
     def setGetDictionaryData(self, method : Callable) -> None:
         self.getDictionaryData = method
         
@@ -28,7 +29,10 @@ class HomeFrame(Frame):
         
     def onSectionsButtonPressed(self) -> None:
         self.window.newFrameNavigated(SectionFrame(self.window, self.getSectionsData()))
-            
+
+    def getName(self) -> None:
+        return self.name
+      
     def pack(self) -> None:
         packAllChildWidgets(self)
         super().pack()

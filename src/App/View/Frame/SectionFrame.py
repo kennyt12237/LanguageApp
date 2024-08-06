@@ -7,10 +7,11 @@ from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 class SectionFrame(Frame):
     
-    def __init__(self, window : Window, data : json = None) -> None:
+    def __init__(self, window : Window, data : json = None, name : str = "Section") -> None:
         super().__init__(window)
         self.window = window
         self.sections = json.loads(data)
+        self.name = name
         self._createButtons()
         
     def createSectionContentFrame(self, text, sectionData) -> None:
@@ -19,6 +20,9 @@ class SectionFrame(Frame):
     def _createButtons(self) -> None:
         for key in self.sections:
             Button(self, text=key, command=lambda key=key: self.createSectionContentFrame(text=key,sectionData = self.sections[key]))
+    
+    def getName(self) -> None:
+        return self.name
     
     def pack(self) -> None:
         packAllChildWidgets(self)
