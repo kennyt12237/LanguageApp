@@ -6,7 +6,6 @@ from .SectionFrame import SectionFrame
 from ..Window import Window
 from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
-
 class HomeFrame(Frame):
     
     def __init__(self, window : Window, name : str = "Home"):
@@ -17,7 +16,7 @@ class HomeFrame(Frame):
         self.getSectionsData : Callable = None
         self.dictionaryButton = Button(self, text="Dictionary", command=self.onDictionaryButtonPressed)
         self.sectionsButton = Button(self, text="Sections", command=self.onSectionsButtonPressed)
-
+        
     def setGetDictionaryData(self, method : Callable) -> None:
         self.getDictionaryData = method
         

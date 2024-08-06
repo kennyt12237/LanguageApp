@@ -2,12 +2,16 @@ from tkinter import Tk, Frame
 
 from typing import Callable
 
+from ..Utils import getScreenWidthCtypes, getScreenHeightCtypes
+
 class Window(Tk):
     
     def __init__(self) -> None:
         super().__init__()
         self.frameStack = []
         self.FRAME_CHANGED_EVENT = "<<FrameChangeEvent>>"
+        self.adjustedWidth = getScreenWidthCtypes()
+        self.adjustedHeight = getScreenHeightCtypes()
         
     def setDefaultFrame(self, defaultFrame : Frame) -> None:
         self.frameStack = [defaultFrame]
@@ -39,3 +43,14 @@ class Window(Tk):
     
     def getCurrentFrame(self) -> Frame:
         return self.frameStack[-1]
+    
+    def setGeometry(self, newWidth : int, newHeight : int) -> None:
+        self.adjustedWidth = newWidth
+        self.adjustedHeight = newHeight
+        self.geometry("{width}x{height}".format(width = newWidth, height=newHeight))
+    
+    def getWidth(self) -> int:
+        return self.adjustedWidth
+    
+    def getHeight(self) -> int:
+        return self.adjustedHeight

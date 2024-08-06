@@ -4,12 +4,13 @@ import ctypes
 
 from .Frame import NavigationFrame, HomeFrame
 from .Window import Window
-from .Utils import packAllChildWidgets
+from .Utils import packAllChildWidgets, getScreenWidthCtypes, getScreenHeightCtypes, setProcessDpiAwareness2
 
 class BasicView():
     
     def __init__(self, window : Window = Window(), windowsize : float = 0.5, scaling : float = 2):
         self.window : Window = window
+        setProcessDpiAwareness2()
         self._setWindowSize(windowsize)
         self._setWidgetScaling(scaling)
         self.navigationFrame = NavigationFrame(self.window)
@@ -21,17 +22,13 @@ class BasicView():
         self.window.mainloop()
         
     def _setWidgetScaling(self, factor : float) -> None:
-        self.window.call("tk", 'scaling', 2)
-        
+        self.window.call("tk", 'scaling', factor)
+    
     def _setWindowSize(self, percentage : float) -> None:
-        ctypes.windll.shcore.SetProcessDpiAwareness(2)
-        user32 = ctypes.windll.user32
-        screen_width = user32.GetSystemMetrics(0)
-        screen_height = user32.GetSystemMetrics(1)
-        adjusted_width = int(screen_width * percentage)
-        adjusted_height = int(screen_height * percentage)
-        self.window.geometry("{width}x{height}".format(width = adjusted_width, height=adjusted_height))
-        
+        screenWidth = getScreenWidthCtypes()
+        screenHeight = getScreenHeightCtypes()
+        self.window.setGeometry(int(screenWidth * percentage),int(screenHeight * percentage))
+    
     def _setDefaultFrame(self, defaultFrame : Frame) -> None:
         self.navigationFrame.setDefaultFrame(defaultFrame)
         self.window.setDefaultFrame(defaultFrame)
