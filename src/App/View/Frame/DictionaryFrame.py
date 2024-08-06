@@ -1,8 +1,6 @@
 from tkinter import Frame, Label
 import json
 
-from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
-
 class DictionaryFrame(Frame):
     
     def __init__(self, window, data : json = None, name : str = "Dictionary"):
@@ -12,21 +10,15 @@ class DictionaryFrame(Frame):
         self._createLabels()
         
     def _createLabels(self) -> None:
+        labelCount = 0
         for entry in self.dictionary:
             labelText = ""
             for values in entry.values():
                 if len(labelText) > 0:
                     labelText += " "
                 labelText += values.strip()
-            Label(self, text=labelText)
+            Label(self, text=labelText).grid(row=labelCount, column=0)
+            labelCount = labelCount + 1
         
     def getName(self) -> None:
         return self.name
-    
-    def pack(self) -> None:
-        packAllChildWidgets(self)
-        super().pack()
-        
-    def pack_forget(self) -> None:
-        packForgetAllChildWidgets(self)
-        super().pack_forget()
