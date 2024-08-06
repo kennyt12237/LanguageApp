@@ -1,7 +1,7 @@
 from tkinter import Frame, Label, Button, Event
 
-from .Window import Window
-from .WidgetUtils import packAllChildWidgets, packForgetAllChildWidgets
+from ..Window import Window
+from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 from typing import Callable
 import json

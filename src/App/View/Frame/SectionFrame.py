@@ -1,6 +1,6 @@
 from tkinter import Frame, Button
-from .WidgetUtils import packAllChildWidgets, packForgetAllChildWidgets
-from .Window import Window
+from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
+from ..Window import Window
 from .SectionContentFrame import SectionContentFrame
 import json
 

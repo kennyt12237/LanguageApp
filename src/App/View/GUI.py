@@ -1,9 +1,8 @@
-from .NavigationFrame import NavigationFrame
-from .HomeFrame import HomeFrame
+from .Frame import NavigationFrame, HomeFrame
 from .Window import Window
 
 from tkinter import Frame
-from .WidgetUtils import packAllChildWidgets
+from .Utils import packAllChildWidgets
 
 from typing import Callable
 import ctypes

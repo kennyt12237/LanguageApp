@@ -1,4 +1,4 @@
-from .WidgetUtils import packAllChildWidgets, packForgetAllChildWidgets
+from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 from tkinter import Frame, Label
 import json

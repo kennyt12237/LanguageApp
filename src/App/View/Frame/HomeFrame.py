@@ -1,6 +1,6 @@
 from tkinter import Frame, Button
-from .Window import Window
-from .WidgetUtils import packAllChildWidgets, packForgetAllChildWidgets
+from ..Window import Window
+from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 from .DictionaryFrame import DictionaryFrame
 from .SectionFrame import SectionFrame
 from typing import Callable
