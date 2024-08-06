@@ -17,6 +17,7 @@ class BasicView():
         self.homeFrame = HomeFrame(self.window)
         self._setDefaultFrame(self.homeFrame)
         packAllChildWidgets(self.window)
+        self.window.setWindowPadding(20, 20)
         
     def mainloop(self) -> None:
         self.window.mainloop()

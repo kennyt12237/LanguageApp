@@ -54,3 +54,6 @@ class Window(Tk):
     
     def getHeight(self) -> int:
         return self.adjustedHeight
+    
+    def setWindowPadding(self, padx : int, pady : int) -> None:
+        self.config(padx=padx, pady=pady)
