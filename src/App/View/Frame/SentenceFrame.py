@@ -3,7 +3,6 @@ from typing import Callable
 import json
 
 from ..Window import Window
-from ..Utils import packAllChildWidgets, packForgetAllChildWidgets
 
 class SentenceFrame(Frame):
     
@@ -15,6 +14,8 @@ class SentenceFrame(Frame):
         self.name = name
         self.sentenceDataFrame = SentenceDataFrame(self, self._getSentenceDataIndexSentence(self.initIndex), self._getSentenceDataIndexMeaning(self.initIndex))
         self.sentenceNavigationFrame = SentenceNavigationFrame(self, self.initIndex + 1, len(self.sentenceData), self.changeSentenceDataFrame)
+        self.sentenceDataFrame.grid(row=0, column=0)
+        self.sentenceNavigationFrame.grid(row=1, column=0)
         
     def changeSentenceDataFrame(self, nextIndex : int) -> None:
         nextSentence = self._getSentenceDataIndexSentence(nextIndex)
@@ -33,14 +34,6 @@ class SentenceFrame(Frame):
     def getName(self) -> None:
         return self.name
     
-    def pack(self) -> None:
-        packAllChildWidgets(self)
-        super().pack()
-    
-    def pack_forget(self) -> None:
-        packForgetAllChildWidgets(self)
-        super().pack_forget()
-    
 class SentenceDataFrame(Frame):
     
     def __init__(self, rootFrame : Frame, sentence : str = None, meaning : str = None) -> None:
@@ -50,18 +43,12 @@ class SentenceDataFrame(Frame):
         self.meaning = meaning
         self.sentenceLabel = Label(self, text=sentence)
         self.meaningLabel = Label(self, text=meaning)
+        self.sentenceLabel.grid(row=0, column=0)
+        self.meaningLabel.grid(row=1, column=0)
         
     def changeLabelTexts(self, sentence : str = None, meaning : str = None) -> None:
         self.sentenceLabel.config(text=sentence)
         self.meaningLabel.config(text=meaning)
-
-    def pack(self) -> None:
-        packAllChildWidgets(self)
-        super().pack()
-        
-    def pack_forget(self) -> None:
-        packForgetAllChildWidgets(self)
-        super().pack_forget()
         
 class SentenceNavigationFrame(Frame):
     
@@ -74,6 +61,8 @@ class SentenceNavigationFrame(Frame):
         self.previousButton = Button(self, text="Previous", command=self._onPreviousButtonPressed)
         self.stepLabel = Label(self, text=self._regenerateStepLabelText(self.currentIndex, totalSentences))
         self.nextButton = Button(self, text="Next", command=self._onNextButtonPressed)
+        self.stepLabel.grid(row=0, column=1)
+        self._determineButtonVisibility()
         
     def _regenerateStepLabelText(self, currentIndex : int = 1, totalSentence : int = 1) -> str:
         return "{currentIndex} of {totalSentence}".format(currentIndex=currentIndex, totalSentence=totalSentence)
@@ -99,25 +88,16 @@ class SentenceNavigationFrame(Frame):
             
     def __previousButtonVisibility(self) -> None:
         if self.currentIndex <= 1:
-            self.previousButton.pack_forget()
+            self.previousButton.grid_forget()
             return
-        self.previousButton.pack()
+        self.previousButton.grid(row=0, column=0)
         
     def __nextButtonVisibility(self) -> None:
         if self.currentIndex >= self.totalSentences:
-            self.nextButton.pack_forget()
+            self.nextButton.grid_forget()
             return
-        self.nextButton.pack()
+        self.nextButton.grid(row=0, column=2)
             
     def _determineButtonVisibility(self) -> None:
         self.__previousButtonVisibility()
         self.__nextButtonVisibility()
-        
-    def pack(self) -> None:
-        self.stepLabel.pack()
-        self._determineButtonVisibility()
-        super().pack()
-        
-    def pack_forget(self) -> None:
-        packForgetAllChildWidgets(self)
-        super().pack_forget()
