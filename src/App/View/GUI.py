@@ -4,11 +4,11 @@ import ctypes
 
 from .Frame import NavigationFrame, HomeFrame
 from .Window import Window
-from .Utils import packAllChildWidgets, getScreenWidthCtypes, getScreenHeightCtypes, setProcessDpiAwareness2
+from .Utils import getScreenWidthCtypes, getScreenHeightCtypes, setProcessDpiAwareness2
 
 class BasicView():
     
-    def __init__(self, window : Window = Window(), windowsize : float = 0.5, scaling : float = 2):
+    def __init__(self, window : Window = Window(padx=40, pady=40), windowsize : float = 0.5, scaling : float = 2):
         self.window : Window = window
         setProcessDpiAwareness2()
         self._setWindowSize(windowsize)
@@ -16,8 +16,8 @@ class BasicView():
         self.navigationFrame = NavigationFrame(self.window)
         self.homeFrame = HomeFrame(self.window)
         self._setDefaultFrame(self.homeFrame)
-        packAllChildWidgets(self.window)
-        self.window.setWindowPadding(20, 20)
+        self.navigationFrame.grid(row=0, column=0, pady=(0,100))
+        self.homeFrame.grid(row=1,column=0)
         
     def mainloop(self) -> None:
         self.window.mainloop()
