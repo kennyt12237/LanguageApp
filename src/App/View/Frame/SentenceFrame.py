@@ -2,16 +2,15 @@ from tkinter import Frame, Label, Button
 from typing import Callable
 import json
 
+from .GridFrame import GridFrame
 from ..Window import Window
 
-class SentenceFrame(Frame):
+class SentenceFrame(GridFrame):
     
     def __init__(self, window : Window, sentenceData : list[dict[str,str]] = None, initIndex : int = 0, name : str = "Sentences") -> None:
-        super().__init__(window)
-        self.window = window
+        super().__init__(window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.initIndex = initIndex
         self.sentenceData : list[dict[str,str]] = json.loads(sentenceData)
-        self.name = name
         self.sentenceDataFrame = SentenceDataFrame(self, self._getSentenceDataIndexSentence(self.initIndex), self._getSentenceDataIndexMeaning(self.initIndex))
         self.sentenceNavigationFrame = SentenceNavigationFrame(self, self.initIndex + 1, len(self.sentenceData), self.changeSentenceDataFrame)
         self.sentenceDataFrame.grid(row=0, column=0)
