@@ -1,23 +1,22 @@
-from tkinter import Frame, Button
+from tkinter import Button, CENTER
 from typing import Callable
 
+from .GridFrame import GridFrame
 from .DictionaryFrame import DictionaryFrame
 from .SectionFrame import SectionFrame
 from ..Window import Window
 from ..Utils import convertPixelsToTextUnit
 
-class HomeFrame(Frame):
+class HomeFrame(GridFrame):
     
     def __init__(self, window : Window, name : str = "Home", defaultWidgetSize : float = 0.1):
-        super().__init__(window)
-        self.window = window
-        self.name = name
+        super().__init__(window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.defaultWidgetSize = defaultWidgetSize
         self.getDictionaryData : Callable = None
         self.getSectionsData : Callable = None
         self.dictionaryButton = Button(self, text="Dictionary", command=self.onDictionaryButtonPressed)
         self.sectionButton = Button(self, text="Sections", command=self.onSectionsButtonPressed)
-        self.dictionaryButton.grid(row=0, column=0)
+        self.dictionaryButton.grid(row=0, column=0, pady=(0,20))
         self.sectionButton.grid(row=1,column=0)
         self.setWidgetSizeRelativeToScreen(defaultWidgetSize)
         
@@ -38,9 +37,6 @@ class HomeFrame(Frame):
         
     def onSectionsButtonPressed(self) -> None:
         self.window.newFrameNavigated(SectionFrame(self.window, self.getSectionsData()))
-
-    def getName(self) -> None:
-        return self.name
         
     def setDictionaryButtonSize(self, widthPixels : int, heightPixels : int) -> None:
         width, height = convertPixelsToTextUnit(self.dictionaryButton, widthPixels, heightPixels)
