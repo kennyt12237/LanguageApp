@@ -1,11 +1,12 @@
-from tkinter import Frame, Label
+from tkinter import Frame, Label, CENTER
+from ..Window import Window
+from .GridFrame import GridFrame
 import json
 
-class DictionaryFrame(Frame):
+class DictionaryFrame(GridFrame):
     
-    def __init__(self, window, data : json = None, name : str = "Dictionary"):
-        super().__init__(window)
-        self.name = name
+    def __init__(self, window : Window, data : json = None, name : str = "Dictionary"):
+        super().__init__(window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.dictionary : list[dict[str,str]] = json.loads(data)
         self._createLabels()
         
