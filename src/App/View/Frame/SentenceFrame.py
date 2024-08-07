@@ -29,9 +29,6 @@ class SentenceFrame(GridFrame):
     
     def _getSentenceDataIndexMeaning(self, index : int) -> str:
         return list(self.sentenceData[index].values())[1]
-
-    def getName(self) -> None:
-        return self.name
     
 class SentenceDataFrame(Frame):
     

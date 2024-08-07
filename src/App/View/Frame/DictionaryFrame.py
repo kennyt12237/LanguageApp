@@ -20,6 +20,3 @@ class DictionaryFrame(GridFrame):
                 labelText += values.strip()
             Label(self, text=labelText).grid(row=labelCount, column=0)
             labelCount = labelCount + 1
-        
-    def getName(self) -> None:
-        return self.name

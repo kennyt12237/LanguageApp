@@ -20,6 +20,3 @@ class SectionFrame(GridFrame):
         for key in self.sections:
             Button(self, text=key, command=lambda key=key: self.createSectionContentFrame(text=key,sectionData = self.sections[key])).grid(row=buttonCount, column=0)
             buttonCount = buttonCount + 1
-    
-    def getName(self) -> None:
-        return self.name
