@@ -3,14 +3,13 @@ import json
 
 from ..Window import Window
 from .SectionContentFrame import SectionContentFrame
+from .GridFrame import GridFrame
 
-class SectionFrame(Frame):
+class SectionFrame(GridFrame):
     
     def __init__(self, window : Window, data : json = None, name : str = "Section") -> None:
-        super().__init__(window)
-        self.window = window
+        super().__init__(window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.sections = json.loads(data)
-        self.name = name
         self._createButtons()
         
     def createSectionContentFrame(self, text, sectionData) -> None:
