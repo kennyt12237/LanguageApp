@@ -13,5 +13,8 @@ class GridFrame(Frame):
         self.grid_propagate(False)
         self.grid_anchor(CENTER)
         
+    def loadGridProperties(self) -> None:
+        self._setGridProperties()
+        
     def getName(self) -> str:
         return self.name

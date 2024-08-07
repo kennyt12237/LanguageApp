@@ -1,4 +1,6 @@
-from tkinter import Tk, Frame
+from tkinter import Tk
+
+from ..Frame import GridFrame
 
 from typing import Callable
 
@@ -17,7 +19,7 @@ class Window(Tk):
         self.grid_propagate(False)
         self.config(padx=padx, pady=pady, background="blue")
         
-    def setDefaultFrame(self, defaultFrame : Frame) -> None:
+    def setDefaultFrame(self, defaultFrame : GridFrame) -> None:
         self.frameStack = [defaultFrame]
         
     def __triggerFrameChangedEvent(self) -> None:
@@ -26,19 +28,19 @@ class Window(Tk):
     def bindForFrameChange(self, event : Callable) -> None:
         self.bind(self.FRAME_CHANGED_EVENT, event)
     
-    def __changeFrame(self,  nextFrame : Frame, currentFrame : Frame = None) -> None:
+    def __changeFrame(self,  nextFrame : GridFrame, currentFrame : GridFrame = None) -> None:
         if currentFrame != None:
             currentFrame.grid_forget()
         nextFrame.grid(row=1,column=0)
-        nextFrame.grid_propagate(False)
+        nextFrame.loadGridProperties()
         self.__triggerFrameChangedEvent()
         
-    def newFrameNavigated(self, newFrame : Frame) -> Frame:
+    def newFrameNavigated(self, newFrame : GridFrame) -> GridFrame:
         currentFrame = self.getCurrentFrame()
         self.frameStack.append(newFrame)
         self.__changeFrame(nextFrame=newFrame, currentFrame=currentFrame)
         
-    def returnToPreviousFrame(self) -> Frame:
+    def returnToPreviousFrame(self) -> GridFrame:
         currentFrame = self.frameStack.pop()
         previousFrame = self.getCurrentFrame()
         self.__changeFrame(nextFrame=previousFrame, currentFrame=currentFrame)
@@ -46,7 +48,7 @@ class Window(Tk):
     def getNumberOfFramesNavigated(self) -> int:
         return len(self.frameStack)
     
-    def getCurrentFrame(self) -> Frame:
+    def getCurrentFrame(self) -> GridFrame:
         return self.frameStack[-1]
     
     def setGeometry(self, newWidth : int, newHeight : int) -> None:
