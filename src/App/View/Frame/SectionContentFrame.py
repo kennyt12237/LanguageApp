@@ -1,17 +1,16 @@
-from tkinter import Frame, Button
+from tkinter import Button
 
 from .DictionaryFrame import DictionaryFrame
 from .GrammarFrame import GrammarFrame
 from .SentenceFrame import SentenceFrame
+from .GridFrame import GridFrame
 
 from ..Window import Window
 
-class SectionContentFrame(Frame):
+class SectionContentFrame(GridFrame):
     
     def __init__(self, window : Window, title : str, sectionData = None, name : str = "Section Content") -> None:
-        super().__init__(window)
-        self.window : Window = window
-        self.name = name
+        super().__init__(window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.title : str = title
         self.data : dict[str,list[dict[str,str]]] = sectionData
         self.wordButton = Button(self, text="Words", command=lambda:self.onWordButtonPressed(self.data["words"]))
@@ -29,6 +28,3 @@ class SectionContentFrame(Frame):
         
     def onSentenceButtonPressed(self, sentences : list[dict[str,str]]) -> None:
         self.window.newFrameNavigated(SentenceFrame(self.window, sentences))
-        
-    def getName(self) -> None:
-        return self.name
