@@ -1,7 +1,5 @@
 from tkinter import Tk, Frame, TclError
 
-from ..Frame import GridFrame
-
 from typing import Callable
 
 from ..Utils import getScreenWidthCtypes, getScreenHeightCtypes
@@ -34,7 +32,6 @@ class FrameDetail():
             self.frame.grid()
             
     def remove(self) -> None:
-        print(self.layoutManager)
         if self.layoutManager == self.PACK:
             self.frame.pack_forget()
         elif self.layoutManager == self.GRID:
@@ -60,7 +57,7 @@ class Window(Tk):
         self.grid_propagate(False)
         self.config(padx=padx, pady=pady, background="blue")
         
-    def setDefaultFrame(self, defaultFrame : GridFrame) -> None:
+    def setDefaultFrame(self, defaultFrame : Frame) -> None:
         self.frameDetails[defaultFrame] = FrameDetail(defaultFrame)
         self.frameStack = [defaultFrame]
         
@@ -78,12 +75,12 @@ class Window(Tk):
         self.frameDetails[nextFrame].useDefinedLayout()
         self.__triggerFrameChangedEvent()
         
-    def newFrameNavigated(self, newFrame : GridFrame) -> GridFrame:
+    def newFrameNavigated(self, newFrame : Frame) -> Frame:
         currentFrame = self.getCurrentFrame()
         self.frameStack.append(newFrame)
         self.__changeFrame(nextFrame=newFrame, currentFrame=currentFrame)
         
-    def returnToPreviousFrame(self) -> GridFrame:
+    def returnToPreviousFrame(self) -> Frame:
         currentFrame = self.frameStack.pop()
         previousFrame = self.getCurrentFrame()
         self.__changeFrame(nextFrame=previousFrame, currentFrame=currentFrame)
@@ -91,7 +88,7 @@ class Window(Tk):
     def getNumberOfFramesNavigated(self) -> int:
         return len(self.frameStack)
     
-    def getCurrentFrame(self) -> GridFrame:
+    def getCurrentFrame(self) -> Frame:
         return self.frameStack[-1]
     
     def setGeometry(self, newWidth : int, newHeight : int) -> None:
