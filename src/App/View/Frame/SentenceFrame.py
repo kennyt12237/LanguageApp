@@ -1,4 +1,4 @@
-from tkinter import Frame, Label, Button
+from tkinter import Frame, Label, Button, Misc
 from typing import Callable
 import json
 
@@ -7,8 +7,8 @@ from ..Window import Window
 
 class SentenceFrame(GridFrame):
     
-    def __init__(self, window : Window, sentenceData : list[dict[str,str]] = None, initIndex : int = 0, name : str = "Sentences") -> None:
-        super().__init__(window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
+    def __init__(self, master : Misc, window : Window, sentenceData : list[dict[str,str]] = None, initIndex : int = 0, name : str = "Sentences") -> None:
+        super().__init__(master, window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.initIndex = initIndex
         self.sentenceData : list[dict[str,str]] = json.loads(sentenceData)
         self.sentenceDataFrame = SentenceDataFrame(self, self._getSentenceDataIndexSentence(self.initIndex), self._getSentenceDataIndexMeaning(self.initIndex))

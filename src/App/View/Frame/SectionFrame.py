@@ -1,4 +1,4 @@
-from tkinter import Frame, Button
+from tkinter import Button, Misc
 import json
 
 from ..Window import Window
@@ -7,13 +7,13 @@ from .GridFrame import GridFrame
 
 class SectionFrame(GridFrame):
     
-    def __init__(self, window : Window, data : json = None, name : str = "Section") -> None:
-        super().__init__(window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
+    def __init__(self, master : Misc, window : Window, data : json = None, name : str = "Section") -> None:
+        super().__init__(master, window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.sections = json.loads(data)
         self._createButtons()
         
     def createSectionContentFrame(self, text, sectionData) -> None:
-        self.window.newFrameNavigated(SectionContentFrame(self.window, title=text, sectionData=sectionData))
+        self.window.newFrameNavigated(SectionContentFrame(self.window, self.window, title=text, sectionData=sectionData))
             
     def _createButtons(self) -> None:
         buttonCount = 0

@@ -1,4 +1,5 @@
-from tkinter import Button, CENTER
+from tkinter import Button, Misc
+from tkinter import CENTER
 from typing import Callable
 
 from .GridFrame import GridFrame
@@ -9,8 +10,8 @@ from ..Utils import convertPixelsToTextUnit
 
 class HomeFrame(GridFrame):
     
-    def __init__(self, window : Window, name : str = "Home", defaultWidgetSize : float = 0.1):
-        super().__init__(window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
+    def __init__(self, master : Misc, window : Window, name : str = "Home", defaultWidgetSize : float = 0.1):
+        super().__init__(master, window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.defaultWidgetSize = defaultWidgetSize
         self.getDictionaryData : Callable = None
         self.getSectionsData : Callable = None
@@ -30,13 +31,13 @@ class HomeFrame(GridFrame):
         self.getDictionaryData = method
         
     def onDictionaryButtonPressed(self) -> None:
-        self.window.newFrameNavigated(DictionaryFrame(self.window, self.getDictionaryData()))
+        self.window.newFrameNavigated(DictionaryFrame(self.window, self.window, self.getDictionaryData()))
     
     def setGetSectionsData(self, method : Callable) -> None:
         self.getSectionsData = method
         
     def onSectionsButtonPressed(self) -> None:
-        self.window.newFrameNavigated(SectionFrame(self.window, self.getSectionsData()))
+        self.window.newFrameNavigated(SectionFrame(self.window, self.window, self.getSectionsData()))
         
     def setDictionaryButtonSize(self, widthPixels : int, heightPixels : int) -> None:
         width, height = convertPixelsToTextUnit(self.dictionaryButton, widthPixels, heightPixels)
@@ -45,3 +46,7 @@ class HomeFrame(GridFrame):
     def setSectionButtonSize(self, widthPixels : int, heightPixels : int) -> None:
         width, height = convertPixelsToTextUnit(self.sectionButton, widthPixels, heightPixels)
         self.sectionButton.config(width=width, height=height)
+        
+    def _setGridProperties(self) -> None:
+        self.grid_propagate(False)
+        self.grid_anchor(CENTER)
