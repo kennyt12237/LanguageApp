@@ -9,9 +9,10 @@ from ..Window import Window
 
 class SectionContentFrame(GridFrame):
     
-    def __init__(self, master : Misc, window : Window, title : str, sectionData = None, name : str = "section content") -> None:
-        super().__init__(master, window, name=name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
-        self.title : str = title
+    def __init__(self, master : Misc, sectionData = None, name : str = "section content", **kwargs) -> None:
+        kwargs["name"] = name
+        super().__init__(master, **kwargs)
+        self.window : Window = self.winfo_toplevel()
         self.data : dict[str,list[dict[str,str]]] = sectionData
         self.wordButton = Button(self, text="Words", command=lambda:self.onWordButtonPressed(self.data["words"]))
         self.grammarButton = Button(self, text="Grammars", command=lambda:self.onGrammarButtonPressed(self.data["grammars"]))
@@ -21,10 +22,10 @@ class SectionContentFrame(GridFrame):
         self.sentenceButton.grid(row=2, column=0)
         
     def onWordButtonPressed(self, words : list[dict[str,str]]) -> None:
-        self.window.newFrameNavigated(DictionaryFrame(self.window, self.window, words))
+        self.window.newFrameNavigated(DictionaryFrame(self.window, words))
 
     def onGrammarButtonPressed(self, grammars : list[dict[str,str]]) -> None:
-        self.window.newFrameNavigated(GrammarFrame(self.window, self.window, grammars))
+        self.window.newFrameNavigated(GrammarFrame(self.window, grammars))
         
     def onSentenceButtonPressed(self, sentences : list[dict[str,str]]) -> None:
-        self.window.newFrameNavigated(SentenceFrame(self.window, self.window, sentences))
+        self.window.newFrameNavigated(SentenceFrame(self.window, sentences))

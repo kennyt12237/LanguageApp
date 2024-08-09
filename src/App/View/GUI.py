@@ -14,7 +14,7 @@ class BasicView():
         self._setWindowSize(windowsize)
         self._setWidgetScaling(scaling)
         self.navigationFrame = NavigationFrame(self.window)
-        self.homeFrame = HomeFrame(self.window, self.window)
+        self.homeFrame = HomeFrame(self.window, width=self.window.getWidthMinusPadding(), height=int(self.window.getHeight() * 0.5))
         self._setDefaultFrame(self.homeFrame)
         self.navigationFrame.grid(row=0, column=0, pady=(0,100))
         self.homeFrame.grid(row=1,column=0)

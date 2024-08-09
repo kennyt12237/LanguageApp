@@ -3,7 +3,6 @@ from tkinter import CENTER
 from typing import Callable
 
 from .GridFrame import GridFrame
-from .DictionaryFrame import DictionaryFrame
 from .ScrollableFrame import ScrollableDictionaryFrame
 from .SectionFrame import SectionFrame
 from ..Window import Window
@@ -11,8 +10,10 @@ from ..Utils import convertPixelsToTextUnit
 
 class HomeFrame(GridFrame):
     
-    def __init__(self, master : Misc, window : Window, name : str = "home", defaultWidgetSize : float = 0.1):
-        super().__init__(master, window, name=name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
+    def __init__(self, master : Misc, defaultWidgetSize : float = 0.1, name : str = "home", **kwargs):
+        kwargs["name"] = name
+        super().__init__(master, **kwargs)
+        self.window : Window = self.winfo_toplevel()
         self.defaultWidgetSize = defaultWidgetSize
         self.getDictionaryData : Callable = None
         self.getSectionsData : Callable = None
@@ -38,7 +39,7 @@ class HomeFrame(GridFrame):
         self.getSectionsData = method
         
     def onSectionsButtonPressed(self) -> None:
-        self.window.newFrameNavigated(SectionFrame(self.window, self.window, self.getSectionsData()))
+        self.window.newFrameNavigated(SectionFrame(self.window, self.getSectionsData()))
         
     def setDictionaryButtonSize(self, widthPixels : int, heightPixels : int) -> None:
         width, height = convertPixelsToTextUnit(self.dictionaryButton, widthPixels, heightPixels)

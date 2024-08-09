@@ -4,8 +4,7 @@ from ..Window import Window
 
 class GridFrame(Frame):
     
-    def __init__(self, master : Misc, window : Window, **kwargs) -> None:
-        self.window = window
+    def __init__(self, master : Misc, **kwargs) -> None:
         super().__init__(master, kwargs)
         self._setGridProperties()
     

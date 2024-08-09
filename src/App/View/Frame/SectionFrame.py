@@ -7,13 +7,15 @@ from .GridFrame import GridFrame
 
 class SectionFrame(GridFrame):
     
-    def __init__(self, master : Misc, window : Window, data : json = None, name : str = "section") -> None:
-        super().__init__(master, window, name=name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
+    def __init__(self, master : Misc, data : json = None, name : str = "section", **kwargs) -> None:
+        kwargs["name"] = name
+        super().__init__(master, **kwargs)
+        self.window : Window = self.winfo_toplevel()
         self.sections = json.loads(data)
         self._createButtons()
         
     def createSectionContentFrame(self, text, sectionData) -> None:
-        self.window.newFrameNavigated(SectionContentFrame(self.window, self.window, title=text, sectionData=sectionData))
+        self.window.newFrameNavigated(SectionContentFrame(self.window, name=text, sectionData=sectionData))
             
     def _createButtons(self) -> None:
         buttonCount = 0
