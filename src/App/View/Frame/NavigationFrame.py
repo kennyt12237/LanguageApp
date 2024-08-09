@@ -27,7 +27,7 @@ class NavigationFrame(Frame):
         self.backButton.grid(row=0, column=0, sticky=W)
 
     def __setFrameHeader(self, frame : Frame) -> None:
-        self.frameLabel.config(text=frame.getName())
+        self.frameLabel.config(text=frame.winfo_name().capitalize())
         
     def setDefaultFrame(self, defaultFrame : Frame) -> None:
         self.__setFrameHeader(defaultFrame)

@@ -7,8 +7,8 @@ from .GridFrame import GridFrame
 
 class SectionFrame(GridFrame):
     
-    def __init__(self, master : Misc, window : Window, data : json = None, name : str = "Section") -> None:
-        super().__init__(master, window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
+    def __init__(self, master : Misc, window : Window, data : json = None, name : str = "section") -> None:
+        super().__init__(master, window, name=name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.sections = json.loads(data)
         self._createButtons()
         

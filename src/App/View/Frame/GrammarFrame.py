@@ -6,8 +6,8 @@ from ..Window import Window
 
 class GrammarFrame(GridFrame):
     
-    def __init__(self, master : Misc, window : Window, grammarData : list[dict[str,str]] = None, name : str = "Grammar") -> None:
-        super().__init__(master, window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
+    def __init__(self, master : Misc, window : Window, grammarData : list[dict[str,str]] = None, name : str = "grammar") -> None:
+        super().__init__(master, window, name=name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.grammarData : list[dict[str,str]] = json.loads(grammarData)
         self._createLabels(self.grammarData)
         

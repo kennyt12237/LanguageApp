@@ -9,8 +9,8 @@ from ..Window import Window
 
 class SectionContentFrame(GridFrame):
     
-    def __init__(self, master : Misc, window : Window, title : str, sectionData = None, name : str = "Section Content") -> None:
-        super().__init__(master, window, name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
+    def __init__(self, master : Misc, window : Window, title : str, sectionData = None, name : str = "section content") -> None:
+        super().__init__(master, window, name=name, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.5), background="green")
         self.title : str = title
         self.data : dict[str,list[dict[str,str]]] = sectionData
         self.wordButton = Button(self, text="Words", command=lambda:self.onWordButtonPressed(self.data["words"]))
