@@ -1,6 +1,5 @@
 from tkinter import Frame, Misc
 from tkinter import CENTER
-from ..Window import Window
 
 class GridFrame(Frame):
     
@@ -8,5 +7,9 @@ class GridFrame(Frame):
         super().__init__(master, kwargs)
         self._setGridProperties()
     
+    def setGridRowAndColumn(self, row : int, column : int) -> None:
+        self.row = row
+        self.column = column
+        
     def _setGridProperties(self) -> None:
         pass

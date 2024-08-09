@@ -55,7 +55,7 @@ class Window(Tk):
         self.adjustedWidth = getScreenWidthCtypes()
         self.adjustedHeight = getScreenHeightCtypes()
         self.grid_propagate(False)
-        self.config(padx=padx, pady=pady, background="blue")
+        self.config(padx=padx, pady=pady)
         
     def setDefaultFrame(self, defaultFrame : Frame) -> None:
         self.frameDetails[defaultFrame] = FrameDetail(defaultFrame)
