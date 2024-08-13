@@ -5,7 +5,7 @@ from ..Window import Window
 class NavigationFrame(Frame):
         
     def __init__(self, window : Window, name : str = "Navigation") -> None:
-        super().__init__(window, width=window.getWidthMinusPadding(), height=int(window.getHeight() * 0.2))
+        super().__init__(window)
         self.window : Window = window
         self.name = name
         self.window.bindForFrameChange(self.onFrameChanged)

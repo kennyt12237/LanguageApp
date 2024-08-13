@@ -1,23 +1,29 @@
 from tkinter import Frame
 from typing import Callable
 
-from .Frame import NavigationFrame, HomeFrame, setGridSettings
+from .Frame import NavigationFrame, HomeFrame
 from .Window import Window
 from .Utils import getScreenWidthCtypes, getScreenHeightCtypes, setProcessDpiAwareness2
 
 class BasicView():
     
-    def __init__(self, window : Window = Window(padx=40, pady=40), windowsize : float = 0.5, scaling : float = 2):
+    def __init__(self, window : Window = Window(padx=20, pady=20), windowsize : float = 0.5, scaling : float = 2):
         self.window : Window = window
         setProcessDpiAwareness2()
         self._setWindowSize(windowsize)
         self._setWidgetScaling(scaling)
+        
         self.navigationFrame = NavigationFrame(self.window)
-        gridSettings : dict[str,str] = setGridSettings(self.window.getWidthMinusPadding(), self.window.getHeightMinusPadding(), 0.7)
-        self.homeFrame = HomeFrame(self.window, **gridSettings)
-        self._setDefaultFrame(self.homeFrame)
-        self.navigationFrame.grid(row=0, column=0, pady=(0,40))
-        self.homeFrame.grid(row=1,column=0)
+        self.navigationFrame.grid(row=0, column=0, sticky="nsew")
+        
+        self.homeFrame = HomeFrame(self.window)
+        self.homeFrame.grid(row=1, column=0, sticky="nsew")
+        
+        self._setDefaultFrame(self.homeFrame)     
+        
+        self.window.grid_rowconfigure(0, weight=3)
+        self.window.grid_rowconfigure(1, weight=10)
+        self.window.grid_columnconfigure(0, weight=1)
         
     def mainloop(self) -> None:
         self.window.mainloop()

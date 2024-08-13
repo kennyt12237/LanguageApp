@@ -29,7 +29,7 @@ class FrameDetail():
         if self.layoutManager == self.PACK:
             self.frame.pack()
         elif self.layoutManager == self.GRID:
-            self.frame.grid()
+            self.frame.grid(row=1, column=0, sticky="nsew")
             
     def remove(self) -> None:
         if self.layoutManager == self.PACK:
@@ -54,7 +54,6 @@ class Window(Tk):
         self.FRAME_CHANGED_EVENT = "<<FrameChangeEvent>>"
         self.adjustedWidth = getScreenWidthCtypes()
         self.adjustedHeight = getScreenHeightCtypes()
-        self.grid_propagate(False)
         self.config(padx=padx, pady=pady)
         
     def setDefaultFrame(self, defaultFrame : Frame) -> None:
