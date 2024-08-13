@@ -8,7 +8,7 @@ def packAllChildWidgets(widget : Widget) -> None:
 def packForgetAllChildWidgets(widget : Widget) -> None:
     for child in widget.winfo_children():
         child.pack_forget()
-    
+        
 def convertPixelsToTextUnit(widget : Widget, widthPixel : int, heightPixel : int) -> tuple:
     widgetFont = font.Font(font=widget.cget("font"))
     charWidth = widgetFont.measure("0")
