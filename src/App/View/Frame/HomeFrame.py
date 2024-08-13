@@ -7,6 +7,7 @@ from .ScrollableFrame import ScrollableDictionaryFrame
 from .SectionFrame import SectionFrame
 from ..Window import Window
 from ..Utils import convertPixelsToTextUnit
+from .Styling import getGridSettings
 
 class HomeFrame(GridFrame):
     
@@ -33,13 +34,13 @@ class HomeFrame(GridFrame):
         self.getDictionaryData = method
         
     def onDictionaryButtonPressed(self) -> None:
-        self.window.newFrameNavigated(ScrollableDictionaryFrame(self.window, self.getDictionaryData()))
+        self.window.newFrameNavigated(ScrollableDictionaryFrame(self.window, self.getDictionaryData(), **getGridSettings()))
     
     def setGetSectionsData(self, method : Callable) -> None:
         self.getSectionsData = method
         
     def onSectionsButtonPressed(self) -> None:
-        self.window.newFrameNavigated(SectionFrame(self.window, self.getSectionsData()))
+        self.window.newFrameNavigated(SectionFrame(self.window, self.getSectionsData(), **getGridSettings()))
         
     def setDictionaryButtonSize(self, widthPixels : int, heightPixels : int) -> None:
         width, height = convertPixelsToTextUnit(self.dictionaryButton, widthPixels, heightPixels)

@@ -14,20 +14,24 @@ class DictionaryFrame(GridFrame):
         headerList = list(self.dictionary[0].keys())
         headerCount = 0
         for header in headerList:
-            Label(self, text=header.strip().capitalize()).grid(row=0, column=headerCount)
+            Label(self, text=header.strip().capitalize(), borderwidth=2, relief="groove").grid(row=0, column=headerCount, sticky="nsew")
             headerCount += 1
         
         labelCount = 0
         for entry in self.dictionary:
             labelIndex = 0
             for values in entry.values():
-                Label(self, text=values.strip()).grid(row=labelCount + 1, column=labelIndex)
+                Label(self, text=values.strip(), borderwidth=2, relief="groove").grid(row=labelCount + 1, column=labelIndex, sticky="nsew")
                 labelIndex += 1
             labelCount = labelCount + 1
         self._additionalGridProperties(labelCount + 1, headerCount)
             
+    def _setGridProperties(self) -> None:
+        self.grid_propagate(False)
+        
     def _additionalGridProperties(self, row : int, col : int) -> None:
-        for i in range(row):
+        self.grid_rowconfigure(0, weight = 2)
+        for i in range(1,row):
             self.grid_rowconfigure(i, weight=1)
         
         for j in range(col):

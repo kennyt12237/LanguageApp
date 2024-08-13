@@ -1,8 +1,7 @@
 from tkinter import Frame
 from typing import Callable
-import ctypes
 
-from .Frame import NavigationFrame, HomeFrame
+from .Frame import NavigationFrame, HomeFrame, setGridSettings
 from .Window import Window
 from .Utils import getScreenWidthCtypes, getScreenHeightCtypes, setProcessDpiAwareness2
 
@@ -14,9 +13,10 @@ class BasicView():
         self._setWindowSize(windowsize)
         self._setWidgetScaling(scaling)
         self.navigationFrame = NavigationFrame(self.window)
-        self.homeFrame = HomeFrame(self.window, width=self.window.getWidthMinusPadding(), height=int(self.window.getHeight() * 0.5))
+        gridSettings : dict[str,str] = setGridSettings(self.window.getWidthMinusPadding(), self.window.getHeightMinusPadding(), 0.7)
+        self.homeFrame = HomeFrame(self.window, **gridSettings)
         self._setDefaultFrame(self.homeFrame)
-        self.navigationFrame.grid(row=0, column=0, pady=(0,100))
+        self.navigationFrame.grid(row=0, column=0, pady=(0,40))
         self.homeFrame.grid(row=1,column=0)
         
     def mainloop(self) -> None:

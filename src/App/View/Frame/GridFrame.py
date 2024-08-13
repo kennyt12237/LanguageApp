@@ -5,6 +5,8 @@ class GridFrame(Frame):
     
     def __init__(self, master : Misc, **kwargs) -> None:
         super().__init__(master, kwargs)
+        self.row = 0
+        self.column = 0
         self._setGridProperties()
     
     def setGridRowAndColumn(self, row : int, column : int) -> None:
@@ -12,4 +14,7 @@ class GridFrame(Frame):
         self.column = column
         
     def _setGridProperties(self) -> None:
+        pass
+
+    def _additionalGridProperties(self, *args) -> None:
         pass
