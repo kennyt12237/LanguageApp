@@ -19,7 +19,7 @@ class BasicView():
         self.homeFrame = HomeFrame(self.window)
         self.homeFrame.grid(row=1, column=0, sticky="nsew")
         
-        self._setDefaultFrame(self.homeFrame)     
+        self._setDefaultFrame(self.homeFrame)
         
         self.window.grid_rowconfigure(0, weight=3)
         self.window.grid_rowconfigure(1, weight=10)
