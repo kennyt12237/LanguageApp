@@ -67,9 +67,9 @@ class SentenceNavigationFrame(GridFrame):
         self.stepLabel = Label(self, text=self._regenerateStepLabelText(self.currentIndex, totalSentences), font=getStepLabelFont())
         self.nextButton = Button(self, text="Next", command=self._onNextButtonPressed)
         self.stepLabel.grid(row=0, column=1)
-        self.grid_columnconfigure(0, weight = 1)
-        self.grid_columnconfigure(1, weight = 8)
-        self.grid_columnconfigure(2, weight = 1)
+        self.grid_columnconfigure(0, weight = 1, minsize=100)
+        self.grid_columnconfigure(1, weight = 10)
+        self.grid_columnconfigure(2, weight = 1, minsize=100)
         self.grid_rowconfigure(0, weight=1)
         self._determineButtonVisibility()
         
