@@ -66,12 +66,8 @@ class SentenceNavigationFrame(GridFrame):
         self.previousButton = Button(self, text="Previous", command=self._onPreviousButtonPressed)
         self.stepLabel = Label(self, text=self._regenerateStepLabelText(self.currentIndex, totalSentences), font=getStepLabelFont())
         self.nextButton = Button(self, text="Next", command=self._onNextButtonPressed)
-        self.stepLabel.grid(row=0, column=1)
-        self.grid_columnconfigure(0, weight = 1, minsize=100)
-        self.grid_columnconfigure(1, weight = 10)
-        self.grid_columnconfigure(2, weight = 1, minsize=100)
-        self.grid_rowconfigure(0, weight=1)
         self._determineButtonVisibility()
+        self._gridPlacement()
         
     def _regenerateStepLabelText(self, currentIndex : int = 1, totalSentence : int = 1) -> str:
         return "{currentIndex} of {totalSentence}".format(currentIndex=currentIndex, totalSentence=totalSentence)
@@ -110,6 +106,13 @@ class SentenceNavigationFrame(GridFrame):
     def _determineButtonVisibility(self) -> None:
         self.__previousButtonVisibility()
         self.__nextButtonVisibility()
+        
+    def _gridPlacement(self) -> None:
+        self.stepLabel.grid(row=0, column=1)
+        self.grid_columnconfigure(0, weight = 1, minsize=100)
+        self.grid_columnconfigure(1, weight = 10)
+        self.grid_columnconfigure(2, weight = 1, minsize=100)
+        self.grid_rowconfigure(0, weight=1)
         
     def _setGridProperties(self) -> None:
         self.grid_propagate(False)

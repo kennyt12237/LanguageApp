@@ -4,7 +4,6 @@ from typing import Callable
 
 from .GridFrame import GridFrame
 from .ScrollableFrame import ScrollableDictionaryFrame
-from .DictionaryFrame import DictionaryFrame
 from .SectionFrame import SectionFrame
 from ..Window import Window
 from ..Utils import convertPixelsToTextUnit
@@ -20,9 +19,8 @@ class HomeFrame(GridFrame):
         self.getSectionsData : Callable = None
         self.dictionaryButton = Button(self, text="Dictionary", command=self.onDictionaryButtonPressed)
         self.sectionButton = Button(self, text="Sections", command=self.onSectionsButtonPressed)
-        self.dictionaryButton.grid(row=0, column=0, pady=(0,20))
-        self.sectionButton.grid(row=1,column=0)
         self.setWidgetSizeRelativeToScreen(defaultWidgetSize)
+        self._gridPlacement()
         
     def setWidgetSizeRelativeToScreen(self, relativeSize : float) -> None:
         widthSize = int(self.window.getWidth() * relativeSize)
@@ -49,6 +47,10 @@ class HomeFrame(GridFrame):
     def setSectionButtonSize(self, widthPixels : int, heightPixels : int) -> None:
         width, height = convertPixelsToTextUnit(self.sectionButton, widthPixels, heightPixels)
         self.sectionButton.config(width=width, height=height)
+        
+    def _gridPlacement(self) -> None:
+        self.dictionaryButton.grid(row=0, column=0, pady=(0,20))
+        self.sectionButton.grid(row=1,column=0)
         
     def _setGridProperties(self) -> None:
         self.grid_propagate(False)

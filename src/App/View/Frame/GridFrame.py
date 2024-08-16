@@ -16,5 +16,8 @@ class GridFrame(Frame):
     def _setGridProperties(self) -> None:
         pass
 
+    def _gridPlacement(self) -> None:
+        pass
+    
     def _additionalGridProperties(self, *args) -> None:
         pass

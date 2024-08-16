@@ -20,10 +20,8 @@ class SectionContentFrame(GridFrame):
         self.wordButton = Button(self, text="Words", command=lambda:self.onWordButtonPressed(self.data["words"]))
         self.grammarButton = Button(self, text="Grammars", command=lambda:self.onGrammarButtonPressed(self.data["grammars"]))
         self.sentenceButton = Button(self, text="Sentences", command=lambda:self.onSentenceButtonPressed(self.data["sentences"]))
-        self.wordButton.grid(row=0, column=0)
-        self.grammarButton.grid(row=1, column=0)
-        self.sentenceButton.grid(row=2, column=0)
         self._setButtonProperties()
+        self._gridPlacement()
         
     def onWordButtonPressed(self, words : list[dict[str,str]]) -> None:
         self.window.newFrameNavigated(DictionaryFrame(self.window, words))
@@ -42,5 +40,11 @@ class SectionContentFrame(GridFrame):
                 widthUnit, heightUnit = convertPixelsToTextUnit(widget, widthSize, heightSize)
                 widget.configure(width=widthUnit, height=heightUnit)
             
+    def _gridPlacement(self) -> None:
+        self.wordButton.grid(row=0, column=0)
+        self.grammarButton.grid(row=1, column=0)
+        self.sentenceButton.grid(row=2, column=0)
+        
     def _setGridProperties(self) -> None:
         self.grid_anchor(CENTER)
+ 
