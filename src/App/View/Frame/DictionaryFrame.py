@@ -13,20 +13,24 @@ class DictionaryFrame(GridFrame):
     
     def _createLabels(self) -> None:
         headerList = list(self.dictionary[0].keys())
-        headerCount = 0
+        headerItemCount = 0
+        Label(self, text="Number", **getDictionaryHeaderLabelSettings()).grid(row=0, column=headerItemCount, sticky="nsew")
+        headerItemCount += 1
         for header in headerList:
-            Label(self, text=header.strip().capitalize(), **getDictionaryHeaderLabelSettings()).grid(row=0, column=headerCount, sticky="nsew")
-            headerCount += 1
+            Label(self, text=header.strip().capitalize(), **getDictionaryHeaderLabelSettings()).grid(row=0, column=headerItemCount, sticky="nsew")
+            headerItemCount += 1
         
         labelCount = 1
         for entry in self.dictionary:
             labelIndex = 0
+            Label(self,text=labelCount,**getDictionaryLabelSettings()).grid(row=labelCount, column=labelIndex, sticky="nsew")
+            labelIndex += 1
             for values in entry.values():
                 Label(self, text=values.strip(), **getDictionaryLabelSettings()).grid(row=labelCount, column=labelIndex, sticky="nsew")
                 labelIndex += 1
             labelCount = labelCount + 1
-        self._additionalGridProperties(labelCount, headerCount)
-        
+        self._additionalGridProperties(labelCount, headerItemCount)
+
     def _additionalGridProperties(self, row : int, col : int) -> None:
         self.grid_rowconfigure(0, minsize=100)
         for i in range(1,row):

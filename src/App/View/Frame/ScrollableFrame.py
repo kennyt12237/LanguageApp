@@ -16,8 +16,8 @@ class ScrollableDictionaryFrame(Frame):
         self.scrollbar = Scrollbar(self, orient=VERTICAL, command=self.canvas.yview)
         self.dictionaryFrame = DictionaryFrame(self.canvas, data)
         
-        self.canvas.configure(yscrollcommand=self.scrollbar.set, yscrollincrement=200)
-        self.canvas.create_window((0,0), window=self.dictionaryFrame, tags="frame")
+        self.canvas.configure(yscrollcommand=self.scrollbar.set, yscrollincrement=50)
+        self.canvas.create_window((0,0), anchor="nw", window=self.dictionaryFrame, tags="frame")
         
         self.canvas.bind("<Configure>", self.onCanvasConfigure)
         self.dictionaryFrame.bind("<Configure>", self.onFrameConfigure)
@@ -25,9 +25,10 @@ class ScrollableDictionaryFrame(Frame):
         self.canvas.pack(side="left", fill="both", expand=True)
         self.scrollbar.pack(side=RIGHT, fill="y")
         self.pack_propagate(False)
-        
+
     def onCanvasConfigure(self, event : Event) -> None:
         self.canvas.itemconfig("frame", width=self.canvas.winfo_width())
         
     def onFrameConfigure(self, event : Event) -> None:
-        self.canvas.configure(scrollregion=self.canvas.bbox(ALL))
+        x,y,width,height = self.canvas.bbox(ALL)
+        self.canvas.configure(scrollregion=(x,y,width, height - 50))
