@@ -3,6 +3,7 @@ from tkinter import CENTER, N, S, E, W
 from typing import Callable
 import json
 
+from .Styling import getSentenceTextFont, getSentenceMeaningFont, getStepLabelFont
 from .GridFrame import GridFrame
 
 class SentenceFrame(GridFrame):
@@ -12,8 +13,8 @@ class SentenceFrame(GridFrame):
         super().__init__(master, **kwargs)
         self.initIndex = initIndex
         self.sentenceData : list[dict[str,str]] = json.loads(sentenceData)
-        self.sentenceDataFrame = SentenceDataFrame(self, self._getSentenceDataIndexSentence(self.initIndex), self._getSentenceDataIndexMeaning(self.initIndex), background="blue")
-        self.sentenceNavigationFrame = SentenceNavigationFrame(self, self.initIndex + 1, len(self.sentenceData), self.changeSentenceDataFrame, background="red")
+        self.sentenceDataFrame = SentenceDataFrame(self, self._getSentenceDataIndexSentence(self.initIndex), self._getSentenceDataIndexMeaning(self.initIndex))
+        self.sentenceNavigationFrame = SentenceNavigationFrame(self, self.initIndex + 1, len(self.sentenceData), self.changeSentenceDataFrame)
         self.sentenceDataFrame.grid(row=0, column=0, sticky=N+S+E+W)
         self.sentenceNavigationFrame.grid(row=1, column=0, sticky=N+S+E+W)
         self.grid_rowconfigure(0, weight=11)
@@ -41,9 +42,10 @@ class SentenceDataFrame(GridFrame):
         self.rootFrame = rootFrame
         self.sentence = sentence
         self.meaning = meaning
-        self.sentenceLabel = Label(self, text=sentence)
-        self.meaningLabel = Label(self, text=meaning)
-        self.sentenceLabel.grid(row=0, column=0)
+        self.sentenceLabel = Label(self, text=sentence, font=getSentenceTextFont())
+        self.meaningLabel = Label(self, text=meaning, font=getSentenceMeaningFont())
+        
+        self.sentenceLabel.grid(row=0, column=0, pady=(0,40))
         self.meaningLabel.grid(row=1, column=0)
         
     def changeLabelTexts(self, sentence : str = None, meaning : str = None) -> None:
@@ -62,7 +64,7 @@ class SentenceNavigationFrame(GridFrame):
         self.totalSentences = totalSentences
         self.callback = callback
         self.previousButton = Button(self, text="Previous", command=self._onPreviousButtonPressed)
-        self.stepLabel = Label(self, text=self._regenerateStepLabelText(self.currentIndex, totalSentences))
+        self.stepLabel = Label(self, text=self._regenerateStepLabelText(self.currentIndex, totalSentences), font=getStepLabelFont())
         self.nextButton = Button(self, text="Next", command=self._onNextButtonPressed)
         self.stepLabel.grid(row=0, column=1)
         self.grid_columnconfigure(0, weight = 1)
