@@ -10,8 +10,7 @@ from ..Utils import convertPixelsToTextUnit
 
 class HomeFrame(GridFrame):
     
-    def __init__(self, master : Misc, defaultWidgetSize : float = 0.1, name : str = "home", **kwargs):
-        kwargs["name"] = name
+    def __init__(self, master : Misc, defaultWidgetSize : float = 0.1, **kwargs):
         super().__init__(master, **kwargs)
         self.window : Window = self.winfo_toplevel()
         self.defaultWidgetSize = defaultWidgetSize
@@ -38,7 +37,7 @@ class HomeFrame(GridFrame):
         self.getSectionsData = method
         
     def onSectionsButtonPressed(self) -> None:
-        self.window.newFrameNavigated(SectionFrame(self.window, self.getSectionsData()))
+        self.window.newFrameNavigated(SectionFrame(self.window, self.getSectionsData(), name="section"))
         
     def setDictionaryButtonSize(self, widthPixels : int, heightPixels : int) -> None:
         width, height = convertPixelsToTextUnit(self.dictionaryButton, widthPixels, heightPixels)

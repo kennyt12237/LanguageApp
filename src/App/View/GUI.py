@@ -16,7 +16,7 @@ class BasicView():
         self.navigationFrame = NavigationFrame(self.window)
         self.navigationFrame.grid(row=0, column=0, sticky="nsew")
         
-        self.homeFrame = HomeFrame(self.window)
+        self.homeFrame = HomeFrame(self.window, name="home")
         self.homeFrame.grid(row=1, column=0, sticky="nsew")
         
         self._setDefaultFrame(self.homeFrame)

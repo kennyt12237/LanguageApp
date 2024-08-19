@@ -9,8 +9,7 @@ from .AbstractFrame import GridFrame
 
 class SectionFrame(GridFrame):
     
-    def __init__(self, master : Misc, data : json = None, defaultWidgetSize : float = 0.1, name : str = "section", **kwargs) -> None:
-        kwargs["name"] = name
+    def __init__(self, master : Misc, data : json = None, defaultWidgetSize : float = 0.1, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.defaultWidgetSize = defaultWidgetSize
         self.window : Window = self.winfo_toplevel()
@@ -20,7 +19,7 @@ class SectionFrame(GridFrame):
         self._gridPlacement()
         
     def createSectionContentFrame(self, text, sectionData) -> None:
-        self.window.newFrameNavigated(SectionContentFrame(self.window, name=text, sectionData=sectionData))
+        self.window.newFrameNavigated(SectionContentFrame(self.window, sectionData=sectionData, name=text))
             
     def _createButtons(self) -> None:
         for key in self.sections:
@@ -34,13 +33,13 @@ class SectionFrame(GridFrame):
                 widthUnit, heightUnit = convertPixelsToTextUnit(widget, widthSize, heightSize)
                 widget.config(width=widthUnit, height=heightUnit)
             
-    def _setGridProperties(self) -> None:
-        self.grid_propagate(False)
-        self.grid_anchor(CENTER)
-
     def _gridPlacement(self) -> None:
         buttonCount = 0
         for widget in self.winfo_children():
             if isinstance(widget, Button):
                 widget.grid(row=buttonCount, column=0)
                 buttonCount += 1
+
+    def _setGridProperties(self) -> None:
+        self.grid_propagate(False)
+        self.grid_anchor(CENTER)
