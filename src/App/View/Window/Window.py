@@ -105,12 +105,3 @@ class Window(Tk):
         self.padx = padx
         self.pady = pady
         self.config(padx=padx, pady=pady)
-        
-    def getPaddingInfo(self) -> tuple:
-        return self.padx, self.pady
-    
-    def getWidthMinusPadding(self) -> int:
-        return self.adjustedWidth - (self.padx * 2)
-    
-    def getHeightMinusPadding(self) -> int:
-        return self.adjustedHeight - (self.pady * 2)
