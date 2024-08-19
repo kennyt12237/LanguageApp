@@ -24,7 +24,7 @@ class SectionFrame(GridFrame):
             
     def _createButtons(self) -> None:
         for key in self.sections:
-            button = Button(self, text=key, command=lambda key=key: self.createSectionContentFrame(text=key,sectionData = self.sections[key]))
+            Button(self, text=key, command=lambda key=key: self.createSectionContentFrame(text=key,sectionData = self.sections[key]))
 
     def _setButtonProperties(self) -> None:
         widthSize = int(self.window.getWidth() * self.defaultWidgetSize)
@@ -35,6 +35,7 @@ class SectionFrame(GridFrame):
                 widget.config(width=widthUnit, height=heightUnit)
             
     def _setGridProperties(self) -> None:
+        self.grid_propagate(False)
         self.grid_anchor(CENTER)
 
     def _gridPlacement(self) -> None:

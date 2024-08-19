@@ -34,6 +34,9 @@ class DictionaryFrame(GridFrame):
             labelCount = labelCount + 1
         self._additionalGridProperties(labelCount, headerItemCount)
 
+    def _setGridProperties(self) -> None:
+        self.grid_propagate(False)
+        
     def _additionalGridProperties(self, row : int, col : int) -> None:
         self.grid_rowconfigure(0, minsize=100)
         for i in range(1,row):

@@ -30,6 +30,9 @@ class GrammarFrame(GridFrame):
             labelCount = labelCount + 1
         self._additionalGridProperties(labelCount, headerCount)
         
+    def _setGridProperties(self) -> None:
+        self.grid_propagate(False)
+        
     def _additionalGridProperties(self, row : int, column : int) -> None:
         self.grid_rowconfigure(0, minsize=100)
         for rowCount in range(1,row):

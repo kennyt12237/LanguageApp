@@ -46,5 +46,6 @@ class SectionContentFrame(GridFrame):
         self.sentenceButton.grid(row=2, column=0)
         
     def _setGridProperties(self) -> None:
+        self.grid_propagate(False)
         self.grid_anchor(CENTER)
  
