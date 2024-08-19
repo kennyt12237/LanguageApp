@@ -37,7 +37,6 @@ class NavigationFrame(GridFrame):
         self.backButton.grid(row=0, column=0, sticky=W)
 
     def __setFrameHeader(self, frame: Frame) -> None:
-        print(frame.winfo_name().capitalize())
         self.frameLabel.config(text=frame.winfo_name().capitalize())
 
     def _gridPlacement(self) -> None:
