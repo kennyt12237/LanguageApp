@@ -1,6 +1,6 @@
 from tkinter import Label, Misc
 from .GridFrame import GridFrame
-from .Styling import getDictionaryHeaderLabelSettings, getDictionaryLabelSettings
+from .Styling import getTableHeaderLabelSettings, getTableLabelSettings
 import json
 
 class DictionaryFrame(GridFrame):
@@ -14,7 +14,7 @@ class DictionaryFrame(GridFrame):
     def _createLabels(self) -> None:
         headerList = list(self.dictionary[0].keys())
         headerItemCount = 0
-        headerLabelSettings = getDictionaryHeaderLabelSettings()
+        headerLabelSettings = getTableHeaderLabelSettings()
         Label(self, text="Number", **headerLabelSettings,).grid(row=0, column=headerItemCount, sticky="nsew")
         headerItemCount += 1
         for header in headerList:
@@ -22,7 +22,7 @@ class DictionaryFrame(GridFrame):
             headerItemCount += 1
         
         labelCount = 1
-        labelSettings = getDictionaryLabelSettings()
+        labelSettings = getTableLabelSettings()
         for entry in self.dictionary:
             labelIndex = 0
             background = '#d7f1f7' if labelCount % 2 == 0 else self.cget('bg')

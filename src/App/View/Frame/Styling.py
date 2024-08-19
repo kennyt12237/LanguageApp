@@ -19,7 +19,7 @@ class FrameStyling():
     def getGridSettings(self) -> dict[str,str]:
         return self.gridSetting
     
-class DictionaryStyling():
+class TableStyling():
     
     def __init__(self) -> None:
         self.headerLabelSettings = dict(borderwidth=2, relief="groove", font=("Segoe UI", 16))
@@ -62,13 +62,13 @@ def setGridSettings(windowWidth : int, windowHeight : int, relativeSize : float)
 def getGridSettings() -> dict[str,str]:
     return frameStyling.getGridSettings()
 
-dictionaryStyling = DictionaryStyling()
+tableStyling = TableStyling()
 
-def getDictionaryHeaderLabelSettings() -> dict:
-    return dictionaryStyling.getHeaderLabelSettings()
+def getTableHeaderLabelSettings() -> dict:
+    return tableStyling.getHeaderLabelSettings()
 
-def getDictionaryLabelSettings() -> dict:
-    return dictionaryStyling.getLabelSettings()
+def getTableLabelSettings() -> dict:
+    return tableStyling.getLabelSettings()
 
 sentenceStyling = SentenceStyling()
 
