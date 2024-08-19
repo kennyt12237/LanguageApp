@@ -1,7 +1,7 @@
 from tkinter import Label, Misc
 import json
 
-from .GridFrame import GridFrame
+from .AbstractFrame.GridFrame import GridFrame
 from .Styling import getTableHeaderLabelSettings, getTableLabelSettings
 
 class GrammarFrame(GridFrame):

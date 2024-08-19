@@ -4,7 +4,7 @@ from typing import Callable
 import json
 
 from .Styling import getSentenceTextFont, getSentenceMeaningFont, getStepLabelFont
-from .GridFrame import GridFrame
+from .AbstractFrame import GridFrame
 
 class SentenceFrame(GridFrame):
     

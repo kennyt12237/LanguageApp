@@ -1,4 +1,4 @@
-from .GridFrame import *
+from .AbstractFrame import *
 from .DictionaryFrame import *
 from .GrammarFrame import *
 from .HomeFrame import *

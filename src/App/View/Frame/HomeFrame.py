@@ -2,7 +2,7 @@ from tkinter import Button, Misc
 from tkinter import CENTER
 from typing import Callable
 
-from .GridFrame import GridFrame
+from .AbstractFrame import GridFrame
 from .ScrollableFrame import ScrollableDictionaryFrame
 from .SectionFrame import SectionFrame
 from ..Window import Window
@@ -32,7 +32,7 @@ class HomeFrame(GridFrame):
         self.getDictionaryData = method
         
     def onDictionaryButtonPressed(self) -> None:
-        self.window.newFrameNavigated(ScrollableDictionaryFrame(self.window, self.getDictionaryData()))
+        self.window.newFrameNavigated(ScrollableDictionaryFrame(self.window, self.getDictionaryData(), name="dictionary"))
     
     def setGetSectionsData(self, method : Callable) -> None:
         self.getSectionsData = method

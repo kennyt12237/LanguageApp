@@ -9,8 +9,7 @@ import json
 
 class ScrollableDictionaryFrame(Frame):
     
-    def __init__(self, master : Misc, data: json = None, name='dictionary', **kwargs) -> None:
-        kwargs["name"] = name
+    def __init__(self, master : Misc, data: json = None, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.window : Window = self.winfo_toplevel()
         self.canvas = Canvas(self)

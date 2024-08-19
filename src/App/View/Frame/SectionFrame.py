@@ -5,7 +5,7 @@ import json
 from ..Window import Window
 from ..Utils import convertPixelsToTextUnit
 from .SectionContentFrame import SectionContentFrame
-from .GridFrame import GridFrame
+from .AbstractFrame import GridFrame
 
 class SectionFrame(GridFrame):
     
