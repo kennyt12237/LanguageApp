@@ -3,9 +3,11 @@ from tkinter import Frame, Button, Label, W
 from .AbstractFrame import GridFrame
 from ..Window import Window
 
+
 class NavigationFrame(GridFrame):
 
     BACK = '<-'
+
     def __init__(self, window: Window) -> None:
         super().__init__(window)
         self.window: Window = window
@@ -15,7 +17,7 @@ class NavigationFrame(GridFrame):
         self.frameLabel = Label(self, font=("Arial", 18))
         self._gridPlacement()
         self._setGridProperties()
-        
+
     def setDefaultFrame(self, defaultFrame: Frame) -> None:
         self.__setFrameHeader(defaultFrame)
 
@@ -29,7 +31,7 @@ class NavigationFrame(GridFrame):
     def _newFrameNavigated(self, nextFrame: Frame) -> None:
         self.__determineBackButtonChange()
         self.__setFrameHeader(nextFrame)
-    
+
     def __determineBackButtonChange(self) -> None:
         if self.window.getNumberOfFramesNavigated() == 1:
             self.backButton.grid_forget()
