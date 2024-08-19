@@ -9,6 +9,7 @@ from .AbstractFrame import GridFrame
 from ..Window import Window
 from ..Utils import convertPixelsToTextUnit
 
+
 class SectionContentFrame(GridFrame):
 
     DICTIONARY = "dictionary"
@@ -17,11 +18,10 @@ class SectionContentFrame(GridFrame):
     WORDS = "words"
     GRAMMARS = "grammars"
     SENTENCES = "sentences"
-    
+
     def __init__(self, master: Misc, sectionData=None, defaultWidgetSize: float = 0.1, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.window: Window = self.winfo_toplevel()
-        self.defaultWidgetSize = defaultWidgetSize
         self.data: dict[str, list[dict[str, str]]] = sectionData
         self.wordButton = Button(
             self, text=self.WORDS.capitalize(), command=lambda: self.onWordButtonPressed(self.data[self.WORDS]))
@@ -29,21 +29,24 @@ class SectionContentFrame(GridFrame):
             self, text=self.GRAMMARS.capitalize(), command=lambda: self.onGrammarButtonPressed(self.data[self.GRAMMARS]))
         self.sentenceButton = Button(
             self, text=self.SENTENCES.capitalize(), command=lambda: self.onSentenceButtonPressed(self.data[self.SENTENCES]))
-        self._setButtonProperties()
+        self.setAllButtonSizeRelativeToScreen(defaultWidgetSize)
         self._gridPlacement()
 
     def onWordButtonPressed(self, words: list[dict[str, str]]) -> None:
-        self.window.newFrameNavigated(DictionaryFrame(self.window, words, name=self.DICTIONARY))
+        self.window.newFrameNavigated(DictionaryFrame(
+            self.window, words, name=self.DICTIONARY))
 
     def onGrammarButtonPressed(self, grammars: list[dict[str, str]]) -> None:
-        self.window.newFrameNavigated(GrammarFrame(self.window, grammars, name=self.GRAMMAR))
+        self.window.newFrameNavigated(GrammarFrame(
+            self.window, grammars, name=self.GRAMMAR))
 
     def onSentenceButtonPressed(self, sentences: list[dict[str, str]]) -> None:
-        self.window.newFrameNavigated(SentenceFrame(self.window, sentences, name=self.SENTENCE))
+        self.window.newFrameNavigated(SentenceFrame(
+            self.window, sentences, name=self.SENTENCE))
 
-    def _setButtonProperties(self) -> None:
-        widthSize = int(self.window.getWidth() * self.defaultWidgetSize)
-        heightSize = int(self.window.getHeight() * self.defaultWidgetSize)
+    def setAllButtonSizeRelativeToScreen(self, relativeSize: float) -> None:
+        widthSize = int(self.window.getWidth() * relativeSize)
+        heightSize = int(self.window.getHeight() * relativeSize)
         for widget in self.winfo_children():
             if isinstance(widget, Button):
                 widthUnit, heightUnit = convertPixelsToTextUnit(

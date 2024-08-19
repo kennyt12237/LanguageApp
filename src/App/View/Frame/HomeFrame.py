@@ -18,15 +18,17 @@ class HomeFrame(GridFrame):
         self.getSectionsData : Callable = None
         self.dictionaryButton = Button(self, text="Dictionary", command=self.onDictionaryButtonPressed)
         self.sectionButton = Button(self, text="Sections", command=self.onSectionsButtonPressed)
-        self.setWidgetSizeRelativeToScreen(defaultWidgetSize)
+        self.setAllButtonSizeRelativeToScreen(defaultWidgetSize)
         self._gridPlacement()
         
-    def setWidgetSizeRelativeToScreen(self, relativeSize : float) -> None:
-        widthSize = int(self.window.getWidth() * relativeSize)
-        heightSize = int(self.window.getHeight() * relativeSize)
-        self.setDictionaryButtonSize(widthSize, heightSize)
-        self.setSectionButtonSize(widthSize, heightSize)
-        
+    def setAllButtonSizeRelativeToScreen(self, relativeSize : float) -> None:
+        widthPixel = int(self.window.getWidth() * relativeSize)
+        heightPixel = int(self.window.getHeight() * relativeSize)
+        for child in self.winfo_children():
+            if isinstance(child, Button):
+                width, height = convertPixelsToTextUnit(child, widthPixel, heightPixel)
+                child.config(width=width, height=height)
+                
     def setGetDictionaryData(self, method : Callable) -> None:
         self.getDictionaryData = method
         
@@ -38,14 +40,6 @@ class HomeFrame(GridFrame):
         
     def onSectionsButtonPressed(self) -> None:
         self.window.newFrameNavigated(SectionFrame(self.window, self.getSectionsData(), name="section"))
-        
-    def setDictionaryButtonSize(self, widthPixels : int, heightPixels : int) -> None:
-        width, height = convertPixelsToTextUnit(self.dictionaryButton, widthPixels, heightPixels)
-        self.dictionaryButton.config(width=width, height=height)
-
-    def setSectionButtonSize(self, widthPixels : int, heightPixels : int) -> None:
-        width, height = convertPixelsToTextUnit(self.sectionButton, widthPixels, heightPixels)
-        self.sectionButton.config(width=width, height=height)
         
     def _gridPlacement(self) -> None:
         self.dictionaryButton.grid(row=0, column=0, pady=(0,20))
