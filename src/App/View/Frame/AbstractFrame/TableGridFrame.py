@@ -49,7 +49,7 @@ class TableGridFrame(GridFrame):
                 row=labelCount, column=labelIndex, sticky=self.GRID_STICKY)
             labelIndex += 1
             for values in entry.values():
-                Label(self, text=values.strip(), background=background, **entryStyling).grid(
+                Label(self, text=str(values).strip(), background=background, **entryStyling).grid(
                     row=labelCount, column=labelIndex, sticky=self.GRID_STICKY)
                 labelIndex += 1
             labelCount = labelCount + 1

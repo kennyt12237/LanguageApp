@@ -31,7 +31,7 @@ class SectionContentFrame(GridFrame):
         self.window.newFrameNavigated(DictionaryFrame(self.window, words, name="dictionary"))
 
     def onGrammarButtonPressed(self, grammars: list[dict[str, str]]) -> None:
-        self.window.newFrameNavigated(GrammarFrame(self.window, grammars))
+        self.window.newFrameNavigated(GrammarFrame(self.window, grammars, name="grammar"))
 
     def onSentenceButtonPressed(self, sentences: list[dict[str, str]]) -> None:
         self.window.newFrameNavigated(SentenceFrame(self.window, sentences))
