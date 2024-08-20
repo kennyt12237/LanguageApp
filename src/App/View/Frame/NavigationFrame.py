@@ -8,8 +8,8 @@ class NavigationFrame(GridFrame):
 
     BACK = '<-'
 
-    def __init__(self, window: Window) -> None:
-        super().__init__(window)
+    def __init__(self, window: Window, **kwargs) -> None:
+        super().__init__(window, **kwargs)
         self.window: Window = window
         self.window.bindForFrameChange(self.onFrameChanged)
         self.backButton = Button(self, text=self.BACK,
