@@ -20,7 +20,7 @@ class ScrollableDictionaryFrame(Frame):
         self.dictionaryFrame.grid_propagate(True)
 
         self.canvas.configure(
-            yscrollcommand=self.scrollbar.set, yscrollincrement=75)
+            yscrollcommand=self.scrollbar.set, yscrollincrement=150)
         self.canvas.create_window(
             (0, 0), anchor="nw", window=self.dictionaryFrame, tags="frame")
 
@@ -36,7 +36,15 @@ class ScrollableDictionaryFrame(Frame):
 
     def onFrameConfigure(self, event: Event) -> None:
         x, y, width, height = self.canvas.bbox(ALL)
-        self.canvas.configure(scrollregion=(x, y, width, height - 75))
+        canvasHeight = self.canvas.winfo_height()
+        bottomRegion = height - canvasHeight
+        
+        if event.y >= 0:
+            self.canvas.yview_moveto(0.0)
+        elif event.y <= -bottomRegion:
+            self.canvas.yview_moveto(bottomRegion/height)
+            
+        self.canvas.configure(scrollregion=(x, y, width, height))
 
 
 class ScrollableGrammarFrame(Frame):
