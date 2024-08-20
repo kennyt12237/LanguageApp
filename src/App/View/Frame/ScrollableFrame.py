@@ -17,6 +17,7 @@ class ScrollableDictionaryFrame(Frame):
         self.scrollbar = Scrollbar(
             self, orient=VERTICAL, command=self.canvas.yview)
         self.dictionaryFrame = DictionaryFrame(self.canvas, data)
+        self.dictionaryFrame.grid_propagate(True)
 
         self.canvas.configure(
             yscrollcommand=self.scrollbar.set, yscrollincrement=75)
@@ -50,6 +51,7 @@ class ScrollableGrammarFrame(Frame):
         self.scrollbar = Scrollbar(
             self, orient=VERTICAL, command=self.canvas.yview)
         self.grammarFrame = GrammarFrame(self.canvas, data)
+        self.grammarFrame.grid_propagate(True)
 
         self.canvas.configure(
             yscrollcommand=self.scrollbar.set, yscrollincrement=75)

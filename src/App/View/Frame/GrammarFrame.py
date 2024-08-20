@@ -11,3 +11,6 @@ class GrammarFrame(TableGridFrame):
         headerStyling = getTableHeaderLabelSettings()
         entryStyling = getTableLabelSettings()
         super().__init__(master, grammarData, headerStyling, entryStyling, **kwargs)
+
+    def _setGridProperties(self) -> None:
+        self.grid_propagate(False)

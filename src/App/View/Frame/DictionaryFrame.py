@@ -10,3 +10,6 @@ class DictionaryFrame(TableGridFrame):
         headerStyling = getTableHeaderLabelSettings()
         labelStyling = getTableLabelSettings()
         super().__init__(master, data, headerStyling, labelStyling, **kwargs)
+
+    def _setGridProperties(self) -> None:
+        self.grid_propagate(False)

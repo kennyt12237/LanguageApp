@@ -42,6 +42,8 @@ class SentenceFrame(GridFrame):
         self.grid_rowconfigure(1, weight=1)
         self.grid_columnconfigure(0, weight=1)
 
+    def _setGridProperties(self) -> None:
+        self.grid_propagate(False)
 
 class SentenceDataFrame(GridFrame):
 
