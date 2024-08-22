@@ -8,7 +8,7 @@ from .Utils import getScreenWidthCtypes, getScreenHeightCtypes, setProcessDpiAwa
 
 class BasicView():
 
-    def __init__(self, window: Window = Window(padx=20, pady=20), windowsize: float = 0.5, scaling: float = 2):
+    def __init__(self, window: Window = Window(padx=40, pady=20), windowsize: float = 0.5, scaling: float = 2):
         self.window: Window = window
         setProcessDpiAwareness2()
         self._setWindowSize(windowsize)
