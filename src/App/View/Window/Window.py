@@ -87,6 +87,14 @@ class Window(Tk):
         previousFrame = self.getCurrentFrame()
         self.__changeFrame(nextFrame=previousFrame, currentFrame=currentFrame)
 
+    def returnHome(self) -> Frame:
+        previousFrame = self.frameStack.pop()
+        homeFrame = self.frameStack[0]
+        for num in range(1, len(self.frameStack)):
+            self.frameStack.pop()
+        self.__changeFrame(nextFrame=homeFrame, currentFrame=previousFrame)
+
+        
     def getNumberOfFramesNavigated(self) -> int:
         return len(self.frameStack)
 
