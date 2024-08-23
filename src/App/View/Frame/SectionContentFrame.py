@@ -3,7 +3,7 @@ from tkinter import CENTER
 
 from .DictionaryFrame import DictionaryFrame
 from .GrammarFrame import GrammarFrame
-from .SentenceFrame import SentenceFrame
+from .SentenceFrame import SentenceContainer
 from .AbstractFrame import GridFrame
 
 from ..Window import Window
@@ -28,7 +28,7 @@ class SectionContentFrame(GridFrame):
         self.grammarButton = Button(
             self, text=self.GRAMMARS.capitalize(), command=lambda: self.onGrammarButtonPressed(self.data[self.GRAMMARS]))
         self.sentenceButton = Button(
-            self, text=self.SENTENCES.capitalize(), command=lambda: self.onSentenceButtonPressed(self.data[self.SENTENCES]))
+            self, text=self.SENTENCES.capitalize(), command=lambda: self.onSentenceButtonPressed(self.data[self.SENTENCES], self.data[self.GRAMMARS]))
         self.setAllButtonSizeRelativeToScreen(defaultWidgetSize)
         self._gridPlacement()
 
@@ -40,9 +40,9 @@ class SectionContentFrame(GridFrame):
         self.window.newFrameNavigated(GrammarFrame(
             self.window, grammars, name=self.GRAMMAR))
 
-    def onSentenceButtonPressed(self, sentences: list[dict[str, str]]) -> None:
-        self.window.newFrameNavigated(SentenceFrame(
-            self.window, sentences, name=self.SENTENCE))
+    def onSentenceButtonPressed(self, sentences: list[dict[str, str]], grammars : list[dict[str,str]] = None) -> None:
+        self.window.newFrameNavigated(SentenceContainer(
+            self.window, sentenceData=sentences, grammarData=grammars, name=self.SENTENCE))
 
     def setAllButtonSizeRelativeToScreen(self, relativeSize: float) -> None:
         widthSize = int(self.window.getWidth() * relativeSize)

@@ -1,5 +1,5 @@
 from tkinter import Frame, Label, Button, Misc
-from tkinter import CENTER
+from tkinter import CENTER, LEFT
 from typing import Callable
 import json
 
@@ -7,16 +7,17 @@ from .Styling import getSentenceTextFont, getSentenceMeaningFont, getStepLabelFo
 from .AbstractFrame import GridFrame
 
 
-class SentenceFrame(GridFrame):
+class SentenceContainer(GridFrame):
 
     STICKY = "nsew"
 
-    def __init__(self, master: Misc, sentenceData: list[dict[str, str]] = None, initIndex: int = 0, **kwargs) -> None:
+    def __init__(self, master: Misc, sentenceData: list[dict[str, str]], grammarData : list[dict[str,str]] = None, initIndex: int = 0, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.initIndex = initIndex
         self.sentenceData: list[dict[str, str]] = json.loads(sentenceData)
+        self.grammars : list[str] = self._getGrammarList(grammarData)
         self.sentenceDataFrame = SentenceDataFrame(self, self._getSentenceDataIndexSentence(
-            self.initIndex), self._getSentenceDataIndexMeaning(self.initIndex))
+            self.initIndex), self._getSentenceDataIndexMeaning(self.initIndex), self.grammars)
         self.sentenceNavigationFrame = SentenceNavigationFrame(
             self, self.initIndex + 1, len(self.sentenceData), self.changeSentenceDataFrame)
         self._gridPlacement()
@@ -26,6 +27,13 @@ class SentenceFrame(GridFrame):
         nextMeaning = self._getSentenceDataIndexMeaning(nextIndex)
         self.sentenceDataFrame.changeLabelTexts(nextSentence, nextMeaning)
 
+    def _getGrammarList(self, grammarDataJson : json) -> list[str]:
+        grammarData : list[dict[str,str]] = json.loads(grammarDataJson)
+        grammars : list[str] = []
+        for g in grammarData:
+            grammars.append(g["character"])
+        return grammars
+        
     def _getSentenceDataIndex(self) -> list[str]:
         return list(self.sentenceData[0].values())
 
@@ -47,28 +55,55 @@ class SentenceFrame(GridFrame):
 
 class SentenceDataFrame(GridFrame):
 
-    def __init__(self, rootFrame: Frame, sentence: str = None, meaning: str = None, **kwargs) -> None:
+    def __init__(self, rootFrame: Frame, sentence: str = None, meaning: str = None, grammars : list[str] = None, **kwargs) -> None:
         super().__init__(rootFrame, **kwargs)
         self.rootFrame = rootFrame
         self.sentence = sentence
         self.meaning = meaning
-        self.sentenceLabel = Label(
-            self, text=sentence, font=getSentenceTextFont())
+        self.grammars = grammars
+        self.sentenceFrame = SentenceFrame(self, self.sentence, font=getSentenceTextFont(), grammars=self.grammars)
         self.meaningLabel = Label(
             self, text=meaning, font=getSentenceMeaningFont())
         self._gridPlacement()
 
     def changeLabelTexts(self, sentence: str = None, meaning: str = None) -> None:
-        self.sentenceLabel.config(text=sentence)
+        self.sentenceFrame.changeLabels(text=sentence)
         self.meaningLabel.config(text=meaning)
 
     def _gridPlacement(self) -> None:
-        self.sentenceLabel.grid(row=0, column=0, pady=(0, 40))
+        self.sentenceFrame.grid(row=0, column=0, pady=(0, 40))
         self.meaningLabel.grid(row=1, column=0)
 
     def _setGridProperties(self) -> None:
         self.grid_anchor(CENTER)
 
+class SentenceFrame(Frame):
+    
+    BACKGROUND_COLOR = 'yellow'
+    
+    def __init__(self, master : Misc, text : str, font : tuple = None, grammars : list[str] = None, **kwargs) -> None:
+        super().__init__(master, **kwargs)
+        self.font = font
+        self.grammars = grammars
+        self.changeLabels(text=text)
+        
+    def _createLabels(self, text : str) -> None:
+        for char in text:
+            bg = self.BACKGROUND_COLOR if char in self.grammars else self.winfo_toplevel().cget("bg")
+            Label(self, text=char, font=self.font, background=bg)
+    
+    def _removeAllLabels(self) -> None:
+        for label in self.winfo_children():
+            label.destroy()
+    
+    def _packAllLabels(self) -> None:
+        for label in self.winfo_children():
+            label.pack(side=LEFT)
+            
+    def changeLabels(self, text: str) -> None:
+        self._removeAllLabels()
+        self._createLabels(text=text)
+        self._packAllLabels()
 
 class SentenceNavigationFrame(GridFrame):
 
