@@ -33,8 +33,8 @@ def getTableLabelSettings() -> dict:
 class SentenceStyling():
 
     def __init__(self) -> None:
-        self.sentenceTextFont = ("Segoe UI", 18)
-        self.sentenceMeaningFont = ("Segoe UI", 20)
+        self.sentenceTextFont = ("Segoe UI", 20)
+        self.sentenceMeaningFont = ("Segoe UI", 24)
         self.stepLabelFont = ("Couroer", 10, BOLD)
 
     def setSentenceTextFont(self, font: tuple[str, int]) -> None:
