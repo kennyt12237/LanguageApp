@@ -1,4 +1,5 @@
 from .AbstractFrame import *
+from .SentenceFrame import *
 from .DictionaryFrame import *
 from .GrammarFrame import *
 from .HomeFrame import *
