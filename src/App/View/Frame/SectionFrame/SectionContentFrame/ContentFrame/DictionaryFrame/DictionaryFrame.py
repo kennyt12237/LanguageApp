@@ -1,15 +1,12 @@
 from tkinter import Misc
 from .....AbstractFrame import TableGridFrame
-from .....Styling import getTableHeaderLabelSettings, getTableLabelSettings
 import json
 
 
 class DictionaryFrame(TableGridFrame):
 
     def __init__(self, master: Misc, data: json = None, **kwargs):
-        headerStyling = getTableHeaderLabelSettings()
-        labelStyling = getTableLabelSettings()
-        super().__init__(master, data, headerStyling, labelStyling, **kwargs)
+        super().__init__(master, data, **kwargs)
 
     def _setGridProperties(self) -> None:
         self.grid_propagate(False)
