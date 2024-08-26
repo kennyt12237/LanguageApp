@@ -1,11 +1,12 @@
 from tkinter import Frame, Label, Misc
 from tkinter import CENTER, LEFT, S, N, E, W, BOTTOM
 from tkinter.font import Font
+
+from .Styling import getSentenceTextFont, getSentenceMeaningFont
+from .Utils import TkManager, convertTupleToFont, getGrammarCharactersList, getGrammarDataFromCharacter
+
 from ..AbstractFrame import GridFrame
 
-from ...Utils import getGrammarCharactersList, getGrammarDataFromCharacter
-from ..Styling import getSentenceTextFont, getSentenceMeaningFont
-from .Utils import TkManager
 
 class SentenceDataFrame(GridFrame):
 
@@ -14,14 +15,10 @@ class SentenceDataFrame(GridFrame):
         self.rootFrame = rootFrame
         self.grammarData = grammarData
         self.sentenceFrame = SentenceFrameWrapper(
-            self, font=self.convertTupleToFont(getSentenceTextFont()), grammarData=self.grammarData)
+            self, font=convertTupleToFont(getSentenceTextFont()), grammarData=self.grammarData)
         self.meaningLabel = Label(
-            self, font=self.convertTupleToFont(getSentenceMeaningFont()))
+            self, font=convertTupleToFont(getSentenceMeaningFont()))
         self._gridPlacement()
-
-    def convertTupleToFont(self, fontTuple: tuple) -> Font:
-        family, size = fontTuple
-        return Font(family=family, size=size)
 
     def changeLabelTexts(self, sentence: str = None, meaning: str = None, manager: TkManager = None) -> None:
         self.sentenceFrame.changeLabels(text=sentence, manager=manager)

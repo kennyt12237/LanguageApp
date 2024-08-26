@@ -1,8 +1,9 @@
 from tkinter import Frame, Label, Button
 from typing import Callable
 
-from ..Styling import getStepLabelFont
+from .Styling import getStepLabelFont
 from ..AbstractFrame import GridFrame
+
 
 class SentenceNavigationFrame(GridFrame):
 
