@@ -1,9 +1,7 @@
 from tkinter import Frame
 from typing import Callable
 
-from .Frame import NavigationFrame, HomeFrame
-from .Window import Window
-from .Utils import getScreenWidthCtypes, getScreenHeightCtypes, setProcessDpiAwareness2
+from .Frame import NavigationFrame, HomeFrame, Window, getScreenWidthCtypes, getScreenHeightCtypes, setProcessDpiAwareness2
 
 
 class BasicView():

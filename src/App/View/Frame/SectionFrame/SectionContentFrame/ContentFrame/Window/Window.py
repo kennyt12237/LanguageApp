@@ -2,7 +2,7 @@ from tkinter import Tk, Frame, TclError
 
 from typing import Callable
 
-from ..Utils import getScreenWidthCtypes, getScreenHeightCtypes
+from .Utils import getScreenWidthCtypes, getScreenHeightCtypes
 
 
 class FrameDetail():
