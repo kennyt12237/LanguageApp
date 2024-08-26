@@ -1,8 +1,7 @@
 from tkinter import Button, Misc
 from tkinter import CENTER
 
-from .ScrollableDictionaryFrame import ScrollableDictionaryFrame
-from .GrammarFrame import GrammarFrame
+from .ContentFrame import ScrollableDictionaryFrame, GrammarFrame
 from .SentenceFrame import SentenceContainer
 from .AbstractFrame import GridFrame
 
