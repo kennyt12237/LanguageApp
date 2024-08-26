@@ -1,2 +1,2 @@
 from .SectionContentFrame import *
-from .ContentFrame import *
+from .TkinterWidget import *

@@ -2,7 +2,7 @@ from tkinter import Button, Misc
 from tkinter import CENTER
 from typing import Callable
 
-from .SectionFrame import ScrollableDictionaryFrame, SectionFrame, GridFrame, Window, convertPixelsToTextUnit
+from .Section import ScrollableDictionaryFrame, SectionFrame, GridFrame, Window, convertPixelsToTextUnit
 
 
 class HomeFrame(GridFrame):

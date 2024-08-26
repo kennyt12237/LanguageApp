@@ -1,2 +1,2 @@
-from .Frame import *
+from .Home import *
 from .GUI import *
