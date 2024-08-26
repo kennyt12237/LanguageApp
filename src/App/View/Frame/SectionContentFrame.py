@@ -1,7 +1,7 @@
 from tkinter import Button, Misc
 from tkinter import CENTER
 
-from .DictionaryFrame import DictionaryFrame
+from .ScrollableDictionaryFrame import ScrollableDictionaryFrame
 from .GrammarFrame import GrammarFrame
 from .SentenceFrame import SentenceContainer
 from .AbstractFrame import GridFrame
@@ -33,7 +33,7 @@ class SectionContentFrame(GridFrame):
         self._gridPlacement()
 
     def onWordButtonPressed(self, words: list[dict[str, str]]) -> None:
-        self.window.newFrameNavigated(DictionaryFrame(
+        self.window.newFrameNavigated(ScrollableDictionaryFrame(
             self.window, words, name=self.DICTIONARY))
 
     def onGrammarButtonPressed(self, grammars: list[dict[str, str]]) -> None:
