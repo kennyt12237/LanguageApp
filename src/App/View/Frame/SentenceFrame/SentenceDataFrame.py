@@ -1,5 +1,5 @@
 from tkinter import Frame, Label, Misc
-from tkinter import CENTER, LEFT, S, N
+from tkinter import CENTER, LEFT, S, N, E, W, BOTTOM
 from ..AbstractFrame import GridFrame
 
 from ...Utils import getGrammarCharactersList, getGrammarDataFromCharacter
@@ -25,7 +25,7 @@ class SentenceDataFrame(GridFrame):
         self.meaningLabel.config(text=meaning)
 
     def _gridPlacement(self) -> None:
-        self.sentenceFrame.grid(row=0, column=0, pady=(0, 40), sticky="nsew")
+        self.sentenceFrame.grid(row=0, column=0, pady=(0, 40), sticky=N+S+E+W)
         self.meaningLabel.grid(row=1, column=0, sticky=N)
 
     def _setGridProperties(self) -> None:
@@ -41,7 +41,7 @@ class SentenceFrameWrapper(Frame):
         super().__init__(master, **kwargs)
         self.sentenceFrame = SentenceFrame(
             self, text, font, grammarData, **kwargs)
-        self.sentenceFrame.pack(side="bottom")
+        self.sentenceFrame.pack(side=BOTTOM)
 
     def changeLabels(self, text: str) -> None:
         self.sentenceFrame.changeLabels(text)
@@ -64,8 +64,7 @@ class SentenceFrame(Frame):
                 label = LabelWithTooltip(self, tooltipParent=self.master, text=char, font=self.font,
                                          background=self.BACKGROUND_COLOR)
                 grammar = getGrammarDataFromCharacter(self.grammarData, char)
-                yOffset = 100
-                label.setToolTip(grammar=grammar, yOffset=yOffset)
+                label.setToolTip(grammar=grammar)
             else:
                 Label(self, text=char, font=self.font)
 
@@ -85,17 +84,20 @@ class SentenceFrame(Frame):
 
 class LabelWithTooltip(Label):
 
+    ENTER_SEQUENCE = "<Enter>"
+    LEAVE_SEQUENCE = "<Leave>"
+
     def __init__(self, master: Misc, tooltipParent: Misc, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.tooltipParent = tooltipParent
         self.toolTip: Label = None
 
-    def setToolTip(self, grammar: dict[str, str], yOffset: int = 0) -> None:
-        self.bind("<Enter>", func=lambda e: self.__createTooltip(
-            grammar, yOffset))
-        self.bind("<Leave>", func=lambda e: self.__removeToolTip())
+    def setToolTip(self, grammar: dict[str, str]) -> None:
+        self.bind(self.ENTER_SEQUENCE, func=lambda e: self.__createTooltip(
+            grammar))
+        self.bind(self.LEAVE_SEQUENCE, func=lambda e: self.__removeToolTip())
 
-    def __createTooltip(self, grammar: dict[str, str], yOffset: int) -> None:
+    def __createTooltip(self, grammar: dict[str, str]) -> None:
         text = "Pinyin : {pinyin}\nCharacter : {character}{num}\nMeaning : {meaning}".format(
             pinyin=grammar["pinyin"],
             character=grammar["character"],
@@ -103,9 +105,7 @@ class LabelWithTooltip(Label):
             meaning=grammar["usage"])
         self.toolTip = Label(self.tooltipParent, text=text, borderwidth=2,
                              padx=10, pady=10, relief="solid", background="lightyellow")
-        # print(self.master, self.master.winfo_width(), self.master.winfo_height())
-        # print(self.tooltipParent, self.tooltipParent.winfo_width(), self.tooltipParent.winfo_height())
-        # print(self.toolTip, self.toolTip.winfo_reqwidth(), self.toolTip.winfo_reqheight())
+
         xPos = self.master.winfo_x() + self.winfo_x() - \
             (self.toolTip.winfo_reqwidth() / 2)
         yPos = self.tooltipParent.winfo_height() - self.master.winfo_height() - \
