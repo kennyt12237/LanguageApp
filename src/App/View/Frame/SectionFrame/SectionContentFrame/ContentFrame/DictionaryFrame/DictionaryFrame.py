@@ -1,6 +1,6 @@
 from tkinter import Misc
-from ...AbstractFrame import TableGridFrame
-from ...Styling import getTableHeaderLabelSettings, getTableLabelSettings
+from .....AbstractFrame import TableGridFrame
+from .....Styling import getTableHeaderLabelSettings, getTableLabelSettings
 import json
 
 

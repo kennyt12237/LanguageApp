@@ -3,7 +3,7 @@ from tkinter import VERTICAL, RIGHT, ALL
 
 from .GrammarFrame import GrammarFrame
 
-from ....Window import Window
+from ......Window import Window
 import json
 
 

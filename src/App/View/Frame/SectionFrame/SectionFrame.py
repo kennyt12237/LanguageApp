@@ -2,10 +2,10 @@ from tkinter import Button, Misc
 from tkinter import CENTER
 import json
 
-from ..Window import Window
-from ..Utils import convertPixelsToTextUnit
+from ...Window import Window
+from ...Utils import convertPixelsToTextUnit
 from .SectionContentFrame import SectionContentFrame
-from .AbstractFrame import GridFrame
+from ..AbstractFrame import GridFrame
 
 
 class SectionFrame(GridFrame):

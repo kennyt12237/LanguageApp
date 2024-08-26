@@ -3,8 +3,7 @@ from tkinter import CENTER
 from typing import Callable
 
 from .AbstractFrame import GridFrame
-from .ContentFrame import ScrollableDictionaryFrame
-from .SectionFrame import SectionFrame
+from .SectionFrame import ScrollableDictionaryFrame, SectionFrame
 from ..Window import Window
 from ..Utils import convertPixelsToTextUnit
 

@@ -1,9 +1,6 @@
 from .AbstractFrame import *
-from .SentenceFrame import *
-from .ContentFrame import *
+from .SectionFrame import *
 from .HomeFrame import *
 from .NavigationFrame import *
-from .SectionContentFrame import *
-from .SectionFrame import *
-from .SentenceFrame import *
+
 from .Styling import *
