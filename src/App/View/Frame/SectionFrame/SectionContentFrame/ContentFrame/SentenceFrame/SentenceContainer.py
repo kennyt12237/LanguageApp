@@ -1,6 +1,6 @@
 from tkinter import Misc
 
-from .....AbstractFrame import GridFrame
+from ..AbstractFrame import GridFrame
 from .SentenceDataFrame import SentenceDataFrame
 from .SentenceNavigationFrame import SentenceNavigationFrame
 from .Utils import TkManager

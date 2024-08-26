@@ -1,6 +1,6 @@
 from tkinter import Misc
 
-from .....AbstractFrame import TableGridFrame
+from ..AbstractFrame import TableGridFrame
 
 
 class GrammarFrame(TableGridFrame):

@@ -5,7 +5,7 @@ from tkinter.font import Font
 from .Styling import getSentenceTextFont, getSentenceMeaningFont
 from .Utils import TkManager, convertTupleToFont, getGrammarCharactersList, getGrammarDataFromCharacter
 
-from .....AbstractFrame import GridFrame
+from ..AbstractFrame import GridFrame
 
 
 class SentenceDataFrame(GridFrame):

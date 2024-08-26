@@ -1,5 +1,5 @@
 from tkinter import Misc
-from .....AbstractFrame import TableGridFrame
+from ..AbstractFrame import TableGridFrame
 import json
 
 

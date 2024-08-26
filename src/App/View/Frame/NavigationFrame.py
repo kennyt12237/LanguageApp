@@ -1,7 +1,7 @@
 from tkinter import Frame, Button, Label, PhotoImage
 from tkinter import W, E
 
-from .AbstractFrame import GridFrame
+from .SectionFrame import GridFrame
 from ..Window import Window
 
 import os
