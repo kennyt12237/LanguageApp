@@ -14,7 +14,7 @@ class SentenceDataFrame(GridFrame):
         self.rootFrame = rootFrame
         self.grammarData = grammarData
         self.sentenceFrame = SentenceFrameWrapper(
-            self, font=self.convertTupleToFont(getSentenceTextFont()), grammarData=self.grammarData, background="red")
+            self, font=self.convertTupleToFont(getSentenceTextFont()), grammarData=self.grammarData)
         self.meaningLabel = Label(
             self, font=self.convertTupleToFont(getSentenceMeaningFont()))
         self._gridPlacement()
