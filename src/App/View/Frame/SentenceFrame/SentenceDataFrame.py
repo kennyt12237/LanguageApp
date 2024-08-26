@@ -1,27 +1,30 @@
 from tkinter import Frame, Label, Misc
 from tkinter import CENTER, LEFT, S, N, E, W, BOTTOM
+from tkinter.font import Font
 from ..AbstractFrame import GridFrame
 
 from ...Utils import getGrammarCharactersList, getGrammarDataFromCharacter
 from ..Styling import getSentenceTextFont, getSentenceMeaningFont
-
+from .Utils import TkManager
 
 class SentenceDataFrame(GridFrame):
 
-    def __init__(self, rootFrame: Frame, sentence: str = None, meaning: str = None, grammarData: list[dict[str, str]] = None, **kwargs) -> None:
+    def __init__(self, rootFrame: Frame, grammarData: list[dict[str, str]] = None, **kwargs) -> None:
         super().__init__(rootFrame, **kwargs)
         self.rootFrame = rootFrame
-        self.sentence = sentence
-        self.meaning = meaning
         self.grammarData = grammarData
         self.sentenceFrame = SentenceFrameWrapper(
-            self, self.sentence, font=getSentenceTextFont(), grammarData=self.grammarData)
+            self, font=self.convertTupleToFont(getSentenceTextFont()), grammarData=self.grammarData, background="red")
         self.meaningLabel = Label(
-            self, text=meaning, font=getSentenceMeaningFont())
+            self, font=self.convertTupleToFont(getSentenceMeaningFont()))
         self._gridPlacement()
 
-    def changeLabelTexts(self, sentence: str = None, meaning: str = None) -> None:
-        self.sentenceFrame.changeLabels(text=sentence)
+    def convertTupleToFont(self, fontTuple: tuple) -> Font:
+        family, size = fontTuple
+        return Font(family=family, size=size)
+
+    def changeLabelTexts(self, sentence: str = None, meaning: str = None, manager: TkManager = None) -> None:
+        self.sentenceFrame.changeLabels(text=sentence, manager=manager)
         self.meaningLabel.config(text=meaning)
 
     def _gridPlacement(self) -> None:
@@ -37,26 +40,25 @@ class SentenceDataFrame(GridFrame):
 
 class SentenceFrameWrapper(Frame):
 
-    def __init__(self, master: Misc, text: str, font: tuple = None, grammarData: list[dict[str, str]] = None, **kwargs) -> None:
-        super().__init__(master, **kwargs)
+    def __init__(self, master: Misc, font: Font = None, grammarData: list[dict[str, str]] = None, tkManager: TkManager = None, **kwargs) -> None:
+        super().__init__(master)
         self.sentenceFrame = SentenceFrame(
-            self, text, font, grammarData, **kwargs)
+            self, font, grammarData, tkManager, **kwargs)
         self.sentenceFrame.pack(side=BOTTOM)
 
-    def changeLabels(self, text: str) -> None:
-        self.sentenceFrame.changeLabels(text)
+    def changeLabels(self, text: str, manager: TkManager) -> None:
+        self.sentenceFrame.changeLabels(text, manager)
 
 
 class SentenceFrame(Frame):
 
     BACKGROUND_COLOR = 'yellow'
 
-    def __init__(self, master: Misc, text: str, font: tuple = None, grammarData: list[dict[str, str]] = None, **kwargs) -> None:
+    def __init__(self, master: Misc, font: Font = None, grammarData: list[dict[str, str]] = None, manager: TkManager = None, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.font = font
         self.grammarData = grammarData
         self.characters: list[str] = getGrammarCharactersList(grammarData)
-        self.changeLabels(text=text)
 
     def _createLabels(self, text: str) -> None:
         for char in text:
@@ -76,10 +78,21 @@ class SentenceFrame(Frame):
         for label in self.winfo_children():
             label.pack(side=LEFT, anchor=S)
 
-    def changeLabels(self, text: str) -> None:
+    def _placeAllLabels(self) -> None:
+        xPos = 0
+        for label in self.winfo_children():
+            label.place(x=xPos, y=0)
+            charWidth = self.font.measure(label.cget("text"))
+            xPos += charWidth + 2
+        self.config(width=xPos, height=self.font.metrics("linespace"))
+
+    def changeLabels(self, text: str, manager: TkManager = TkManager.PACK) -> None:
         self._removeAllLabels()
         self._createLabels(text=text)
-        self._packAllLabels()
+        if manager == TkManager.PLACE:
+            self._placeAllLabels()
+        else:
+            self._packAllLabels()
 
 
 class LabelWithTooltip(Label):

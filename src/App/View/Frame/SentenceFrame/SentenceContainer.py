@@ -3,6 +3,7 @@ from tkinter import Misc
 from ..AbstractFrame import GridFrame
 from .SentenceDataFrame import SentenceDataFrame
 from .SentenceNavigationFrame import SentenceNavigationFrame
+from .Utils import TkManager
 
 import json
 
@@ -15,16 +16,19 @@ class SentenceContainer(GridFrame):
         self.initIndex = initIndex
         self.sentenceData: list[dict[str, str]] = json.loads(sentenceData)
         self.grammars: list[str] = grammarData
-        self.sentenceDataFrame = SentenceDataFrame(self, self._getSentenceDataIndexSentence(
-            self.initIndex), self._getSentenceDataIndexMeaning(self.initIndex), self.grammars)
+        self.sentenceDataFrame = SentenceDataFrame(self, self.grammars)
         self.sentenceNavigationFrame = SentenceNavigationFrame(
             self, self.initIndex + 1, len(self.sentenceData), self.changeSentenceDataFrame)
+        self.__setInitialSentenceFrameData(0)
         self._gridPlacement()
 
+    def __setInitialSentenceFrameData(self, index) -> None:
+        self.changeSentenceDataFrame(index)
+        
     def changeSentenceDataFrame(self, nextIndex: int) -> None:
         nextSentence = self._getSentenceDataIndexSentence(nextIndex)
         nextMeaning = self._getSentenceDataIndexMeaning(nextIndex)
-        self.sentenceDataFrame.changeLabelTexts(nextSentence, nextMeaning)
+        self.sentenceDataFrame.changeLabelTexts(nextSentence, nextMeaning, TkManager.PLACE)
 
     def _getSentenceDataIndex(self) -> list[str]:
         return list(self.sentenceData[0].values())
