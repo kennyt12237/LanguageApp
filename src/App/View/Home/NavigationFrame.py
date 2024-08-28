@@ -75,7 +75,7 @@ class MenuFrameWrapper(GridFrame):
     def __init__(self, master: Misc, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.menuFrame = MenuFrame(self, **kwargs)
-        self.settingFrame = SettingFrame(self.winfo_toplevel())
+        self.settingFrame = SettingFrame(self.winfo_toplevel(), borderwidth=3, relief="raised")
         self.settingFrame.setOnClosedButtonPressed(lambda: (self.settingFrame.place_forget(
         ), self.menuFrame.grid(row=0, column=0, sticky="nsew")))
         self.menuFrame.setOnSettingsButtonPressed(self.onSettingButtonPressed)
@@ -210,14 +210,14 @@ class SentenceSettingFrame(GridFrame):
 
     def __init__(self, master: Misc, **kwargs) -> None:
         super().__init__(master, **kwargs)
-        self.sentenceLabel = Label(self, text="Sentence", width=40)
+        self.sentenceLabel = Label(self, text="Sentence", width=40, padx=4, anchor=W)
         self.seperator = Separator(self, orient=HORIZONTAL)
         self.sizeFrame = SizeFrame(self)
         self._gridPlacement()
-
+        
     def _gridPlacement(self) -> None:
         self.sentenceLabel.grid(row=0, column=0, sticky="nsew")
-        self.seperator.grid(row=1, column=0, sticky="nsew")
+        self.seperator.grid(row=1, column=0, sticky="ew", pady=(0,2))
         self.sizeFrame.grid(row=2, column=0, sticky="nsew")
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
@@ -227,9 +227,9 @@ class SentenceSettingFrame(GridFrame):
 
 class SizeFrame(GridFrame):
 
-    SMALL = "small"
-    MEDIUM = "medium"
-    LARGE = "large"
+    SMALL = "Small"
+    MEDIUM = "Medium"
+    LARGE = "Large"
 
     def __init__(self, master: Misc, **kwargs) -> None:
         super().__init__(master, **kwargs)
