@@ -29,14 +29,6 @@ class NavigationFrame(GridFrame):
         self.menuFrame = MenuFrameWrapper(self, background="red")
         self.menuFrame.setOnHomeButtonPressed(lambda: self.window.returnHome())
 
-        # def setOnSettingButtonPressed():
-        #     print("back button", self.backButton.winfo_rootx(), self.backButton.winfo_rooty())
-        #     print("back button size", self.grid_bbox(row=0, column=0))
-        #     print("frameLabel", self.frameLabel.winfo_rootx(), self.frameLabel.winfo_rooty())
-        #     print("frameLabel size", self.grid_bbox(row=0, column=1), self.frameLabel.bbox())
-        #     print("menuframe", self.menuFrame.winfo_rootx(), self.menuFrame.winfo_rooty())
-        #     print("MenuFrame size", self.grid_bbox(row=0, column=2))
-        # self.menuFrame.setOnSettingsButtonPressed(setOnSettingButtonPressed)
         self._gridPlacement()
         self._setGridProperties()
 
@@ -84,8 +76,9 @@ class MenuFrameWrapper(GridFrame):
         super().__init__(master, **kwargs)
         self.menuFrame = MenuFrame(self, **kwargs)
         self.settingFrame = SettingFrame(self.winfo_toplevel())
+        self.settingFrame.setOnClosedButtonPressed(lambda: (self.settingFrame.place_forget(
+        ), self.menuFrame.grid(row=0, column=0, sticky="nsew")))
         self.menuFrame.setOnSettingsButtonPressed(self.onSettingButtonPressed)
-
         self._gridPlacement()
 
     def setOnHomeButtonPressed(self, command) -> None:
@@ -100,11 +93,12 @@ class MenuFrameWrapper(GridFrame):
         yPos = self.winfo_y()
         # self.menuFrame.grid_remove()
         _, _, x2, _ = self.bbox()
+
         def onMenuFrameWrapperConfigure() -> None:
-            xPos = self.winfo_x() 
+            xPos = self.winfo_x()
             yPos = self.winfo_y()
             self.settingFrame.place_configure(x=xPos, y=yPos)
-        self.bind("<Configure>", lambda e : onMenuFrameWrapperConfigure())
+        self.bind("<Configure>", lambda e: onMenuFrameWrapperConfigure())
         self.settingFrame.place(x=xPos, y=yPos, width=x2)
 
     def setOnSettingsButtonPressed(self, command) -> None:
@@ -179,9 +173,6 @@ class MenuFrame(GridFrame):
     def getButtonListStr(self) -> list[str]:
         return list(self.buttonDict.keys())
 
-    def printInfo(self):
-        print(self.winfo_rootx(), self.winfo_rooty())
-
     def setOnSettingsButtonPressed(self, command) -> None:
         self.settingsButton.config(command=command)
 
@@ -197,18 +188,29 @@ class MenuFrame(GridFrame):
 
 class SettingFrame(GridFrame):
 
+    CLOSE = "Close"
+
     def __init__(self, master: Misc, **kwargs) -> None:
         super().__init__(master, **kwargs)
 
         self.sentenceSettingFrame = SentenceSettingFrame(self)
-        self.sentenceSettingFrame.pack(fill="both", expand=True)
+        self.closeButton = Button(self, text=self.CLOSE)
+        self._gridPlacement()
+
+    def setOnClosedButtonPressed(self, command) -> None:
+        self.closeButton.config(command=command)
+
+    def _gridPlacement(self) -> None:
+        self.sentenceSettingFrame.grid(row=0, column=0, pady=(0, 50))
+        self.closeButton.grid(row=1, column=0, sticky=E)
+        self.grid_columnconfigure(0, weight=1)
 
 
 class SentenceSettingFrame(GridFrame):
 
     def __init__(self, master: Misc, **kwargs) -> None:
         super().__init__(master, **kwargs)
-        self.sentenceLabel = Label(self, text="Sentence", width=50)
+        self.sentenceLabel = Label(self, text="Sentence", width=40)
         self.seperator = Separator(self, orient=HORIZONTAL)
         self.sizeFrame = SizeFrame(self)
         self._gridPlacement()
