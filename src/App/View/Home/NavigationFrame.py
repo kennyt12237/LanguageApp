@@ -14,14 +14,16 @@ class NavigationFrame(GridFrame):
         HOME = "home",
         SETTINGS = "settings"
 
-    ARROW_PATH = os.path.join(os.getcwd(), 'src\App\Icons', 'arrow-left.png')
-    HOME_PATH = os.path.join(os.getcwd(), 'src\App\Icons', 'home.png')
+    ARROW_PATH = os.path.join(os.getcwd(), 'src\App\View\Home\Icons', 'arrow-left.png')
+    HOME_PATH = os.path.join(os.getcwd(), 'src\App\View\Home\Icons', 'home.png')
+    SETTINGS_PATH = os.path.join(os.getcwd(), 'src\App\View\Home\Icons', 'settings.png')
 
     def __init__(self, window: Window, **kwargs) -> None:
         super().__init__(window, **kwargs)
         self.window: Window = window
         self.backImage = PhotoImage(file=self.ARROW_PATH)
         self.homeImage = PhotoImage(file=self.HOME_PATH)
+        self.settingsImage = PhotoImage(file=self.SETTINGS_PATH)
         self.window.bindForFrameChange(self.onFrameChanged)
         self.backButton = Button(self, image=self.backImage,
                                  command=self.backButtonPressed, width=50)
@@ -58,7 +60,7 @@ class NavigationFrame(GridFrame):
             self.menuFrame.hideButton(
                 self.menuButtonDict[self.ButtonType.HOME])
             return
-        self.backButton.grid(row=0, column=0)
+        self.backButton.grid(row=0, column=0, sticky=W)
         self.menuFrame.showButton(self.menuButtonDict[self.ButtonType.HOME])
 
     def __setFrameHeader(self, frame: Frame) -> None:
@@ -82,7 +84,7 @@ class NavigationFrame(GridFrame):
         homeButton = Button(parent, image=self.homeImage,
                             command=self.homeButtonPressed)
         settingsButton = Button(
-            parent, text="Settings", command=self.settingButtonPressed)
+            parent, image=self.settingsImage, width=50, command=self.settingButtonPressed)
 
         buttonDict[self.ButtonType.HOME] = homeButton
         buttonDict[self.ButtonType.SETTINGS] = settingsButton
