@@ -2,48 +2,8 @@ from tkinter import Tk, Frame, TclError
 
 from typing import Callable
 
+from ..AbstractFrame import GridFrame
 from .Utils import getScreenWidthCtypes, getScreenHeightCtypes
-
-
-class FrameDetail():
-
-    PACK = 'pack'
-    GRID = 'grid'
-
-    def __init__(self, frame: Frame) -> None:
-        self.frame = frame
-        self.layoutManager = self.__findLayoutManagerUsed(frame)
-
-    def __findLayoutManagerUsed(self, frame: Frame) -> str:
-        try:
-            frame.pack_info()
-            return self.PACK
-        except TclError:
-            pass
-        try:
-            frame.grid_info()
-            return self.GRID
-        except TclError:
-            pass
-        return None
-
-    def useDefinedLayout(self) -> None:
-        if self.layoutManager == self.PACK:
-            self.frame.pack()
-        elif self.layoutManager == self.GRID:
-            self.frame.grid(row=1, column=0, sticky="nsew")
-
-    def remove(self) -> None:
-        if self.layoutManager == self.PACK:
-            self.frame.pack_forget()
-        elif self.layoutManager == self.GRID:
-            self.frame.grid_remove()
-
-    def getFrame(self) -> Frame:
-        return self.frame
-
-    def getLayoutManager(self) -> str:
-        return self.layoutManager
 
 
 class Window(Tk):
@@ -52,15 +12,13 @@ class Window(Tk):
         super().__init__()
         self.padx = padx
         self.pady = pady
-        self.frameDetails: dict[Frame, FrameDetail] = {}
         self.frameStack = []
         self.FRAME_CHANGED_EVENT = "<<FrameChangeEvent>>"
         self.adjustedWidth = getScreenWidthCtypes()
         self.adjustedHeight = getScreenHeightCtypes()
         self.config(padx=padx, pady=pady)
 
-    def setDefaultFrame(self, defaultFrame: Frame) -> None:
-        self.frameDetails[defaultFrame] = FrameDetail(defaultFrame)
+    def setDefaultFrame(self, defaultFrame: GridFrame) -> None:
         self.frameStack = [defaultFrame]
 
     def __triggerFrameChangedEvent(self) -> None:
@@ -69,15 +27,12 @@ class Window(Tk):
     def bindForFrameChange(self, event: Callable) -> None:
         self.bind(self.FRAME_CHANGED_EVENT, event)
 
-    def __changeFrame(self,  nextFrame: Frame, currentFrame: Frame) -> None:
-        if self.frameDetails[currentFrame] != None:
-            self.frameDetails[currentFrame].remove()
-
-        self.frameDetails[nextFrame] = FrameDetail(nextFrame)
-        self.frameDetails[nextFrame].useDefinedLayout()
+    def __changeFrame(self,  nextFrame: GridFrame, currentFrame: GridFrame) -> None:
+        currentFrame.grid_remove()
+        nextFrame.grid(row=1, column=0, sticky="nsew")
         self.__triggerFrameChangedEvent()
 
-    def newFrameNavigated(self, newFrame: Frame) -> Frame:
+    def newFrameNavigated(self, newFrame: GridFrame) -> None:
         currentFrame = self.getCurrentFrame()
         self.frameStack.append(newFrame)
         self.__changeFrame(nextFrame=newFrame, currentFrame=currentFrame)
@@ -94,7 +49,6 @@ class Window(Tk):
             self.frameStack.pop()
         self.__changeFrame(nextFrame=homeFrame, currentFrame=previousFrame)
 
-        
     def getNumberOfFramesNavigated(self) -> int:
         return len(self.frameStack)
 
