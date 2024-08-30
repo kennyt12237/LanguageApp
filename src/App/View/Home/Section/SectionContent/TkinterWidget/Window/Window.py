@@ -1,4 +1,4 @@
-from tkinter import Tk, Frame, Widget
+from tkinter import Tk, Frame, Widget, Event
 
 from typing import Callable
 
@@ -18,6 +18,7 @@ class Window(Tk):
         self.adjustedHeight = getScreenHeightCtypes()
         self.config(padx=padx, pady=pady)
         self.widgetStyling = {}
+        self.bind("<Map>", lambda e : self.__onWidgetMapped(e))
         
     def setDefaultFrame(self, defaultFrame: GridFrame) -> None:
         self.frameStack = [defaultFrame]
@@ -31,7 +32,6 @@ class Window(Tk):
     def __changeFrame(self,  nextFrame: GridFrame, currentFrame: GridFrame) -> None:
         currentFrame.grid_remove()
         nextFrame.grid(row=1, column=0, sticky="nsew")
-        self.__setFrameStyling(self)
         self.__triggerFrameChangedEvent()
 
     def newFrameNavigated(self, newFrame: GridFrame) -> None:
@@ -76,11 +76,19 @@ class Window(Tk):
 
     def addWidgetStyling(self, name : str, styling : dict = None) -> None:
         self.widgetStyling[name] = styling
+        self.__setWidgetStyling(self)
         
-    def __setFrameStyling(self, child : Widget) -> None:
+    def __onWidgetMapped(self, event : Event) -> None:
+        widget : Widget = event.widget
+        name = widget.winfo_name()
+        for key in self.widgetStyling.keys():
+            if key in name:
+                widget.configure(**self.widgetStyling[key])
+        
+    def __setWidgetStyling(self, child : Widget) -> None:
         for child in child.winfo_children():
             name = child.winfo_name()
             for key in self.widgetStyling.keys():
                 if key in name:
                     child.configure(**self.widgetStyling[key])
-            self.__setFrameStyling(child)
+            self.__setWidgetStyling(child)
