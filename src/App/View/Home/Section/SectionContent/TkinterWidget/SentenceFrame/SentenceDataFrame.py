@@ -10,6 +10,8 @@ from ..AbstractFrame import GridFrame
 
 class SentenceDataFrame(GridFrame):
 
+    MEANING_LABEL = "meaningLabel"
+    
     def __init__(self, rootFrame: Frame, grammarData: list[dict[str, str]] = None, **kwargs) -> None:
         super().__init__(rootFrame, **kwargs)
         self.rootFrame = rootFrame
@@ -17,7 +19,7 @@ class SentenceDataFrame(GridFrame):
         self.sentenceFrame = SentenceFrameWrapper(
             self, font=convertTupleToFont(getSentenceTextFont()), grammarData=self.grammarData)
         self.meaningLabel = Label(
-            self, font=convertTupleToFont(getSentenceMeaningFont()))
+            self, name=self.MEANING_LABEL, font=convertTupleToFont(getSentenceMeaningFont()))
         self._gridPlacement()
 
     def changeLabelTexts(self, sentence: str = None, meaning: str = None, manager: TkManager = None) -> None:
@@ -50,6 +52,7 @@ class SentenceFrameWrapper(Frame):
 class SentenceFrame(Frame):
 
     BACKGROUND_COLOR = 'yellow'
+    TEXT_LABEL = "textLabel"
 
     def __init__(self, master: Misc, font: Font = None, grammarData: list[dict[str, str]] = None, manager: TkManager = None, **kwargs) -> None:
         super().__init__(master, **kwargs)
@@ -59,13 +62,14 @@ class SentenceFrame(Frame):
 
     def _createLabels(self, text: str) -> None:
         for char in text:
+            labelName = self.TEXT_LABEL + str(len(self.winfo_children()))
             if char in self.characters:
-                label = LabelWithTooltip(self, tooltipParent=self.master, text=char, font=self.font,
+                label = LabelWithTooltip(self, tooltipParent=self.master,  name=labelName, text=char, font=self.font,
                                          background=self.BACKGROUND_COLOR)
                 grammar = getGrammarDataFromCharacter(self.grammarData, char)
                 label.setToolTip(grammar=grammar)
             else:
-                Label(self, text=char, font=self.font)
+                Label(self, text=char, name=labelName, font=self.font)
 
     def _removeAllLabels(self) -> None:
         for label in self.winfo_children():

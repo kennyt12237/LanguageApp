@@ -1,4 +1,4 @@
-from tkinter import Tk, Frame, TclError
+from tkinter import Tk, Frame, Widget
 
 from typing import Callable
 
@@ -17,7 +17,8 @@ class Window(Tk):
         self.adjustedWidth = getScreenWidthCtypes()
         self.adjustedHeight = getScreenHeightCtypes()
         self.config(padx=padx, pady=pady)
-
+        self.widgetStyling = {}
+        
     def setDefaultFrame(self, defaultFrame: GridFrame) -> None:
         self.frameStack = [defaultFrame]
 
@@ -30,6 +31,7 @@ class Window(Tk):
     def __changeFrame(self,  nextFrame: GridFrame, currentFrame: GridFrame) -> None:
         currentFrame.grid_remove()
         nextFrame.grid(row=1, column=0, sticky="nsew")
+        self.__setFrameStyling(self)
         self.__triggerFrameChangedEvent()
 
     def newFrameNavigated(self, newFrame: GridFrame) -> None:
@@ -71,3 +73,14 @@ class Window(Tk):
         self.padx = padx
         self.pady = pady
         self.config(padx=padx, pady=pady)
+
+    def addWidgetStyling(self, name : str, styling : dict = None) -> None:
+        self.widgetStyling[name] = styling
+        
+    def __setFrameStyling(self, child : Widget) -> None:
+        for child in child.winfo_children():
+            name = child.winfo_name()
+            for key in self.widgetStyling.keys():
+                if key in name:
+                    child.configure(**self.widgetStyling[key])
+            self.__setFrameStyling(child)

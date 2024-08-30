@@ -3,7 +3,7 @@ from tkinter.ttk import Separator
 from tkinter import N, S, E, W, CENTER, HORIZONTAL
 from enum import Enum
 
-from .Section import GridFrame, Window
+from .Section import GridFrame, Window, sentenceTextStyling, sentenceMeaningStyling, stepLabelStyling
 
 import os
 
@@ -207,13 +207,40 @@ class SettingFrame(GridFrame):
 
 
 class SentenceSettingFrame(GridFrame):
+    
+    SMALL_SIZE = 0.7
+    MEDIUM_SIZE = 1.0
+    LARGE_SIZE = 1.3
 
     def __init__(self, master: Misc, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.sentenceLabel = Label(self, text="Sentence", width=40, padx=4, anchor=W)
         self.seperator = Separator(self, orient=HORIZONTAL)
         self.sizeFrame = SizeFrame(self)
+        self.sizeFrame.setOnSmallButtonPressed(lambda : self.onButtonPressed(self.SMALL_SIZE))
+        self.sizeFrame.setOnMediumButtonPressed(lambda : self.onButtonPressed(self.MEDIUM_SIZE))
+        self.sizeFrame.setOnLargeButtonPressed(lambda : self.onButtonPressed(self.LARGE_SIZE))
         self._gridPlacement()
+    
+    def onButtonPressed(self, multiplier : float) -> None:
+        meaningStyling = sentenceMeaningStyling.copy()
+        family, size = meaningStyling['font']
+        meaningFont = (family, int(size * multiplier))
+        meaningStyling['font'] = meaningFont
+        
+        textStyling = sentenceTextStyling.copy()
+        textFamily, textSize = textStyling['font']
+        textFont = (textFamily, int(textSize * multiplier))
+        textStyling['font'] = textFont
+        
+        stepStyling = stepLabelStyling.copy()
+        stepFamily, stepSize, stepWeight = stepLabelStyling['font']
+        stepFont = (stepFamily, int(stepSize * multiplier), stepWeight)
+        stepStyling['font'] = stepFont
+        window : Window = self.winfo_toplevel()
+        window.addWidgetStyling("meaningLabel", meaningStyling)
+        window.addWidgetStyling("textLabel", textStyling)
+        window.addWidgetStyling("stepLabel", stepStyling)
         
     def _gridPlacement(self) -> None:
         self.sentenceLabel.grid(row=0, column=0, sticky="nsew")

@@ -10,6 +10,7 @@ class SentenceNavigationFrame(GridFrame):
     PREVIOUS = "Previous"
     NEXT = "Next"
     STICKY = "nsew"
+    STEP_LABEL = "stepLabel"
 
     def __init__(self, rootFrame: Frame, initIndex: int = 1, totalSentences: int = 1, callback: Callable = None, **kwargs) -> None:
         super().__init__(rootFrame, **kwargs)
@@ -20,7 +21,7 @@ class SentenceNavigationFrame(GridFrame):
         self.previousButton = Button(
             self, text=self.PREVIOUS, command=self.onPreviousButtonPressed)
         self.stepLabel = Label(self, text=self._regenerateStepLabelText(
-            self.currentIndex, totalSentences), font=getStepLabelFont())
+            self.currentIndex, totalSentences), name=self.STEP_LABEL, font=getStepLabelFont())
         self.nextButton = Button(self, text=self.NEXT,
                                  command=self.onNextButtonPressed)
         self._determineButtonVisibility()
