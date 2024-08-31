@@ -3,7 +3,8 @@ from tkinter.ttk import Separator
 from tkinter import N, S, E, W, CENTER, HORIZONTAL
 from enum import Enum
 
-from .Section import GridFrame, Window, sentenceTextStyling, sentenceMeaningStyling, stepLabelStyling
+from .Section import GridFrame, Window
+from .Section import sentenceMeaningFont, sentenceTextFont, stepLabelFont
 
 import os
 
@@ -223,24 +224,19 @@ class SentenceSettingFrame(GridFrame):
         self._gridPlacement()
     
     def onButtonPressed(self, multiplier : float) -> None:
-        meaningStyling = sentenceMeaningStyling.copy()
-        family, size = meaningStyling['font']
-        meaningFont = (family, int(size * multiplier))
-        meaningStyling['font'] = meaningFont
-        
-        textStyling = sentenceTextStyling.copy()
-        textFamily, textSize = textStyling['font']
-        textFont = (textFamily, int(textSize * multiplier))
-        textStyling['font'] = textFont
-        
-        stepStyling = stepLabelStyling.copy()
-        stepFamily, stepSize, stepWeight = stepLabelStyling['font']
-        stepFont = (stepFamily, int(stepSize * multiplier), stepWeight)
-        stepStyling['font'] = stepFont
         window : Window = self.winfo_toplevel()
-        window.addWidgetStyling("meaningLabel", meaningStyling)
-        window.addWidgetStyling("textLabel", textStyling)
-        window.addWidgetStyling("stepLabel", stepStyling)
+        
+        mFamily, mSize = sentenceMeaningFont
+        meaningFont = (mFamily, int(mSize * multiplier))
+        window.addWidgetStyling("meaningLabel", dict(font=meaningFont))
+        
+        textFamily, textSize = sentenceTextFont
+        textFont = (textFamily, int(textSize * multiplier))
+        window.addWidgetStyling("textLabel", dict(font=textFont))
+        
+        stepFamily, stepSize, stepWeight = stepLabelFont
+        stepFont = (stepFamily, int(stepSize * multiplier), stepWeight)
+        window.addWidgetStyling("stepLabel", dict(font=stepFont))
         
     def _gridPlacement(self) -> None:
         self.sentenceLabel.grid(row=0, column=0, sticky="nsew")

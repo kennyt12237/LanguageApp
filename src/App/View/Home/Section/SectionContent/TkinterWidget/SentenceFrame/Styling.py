@@ -1,18 +1,8 @@
 from tkinter.font import NORMAL, BOLD
 
 sentenceTextFont = ("Segoe UI", 20)
-sentenceTextStyling = {
-    'font': sentenceTextFont}
-
 sentenceMeaningFont = ("Segoe UI", 24)
-sentenceMeaningStyling = {
-    'font': sentenceMeaningFont
-}
-
 stepLabelFont = ("MS Sans Serif", 10, BOLD)
-stepLabelStyling = {
-    'font': stepLabelFont
-}
 
 
 class SentenceStyling():

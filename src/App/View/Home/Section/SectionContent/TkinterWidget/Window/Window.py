@@ -17,7 +17,7 @@ class Window(Tk):
         self.adjustedWidth = getScreenWidthCtypes()
         self.adjustedHeight = getScreenHeightCtypes()
         self.config(padx=padx, pady=pady)
-        self.widgetStyling = {}
+        self.widgetStyling : dict[str, dict] = {}
         self.bind("<Map>", lambda e : self.__onWidgetMapped(e))
         
     def setDefaultFrame(self, defaultFrame: GridFrame) -> None:
