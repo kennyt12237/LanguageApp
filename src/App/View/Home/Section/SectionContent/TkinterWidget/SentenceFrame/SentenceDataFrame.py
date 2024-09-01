@@ -1,6 +1,7 @@
-from tkinter import Frame, Label, Misc
+from tkinter import Frame, Misc
 from tkinter import CENTER, LEFT, S, N, E, W, BOTTOM
 from tkinter.font import Font
+from .KLabel import KLabel
 
 from .Styling import getSentenceTextFont, getSentenceMeaningFont
 from .Utils import TkManager, convertTupleToFont, getGrammarCharactersList, getGrammarDataFromCharacter
@@ -18,7 +19,7 @@ class SentenceDataFrame(GridFrame):
         self.grammarData = grammarData
         self.sentenceFrame = SentenceFrameWrapper(
             self, font=convertTupleToFont(getSentenceTextFont()), grammarData=self.grammarData)
-        self.meaningLabel = Label(
+        self.meaningLabel = KLabel(
             self, name=self.MEANING_LABEL, font=convertTupleToFont(getSentenceMeaningFont()))
         self._gridPlacement()
 
@@ -58,8 +59,9 @@ class SentenceFrame(Frame):
         super().__init__(master, **kwargs)
         self.font = font
         self.grammarData = grammarData
+        self.config(background="red")
         self.characters: list[str] = getGrammarCharactersList(grammarData)
-
+            
     def _createLabels(self, text: str) -> None:
         for char in text:
             labelName = self.TEXT_LABEL + str(len(self.winfo_children()))
@@ -69,7 +71,7 @@ class SentenceFrame(Frame):
                 grammar = getGrammarDataFromCharacter(self.grammarData, char)
                 label.setToolTip(grammar=grammar)
             else:
-                Label(self, text=char, name=labelName, font=self.font)
+                KLabel(self, text=char, name=labelName, font=self.font)
 
     def _removeAllLabels(self) -> None:
         for label in self.winfo_children():
@@ -85,8 +87,25 @@ class SentenceFrame(Frame):
             label.place(x=xPos, y=0)
             charWidth = self.font.measure(label.cget("text"))
             xPos += charWidth + 2
+            label.bind("<<PropertyChange>>", lambda e, label=label : self.onPropertyChange(e, label))
         self.config(width=xPos, height=self.font.metrics("linespace"))
 
+    def onPropertyChange(self, event, label : KLabel) -> None:
+        labelList = self.winfo_children()
+        labelInd = labelList.index(label)
+        if labelInd != 0:
+            prevLabel = labelList[labelInd - 1]
+            prevLabelPos = int(prevLabel.place_info()['x'])
+            prevLabelFont = Font(font=prevLabel.cget('font'))
+            prevCharWidth = prevLabelFont.measure(prevLabel.cget('text'))
+            newxPos = prevLabelPos + prevCharWidth + 2
+            label.place_configure(x = newxPos, y=0)
+            if labelInd == len(labelList) - 1:
+                currentLabelFont = Font(font=label.cget('font'))
+                currentCharWidth = currentLabelFont.measure(label.cget('text'))
+                newFrameWidth = newxPos + currentCharWidth + 2
+                self.config(width=newFrameWidth, height=currentLabelFont.metrics("linespace"))
+        
     def changeLabels(self, text: str, manager: TkManager = TkManager.PACK) -> None:
         self._removeAllLabels()
         self._createLabels(text=text)
@@ -96,7 +115,7 @@ class SentenceFrame(Frame):
             self._packAllLabels()
 
 
-class LabelWithTooltip(Label):
+class LabelWithTooltip(KLabel):
 
     ENTER_SEQUENCE = "<Enter>"
     LEAVE_SEQUENCE = "<Leave>"
@@ -104,7 +123,7 @@ class LabelWithTooltip(Label):
     def __init__(self, master: Misc, tooltipParent: Misc, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.tooltipParent = tooltipParent
-        self.toolTip: Label = None
+        self.toolTip: KLabel = None
 
     def setToolTip(self, grammar: dict[str, str]) -> None:
         self.bind(self.ENTER_SEQUENCE, func=lambda e: self.__createTooltip(
@@ -117,7 +136,7 @@ class LabelWithTooltip(Label):
             character=grammar["character"],
             num=grammar["number"],
             meaning=grammar["usage"])
-        self.toolTip = Label(self.tooltipParent, text=text, borderwidth=2,
+        self.toolTip = KLabel(self.tooltipParent, text=text, borderwidth=2,
                              padx=10, pady=10, relief="solid", background="lightyellow")
 
         xPos = self.master.winfo_x() + self.winfo_x() - \
