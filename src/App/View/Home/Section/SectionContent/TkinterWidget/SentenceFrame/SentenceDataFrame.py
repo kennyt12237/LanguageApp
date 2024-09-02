@@ -59,9 +59,8 @@ class SentenceFrame(Frame):
         super().__init__(master, **kwargs)
         self.font = font
         self.grammarData = grammarData
-        self.config(background="red")
         self.characters: list[str] = getGrammarCharactersList(grammarData)
-            
+
     def _createLabels(self, text: str) -> None:
         for char in text:
             labelName = self.TEXT_LABEL + str(len(self.winfo_children()))
@@ -90,21 +89,33 @@ class SentenceFrame(Frame):
             label.bind("<<PropertyChange>>", lambda e, label=label : self.onPropertyChange(e, label))
         self.config(width=xPos, height=self.font.metrics("linespace"))
 
-    def onPropertyChange(self, event, label : KLabel) -> None:
+    def _changeLabelPlacement(self, label : KLabel) -> None:
+    
         labelList = self.winfo_children()
         labelInd = labelList.index(label)
-        if labelInd != 0:
-            prevLabel = labelList[labelInd - 1]
-            prevLabelPos = int(prevLabel.place_info()['x'])
-            prevLabelFont = Font(font=prevLabel.cget('font'))
-            prevCharWidth = prevLabelFont.measure(prevLabel.cget('text'))
-            newxPos = prevLabelPos + prevCharWidth + 2
-            label.place_configure(x = newxPos, y=0)
-            if labelInd == len(labelList) - 1:
-                currentLabelFont = Font(font=label.cget('font'))
-                currentCharWidth = currentLabelFont.measure(label.cget('text'))
-                newFrameWidth = newxPos + currentCharWidth + 2
-                self.config(width=newFrameWidth, height=currentLabelFont.metrics("linespace"))
+        
+        if labelInd == 0:
+            self._changeLabelPlacement(labelList[labelInd + 1])
+            return
+        
+        prevLabel = labelList[labelInd - 1]
+        prevLabelFont = Font(font=prevLabel.cget("font"))
+        prevxPos = int(prevLabel.place_info()['x'])
+        prevLabelWidth = prevLabelFont.measure(prevLabel.cget('text'))
+        newxPos = prevxPos + prevLabelWidth + 2
+        label.place_configure(x=newxPos, y = 0)
+        
+        if labelInd == len(labelList) - 1:
+            currentLabelFont = Font(font=label.cget('font'))
+            currentCharWidth = currentLabelFont.measure(label.cget('text'))
+            newFrameWidth = newxPos + currentCharWidth + 2
+            self.config(width=newFrameWidth, height=currentLabelFont.metrics("linespace"))
+        else:
+            self._changeLabelPlacement(labelList[labelInd + 1])
+        
+    def onPropertyChange(self, event, label : KLabel) -> None:
+        if self.winfo_children().index(label) == 0:
+            self._changeLabelPlacement(label)
         
     def changeLabels(self, text: str, manager: TkManager = TkManager.PACK) -> None:
         self._removeAllLabels()

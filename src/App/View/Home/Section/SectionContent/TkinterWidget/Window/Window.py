@@ -19,7 +19,7 @@ class Window(Tk):
         self.config(padx=padx, pady=pady)
         self.widgetStyling : dict[str, dict] = {}
         self.bind("<Map>", lambda e : self.__onWidgetMapped(e))
-        
+            
     def setDefaultFrame(self, defaultFrame: GridFrame) -> None:
         self.frameStack = [defaultFrame]
 
@@ -86,7 +86,8 @@ class Window(Tk):
                 widget.configure(**self.widgetStyling[key])
         
     def __setWidgetStyling(self, child : Widget) -> None:
-        for child in child.winfo_children():
+        reversedList = child.winfo_children()
+        for child in reversedList:
             name = child.winfo_name()
             for key in self.widgetStyling.keys():
                 if key in name:
