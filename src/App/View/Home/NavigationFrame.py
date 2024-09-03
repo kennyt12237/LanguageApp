@@ -27,7 +27,7 @@ class NavigationFrame(GridFrame):
         self.backButton = Button(self, image=self.backImage,
                                  command=self.backButtonPressed, width=50)
         self.frameLabel = Label(self, font=("Arial", 18), width=200)
-        self.menuFrame = MenuFrameWrapper(self, background="red")
+        self.menuFrame = MenuFrameWrapper(self)
         self.menuFrame.setOnHomeButtonPressed(lambda: self.window.returnHome())
 
         self._gridPlacement()
@@ -93,7 +93,7 @@ class MenuFrameWrapper(GridFrame):
         self.settingFrame.lift()
         xPos = self.winfo_x()
         yPos = self.winfo_y()
-        # self.menuFrame.grid_remove()
+        self.menuFrame.grid_remove()
         _, _, x2, _ = self.bbox()
 
         def onMenuFrameWrapperConfigure() -> None:
@@ -191,10 +191,11 @@ class MenuFrame(GridFrame):
 class SettingFrame(GridFrame):
 
     CLOSE = "Close"
+    HEADER = "Setting"
 
     def __init__(self, master: Misc, **kwargs) -> None:
         super().__init__(master, **kwargs)
-
+        self.header = Label(self, text=self.HEADER)
         self.sentenceSettingFrame = SentenceSettingFrame(self)
         self.closeButton = Button(self, text=self.CLOSE)
         self._gridPlacement()
@@ -203,8 +204,9 @@ class SettingFrame(GridFrame):
         self.closeButton.config(command=command)
 
     def _gridPlacement(self) -> None:
-        self.sentenceSettingFrame.grid(row=0, column=0, pady=(0, 50))
-        self.closeButton.grid(row=1, column=0, sticky=E)
+        self.header.grid(row=0, column=0)
+        self.sentenceSettingFrame.grid(row=1, column=0, pady=(0, 50))
+        self.closeButton.grid(row=2, column=0, sticky=E)
         self.grid_columnconfigure(0, weight=1)
 
 
