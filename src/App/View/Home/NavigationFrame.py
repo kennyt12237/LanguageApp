@@ -50,11 +50,10 @@ class NavigationFrame(GridFrame):
     def __determineButtonChanges(self) -> None:
         if self.window.getNumberOfFramesNavigated() == 1:
             self.backButton.grid_forget()
-            # self.menuFrame.hideButton(
-            #     self.menuButtonDict[self.ButtonType.HOME])
+            self.menuFrame.hideButton(MenuFrame.HOME_BUTTON)
             return
         self.backButton.grid(row=0, column=0, sticky=W)
-        # self.menuFrame.showButton(self.menuButtonDict[self.ButtonType.HOME])
+        self.menuFrame.showButton(MenuFrame.HOME_BUTTON)
 
     def __setFrameHeader(self, frame: Frame) -> None:
         self.frameLabel.config(text=frame.winfo_name().capitalize())
@@ -62,6 +61,7 @@ class NavigationFrame(GridFrame):
     def _gridPlacement(self) -> None:
         self.frameLabel.grid(row=0, column=1, pady=50, sticky="nsew")
         self.menuFrame.grid(row=0, column=2, sticky="nsew")
+        self.menuFrame.hideButton(MenuFrame.HOME_BUTTON)
         self.columnconfigure(0, weight=1, minsize=200)
         self.columnconfigure(1, weight=3)
         self.columnconfigure(2, weight=2, minsize=200)
@@ -110,6 +110,12 @@ class MenuFrameWrapper(GridFrame):
         self.menuFrame.grid(row=0, column=0, sticky="nsew")
         self.grid_rowconfigure(0, weight=1)
         self.grid_columnconfigure(0, weight=1)
+        
+    def hideButton(self, button: str) -> None:
+        self.menuFrame.hideButton(button=button)
+
+    def showButton(self, button: str) -> None:
+        self.menuFrame.showButton(button=button)
 
 
 class MenuFrame(GridFrame):
@@ -145,9 +151,9 @@ class MenuFrame(GridFrame):
         self.gridManager = self.GridManager()
         self.homeImage = PhotoImage(file=self.HOME_PATH)
         self.settingsImage = PhotoImage(file=self.SETTINGS_PATH)
-        self.homeButton = Button(self, image=self.homeImage)
+        self.homeButton = Button(self, name=self.HOME_BUTTON, image=self.homeImage)
         self.settingsButton = Button(
-            self, image=self.settingsImage, width=50)
+            self, name=self.SETTING_BUTTON, image=self.settingsImage, width=50)
         self.buttonDict: dict[str, Button] = {}
         self.buttonDict[self.HOME_BUTTON] = self.homeButton
         self.buttonDict[self.SETTING_BUTTON] = self.settingsButton
@@ -164,16 +170,15 @@ class MenuFrame(GridFrame):
             self.grid_columnconfigure(ind, weight=1, minsize=100)
             ind += 1
 
-    def _hideButton(self, button: Button) -> None:
-        if button in self.winfo_children():
-            self.gridManager.removeWidget(self.buttonDict[button])
+    def _hideButton(self, button: str) -> None:
+        b = self.buttonDict[button]
+        if b in self.winfo_children():
+            self.gridManager.removeWidget(b)
 
-    def _showButton(self, button: Button) -> None:
-        if button in self.winfo_children():
-            self.gridManager.retrieveWidget(self.buttonDict[button])
-
-    def getButtonListStr(self) -> list[str]:
-        return list(self.buttonDict.keys())
+    def _showButton(self, button: str) -> None:
+        b = self.buttonDict[button]
+        if b in self.winfo_children():
+            self.gridManager.retrieveWidget(b)
 
     def setOnSettingsButtonPressed(self, command) -> None:
         self.settingsButton.config(command=command)
