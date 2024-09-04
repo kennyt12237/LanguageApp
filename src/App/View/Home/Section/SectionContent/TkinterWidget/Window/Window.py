@@ -31,8 +31,13 @@ class Window(Tk):
 
     def __changeFrame(self,  nextFrame: GridFrame, currentFrame: GridFrame) -> None:
         currentFrame.grid_remove()
-        nextFrame.grid(row=1, column=0, sticky="nsew")
+        nextFrame.grid(row=1, column=0, sticky="nsew") 
+        self.__removePlacedWidgets()
         self.__triggerFrameChangedEvent()
+        
+    def __removePlacedWidgets(self) -> None:
+        for widget in self.place_slaves():
+            widget.place_forget()
 
     def newFrameNavigated(self, newFrame: GridFrame) -> None:
         currentFrame = self.getCurrentFrame()

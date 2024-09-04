@@ -93,7 +93,6 @@ class MenuFrameWrapper(GridFrame):
         self.settingFrame.lift()
         xPos = self.winfo_x()
         yPos = self.winfo_y()
-        self.menuFrame.grid_remove()
         _, _, x2, _ = self.bbox()
 
         def onMenuFrameWrapperConfigure() -> None:
