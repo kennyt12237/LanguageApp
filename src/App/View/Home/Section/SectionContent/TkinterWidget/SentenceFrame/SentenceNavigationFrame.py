@@ -1,7 +1,8 @@
 from tkinter import Frame, Label, Button
+from tkinter.font import Font
 from typing import Callable
 
-from .Styling import getStepLabelFont
+from .Styling import stepLabelFont
 from ..AbstractFrame import GridFrame
 
 
@@ -21,7 +22,7 @@ class SentenceNavigationFrame(GridFrame):
         self.previousButton = Button(
             self, text=self.PREVIOUS, command=self.onPreviousButtonPressed)
         self.stepLabel = Label(self, text=self._regenerateStepLabelText(
-            self.currentIndex, totalSentences), name=self.STEP_LABEL, font=getStepLabelFont())
+            self.currentIndex, totalSentences), name=self.STEP_LABEL, font=Font(font=stepLabelFont))
         self.nextButton = Button(self, text=self.NEXT,
                                  command=self.onNextButtonPressed)
         self._determineButtonVisibility()

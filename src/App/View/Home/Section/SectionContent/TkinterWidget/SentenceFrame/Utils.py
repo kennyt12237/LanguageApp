@@ -1,5 +1,3 @@
-from tkinter.font import Font
-
 from enum import Enum
 import json
 
@@ -8,11 +6,6 @@ class TkManager(Enum):
     PACK = "Pack"
     GRID = "Grid"
     PLACE = "Place"
-
-
-def convertTupleToFont(fontTuple: tuple) -> Font:
-    family, size = fontTuple
-    return Font(family=family, size=size)
 
 
 def getGrammarCharactersList(grammarDataJson: json) -> list[str]:
