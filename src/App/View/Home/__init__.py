@@ -1,3 +1,3 @@
 from .Section import *
 from .HomeFrame import *
-from .NavigationFrame import *
+from .Navigation import *
