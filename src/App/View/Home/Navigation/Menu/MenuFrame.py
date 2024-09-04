@@ -1,9 +1,8 @@
-from tkinter import Misc, Widget,Button, PhotoImage
+from tkinter import Misc, Button, PhotoImage
 from tkinter import CENTER
 
 from ...Section import GridFrame
 
-from enum import Enum
 import os
 
 class MenuFrame(GridFrame):
