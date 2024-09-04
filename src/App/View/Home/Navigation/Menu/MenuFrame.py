@@ -16,27 +16,8 @@ class MenuFrame(GridFrame):
     HOME_BUTTON = "home"
     SETTING_BUTTON = "setting"
 
-    class RowStyle(Enum):
-        ROW = "row",
-        COLUMN = "column"
-
-    class GridManager():
-
-        def __init__(self) -> None:
-            self.gridInfo = {}
-
-        def removeWidget(self, widget: Widget) -> None:
-            self.gridInfo[widget] = widget.grid_info()
-            widget.grid_remove()
-
-        def retrieveWidget(self, widget: Widget) -> None:
-            if widget in self.gridInfo:
-                previousGridInfo = self.gridInfo[widget]
-                widget.grid(**previousGridInfo)
-
     def __init__(self, master: Misc = None, **kwargs) -> None:
         super().__init__(master, **kwargs)
-        self.gridManager = self.GridManager()
         self.homeImage = PhotoImage(file=self.HOME_PATH)
         self.settingsImage = PhotoImage(file=self.SETTINGS_PATH)
         self.homeButton = Button(self, name=self.HOME_BUTTON, image=self.homeImage)
@@ -61,12 +42,12 @@ class MenuFrame(GridFrame):
     def _hideButton(self, button: str) -> None:
         b = self.buttonDict[button]
         if b in self.winfo_children():
-            self.gridManager.removeWidget(b)
+            b.grid_remove()
 
     def _showButton(self, button: str) -> None:
         b = self.buttonDict[button]
         if b in self.winfo_children():
-            self.gridManager.retrieveWidget(b)
+            b.grid()
 
     def setOnSettingsButtonPressed(self, command) -> None:
         self.settingsButton.config(command=command)
