@@ -29,8 +29,9 @@ class Window(Tk):
     def bindForFrameChange(self, event: Callable) -> None:
         self.bind(self.FRAME_CHANGED_EVENT, event)
 
-    def __changeFrame(self,  nextFrame: GridFrame, currentFrame: GridFrame) -> None:
-        currentFrame.grid_remove()
+    def __changeFrame(self,  nextFrame: GridFrame, currentFrame: GridFrame = None) -> None:
+        if currentFrame != None:
+           currentFrame.grid_remove()
         nextFrame.grid(row=1, column=0, sticky="nsew") 
         self.__removePlacedWidgets()
         self.__triggerFrameChangedEvent()
@@ -52,8 +53,12 @@ class Window(Tk):
         self.__changeFrame(nextFrame=previousFrame, currentFrame=currentFrame)
 
     def returnHome(self) -> Frame:
-        previousFrame = self.frameStack.pop()
         homeFrame = self.frameStack[0]
+        if len(self.frameStack) == 1:
+            self.__changeFrame(nextFrame=homeFrame, currentFrame=None)
+            return
+        
+        previousFrame = self.frameStack.pop()
         for num in range(1, len(self.frameStack)):
             self.frameStack.pop()
         self.__changeFrame(nextFrame=homeFrame, currentFrame=previousFrame)
