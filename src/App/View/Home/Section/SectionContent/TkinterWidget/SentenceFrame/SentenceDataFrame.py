@@ -62,18 +62,22 @@ class SentenceFrame(Frame):
         self.grammarData = grammarData
         self.dictionaryData = dictionaryData
         self.grammarChars: list[str] = getGrammarCharactersList(grammarData)
-        self.dictionaryChars : list[str] = getDictionaryCharactersList(self.dictionaryData)
+        self.dictionaryChars: list[str] = getDictionaryCharactersList(
+            self.dictionaryData)
 
     def _createLabels(self, text: str) -> None:
         for char in text:
             labelName = self.TEXT_LABEL + str(len(self.winfo_children()))
             if char in self.grammarChars:
-                label = GrammarLabelTooltip(self, tooltipParent=self.master,  name=labelName, text=char, font=self.font, background="OliveDrab1")
+                label = GrammarLabelTooltip(
+                    self, tooltipParent=self.master,  name=labelName, text=char, font=self.font, background="OliveDrab1")
                 grammar = getGrammarDataFromCharacter(self.grammarData, char)
                 label.setToolTip(data=grammar)
             elif char in self.dictionaryChars:
-                label = DictionaryWordTooltip(self, tooltipParent=self.master,  name=labelName, text=char, font=self.font, background="SkyBlue1")
-                word = getDictionaryDataFromCharacter(self.dictionaryData, char)
+                label = DictionaryWordTooltip(
+                    self, tooltipParent=self.master,  name=labelName, text=char, font=self.font, background="SkyBlue1")
+                word = getDictionaryDataFromCharacter(
+                    self.dictionaryData, char)
                 label.setToolTip(data=word)
             else:
                 KLabel(self, text=char, name=labelName, font=self.font)
@@ -151,7 +155,9 @@ class LabelTooltip(ABC, KLabel):
 
     def __createTooltip(self, data) -> None:
         self.toolTip = self._createLabel(data)
-        xPos = self.master.winfo_x() + self.winfo_x() - \
+        toolTipfont = Font(font=self.cget("font"))
+        toolTipWidth = toolTipfont.measure(self.cget("text"))
+        xPos = self.master.winfo_x() + self.winfo_x() + int(toolTipWidth / 2) - \
             (self.toolTip.winfo_reqwidth() / 2)
         yPos = self.tooltipParent.winfo_height() - self.master.winfo_height() - \
             self.toolTip.winfo_reqheight() - 20
@@ -178,7 +184,8 @@ class GrammarLabelTooltip(LabelTooltip):
             meaning=data["usage"])
         return KLabel(self.tooltipParent, text=text, borderwidth=2,
                       padx=10, pady=10, relief="solid", background="lightyellow")
-        
+
+
 class DictionaryWordTooltip(LabelTooltip):
 
     def __init__(self, master: Misc, tooltipParent: Misc, **kwargs) -> None:
