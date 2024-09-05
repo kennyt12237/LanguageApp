@@ -30,6 +30,10 @@ class MenuFrameWrapper(GridFrame):
         _, _, x2, _ = self.bbox()
 
         def onMenuFrameWrapperConfigure() -> None:
+            if self.settingFrame.place_info() == {}:
+                for event in self.bind():
+                    self.unbind(event)
+                    return
             xPos = self.winfo_x()
             yPos = self.winfo_y()
             self.settingFrame.place_configure(x=xPos, y=yPos)
