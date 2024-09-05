@@ -4,7 +4,7 @@ from tkinter.font import Font
 from .KLabel import KLabel
 
 from .Styling import sentenceTextFont, sentenceMeaningFont
-from .Utils import TkManager, getGrammarCharactersList, getGrammarDataFromCharacter
+from .Utils import TkManager, getGrammarCharactersList, getGrammarDataFromCharacter, getDictionaryCharactersList, getDictionaryDataFromCharacter
 
 from ..AbstractFrame import GridFrame
 from abc import ABC, abstractmethod
@@ -14,12 +14,13 @@ class SentenceDataFrame(GridFrame):
 
     MEANING_LABEL = "meaningLabel"
 
-    def __init__(self, rootFrame: Frame, grammarData: list[dict[str, str]] = None, **kwargs) -> None:
+    def __init__(self, rootFrame: Frame, dictionaryData: list[dict[str, str]] = None, grammarData: list[dict[str, str]] = None, **kwargs) -> None:
         super().__init__(rootFrame, **kwargs)
         self.rootFrame = rootFrame
         self.grammarData = grammarData
+        self.dictionaryData = dictionaryData
         self.sentenceFrame = SentenceFrameWrapper(
-            self, font=Font(font=sentenceTextFont), grammarData=self.grammarData)
+            self, font=Font(font=sentenceTextFont),  dictionaryData=self.dictionaryData, grammarData=self.grammarData)
         self.meaningLabel = KLabel(
             self, name=self.MEANING_LABEL, font=Font(font=sentenceMeaningFont))
         self._gridPlacement()
@@ -41,10 +42,10 @@ class SentenceDataFrame(GridFrame):
 
 class SentenceFrameWrapper(Frame):
 
-    def __init__(self, master: Misc, font: Font = None, grammarData: list[dict[str, str]] = None, tkManager: TkManager = None, **kwargs) -> None:
+    def __init__(self, master: Misc, font: Font = None,  dictionaryData: list[dict[str, str]] = None, grammarData: list[dict[str, str]] = None, tkManager: TkManager = None, **kwargs) -> None:
         super().__init__(master)
         self.sentenceFrame = SentenceFrame(
-            self, font, grammarData, tkManager, **kwargs)
+            self, font, dictionaryData, grammarData, tkManager, **kwargs)
         self.sentenceFrame.pack(side=BOTTOM)
 
     def changeLabels(self, text: str, manager: TkManager) -> None:
@@ -53,23 +54,27 @@ class SentenceFrameWrapper(Frame):
 
 class SentenceFrame(Frame):
 
-    BACKGROUND_COLOR = 'yellow'
     TEXT_LABEL = "textLabel"
 
-    def __init__(self, master: Misc, font: Font = None, grammarData: list[dict[str, str]] = None, manager: TkManager = None, **kwargs) -> None:
+    def __init__(self, master: Misc, font: Font = None,  dictionaryData: list[dict[str, str]] = None, grammarData: list[dict[str, str]] = None, manager: TkManager = None, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.font = font
         self.grammarData = grammarData
-        self.characters: list[str] = getGrammarCharactersList(grammarData)
+        self.dictionaryData = dictionaryData
+        self.grammarChars: list[str] = getGrammarCharactersList(grammarData)
+        self.dictionaryChars : list[str] = getDictionaryCharactersList(self.dictionaryData)
 
     def _createLabels(self, text: str) -> None:
         for char in text:
             labelName = self.TEXT_LABEL + str(len(self.winfo_children()))
-            if char in self.characters:
-                label = GrammarLabelTooltip(self, tooltipParent=self.master,  name=labelName, text=char, font=self.font,
-                                         background=self.BACKGROUND_COLOR)
+            if char in self.grammarChars:
+                label = GrammarLabelTooltip(self, tooltipParent=self.master,  name=labelName, text=char, font=self.font, background="OliveDrab1")
                 grammar = getGrammarDataFromCharacter(self.grammarData, char)
-                label.setToolTip(grammar=grammar)
+                label.setToolTip(data=grammar)
+            elif char in self.dictionaryChars:
+                label = DictionaryWordTooltip(self, tooltipParent=self.master,  name=labelName, text=char, font=self.font, background="SkyBlue1")
+                word = getDictionaryDataFromCharacter(self.dictionaryData, char)
+                label.setToolTip(data=word)
             else:
                 KLabel(self, text=char, name=labelName, font=self.font)
 
@@ -139,9 +144,9 @@ class LabelTooltip(ABC, KLabel):
         self.tooltipParent = tooltipParent
         self.toolTip: KLabel = None
 
-    def setToolTip(self, grammar: dict[str, str]) -> None:
+    def setToolTip(self, data) -> None:
         self.bind(self.ENTER_SEQUENCE, func=lambda e: self.__createTooltip(
-            grammar))
+            data))
         self.bind(self.LEAVE_SEQUENCE, func=lambda e: self.__removeToolTip())
 
     def __createTooltip(self, data) -> None:
@@ -171,5 +176,19 @@ class GrammarLabelTooltip(LabelTooltip):
             character=data["character"],
             num=data["number"],
             meaning=data["usage"])
+        return KLabel(self.tooltipParent, text=text, borderwidth=2,
+                      padx=10, pady=10, relief="solid", background="lightyellow")
+        
+class DictionaryWordTooltip(LabelTooltip):
+
+    def __init__(self, master: Misc, tooltipParent: Misc, **kwargs) -> None:
+        super().__init__(master, tooltipParent, **kwargs)
+
+    def _createLabel(self, data) -> KLabel:
+        text = "Pinyin : {pinyin}\nCharacter : {character}\nType : {type}\nMeaning : {meaning}".format(
+            pinyin=data["pinyin"],
+            character=data["character"],
+            type=data["type"],
+            meaning=data["meaning"])
         return KLabel(self.tooltipParent, text=text, borderwidth=2,
                       padx=10, pady=10, relief="solid", background="lightyellow")

@@ -11,12 +11,13 @@ class SentenceContainer(GridFrame):
 
     STICKY = "nsew"
 
-    def __init__(self, master: Misc, sentenceData: list[dict[str, str]], grammarData: list[dict[str, str]] = None, initIndex: int = 0, **kwargs) -> None:
+    def __init__(self, master: Misc, sentenceData: list[dict[str, str]], dictionaryData : list[dict[str,str]], grammarData: list[dict[str, str]] = None, initIndex: int = 0, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.initIndex = initIndex
         self.sentenceData: list[dict[str, str]] = json.loads(sentenceData)
+        self.dictionary = dictionaryData
         self.grammars: list[str] = grammarData
-        self.sentenceDataFrame = SentenceDataFrame(self, self.grammars)
+        self.sentenceDataFrame = SentenceDataFrame(self, self.dictionary, self.grammars)
         self.sentenceNavigationFrame = SentenceNavigationFrame(
             self, self.initIndex + 1, len(self.sentenceData), self.changeSentenceDataFrame)
         self.__setInitialSentenceFrameData(0)

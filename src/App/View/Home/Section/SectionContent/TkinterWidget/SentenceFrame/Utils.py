@@ -22,3 +22,18 @@ def getGrammarDataFromCharacter(grammarDataJson: json, character: str) -> dict[s
         if data["character"] == character:
             return data
     return None
+
+def getDictionaryCharactersList(dictionaryDataJson: json) -> list[str]:
+    dictionaryData : list[dict[str,str]] = json.loads(dictionaryDataJson)
+    words : list[str] = []
+    for d in dictionaryData:
+        words.append(d['character'])
+    return words
+
+def getDictionaryDataFromCharacter(dictionaryDataJson: json, character: str) -> dict[str, str]:
+    dictionaryData = json.loads(dictionaryDataJson)
+    for data in dictionaryData:
+        if data["character"] == character:
+            return data
+    return None
+    

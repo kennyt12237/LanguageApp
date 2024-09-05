@@ -22,7 +22,7 @@ class SectionContentFrame(GridFrame):
         self.grammarButton = Button(
             self, text=self.GRAMMARS.capitalize(), command=lambda: self.onGrammarButtonPressed(self.data[self.GRAMMARS]))
         self.sentenceButton = Button(
-            self, text=self.SENTENCES.capitalize(), command=lambda: self.onSentenceButtonPressed(self.data[self.SENTENCES], self.data[self.GRAMMARS]))
+            self, text=self.SENTENCES.capitalize(), command=lambda: self.onSentenceButtonPressed(self.data[self.SENTENCES], self.data[self.WORDS], self.data[self.GRAMMARS]))
         self.setAllButtonSizeRelativeToScreen(defaultWidgetSize)
         self._gridPlacement()
 
@@ -34,9 +34,9 @@ class SectionContentFrame(GridFrame):
         self.window.newFrameNavigated(GrammarFrame(
             self.window, grammars, name=self.GRAMMAR))
 
-    def onSentenceButtonPressed(self, sentences: list[dict[str, str]], grammars : list[dict[str,str]] = None) -> None:
+    def onSentenceButtonPressed(self, sentences: list[dict[str, str]], dictionary : list[dict[str,str]] = None, grammars : list[dict[str,str]] = None) -> None:
         self.window.newFrameNavigated(SentenceContainer(
-            self.window, sentenceData=sentences, grammarData=grammars, name=self.SENTENCE))
+            self.window, sentenceData=sentences, dictionaryData = dictionary, grammarData=grammars, name=self.SENTENCE))
 
     def setAllButtonSizeRelativeToScreen(self, relativeSize: float) -> None:
         widthSize = int(self.window.getWidth() * relativeSize)
