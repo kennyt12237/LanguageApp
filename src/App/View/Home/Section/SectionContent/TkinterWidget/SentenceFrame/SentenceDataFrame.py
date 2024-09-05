@@ -7,6 +7,7 @@ from .Styling import sentenceTextFont, sentenceMeaningFont
 from .Utils import TkManager, getGrammarCharactersList, getGrammarDataFromCharacter
 
 from ..AbstractFrame import GridFrame
+from abc import ABC, abstractmethod
 
 
 class SentenceDataFrame(GridFrame):
@@ -65,7 +66,7 @@ class SentenceFrame(Frame):
         for char in text:
             labelName = self.TEXT_LABEL + str(len(self.winfo_children()))
             if char in self.characters:
-                label = LabelWithTooltip(self, tooltipParent=self.master,  name=labelName, text=char, font=self.font,
+                label = GrammarLabelTooltip(self, tooltipParent=self.master,  name=labelName, text=char, font=self.font,
                                          background=self.BACKGROUND_COLOR)
                 grammar = getGrammarDataFromCharacter(self.grammarData, char)
                 label.setToolTip(grammar=grammar)
@@ -128,7 +129,7 @@ class SentenceFrame(Frame):
             self._packAllLabels()
 
 
-class LabelWithTooltip(KLabel):
+class LabelTooltip(ABC, KLabel):
 
     ENTER_SEQUENCE = "<Enter>"
     LEAVE_SEQUENCE = "<Leave>"
@@ -143,20 +144,32 @@ class LabelWithTooltip(KLabel):
             grammar))
         self.bind(self.LEAVE_SEQUENCE, func=lambda e: self.__removeToolTip())
 
-    def __createTooltip(self, grammar: dict[str, str]) -> None:
-        text = "Pinyin : {pinyin}\nCharacter : {character}{num}\nMeaning : {meaning}".format(
-            pinyin=grammar["pinyin"],
-            character=grammar["character"],
-            num=grammar["number"],
-            meaning=grammar["usage"])
-        self.toolTip = KLabel(self.tooltipParent, text=text, borderwidth=2,
-                              padx=10, pady=10, relief="solid", background="lightyellow")
-
+    def __createTooltip(self, data) -> None:
+        self.toolTip = self._createLabel(data)
         xPos = self.master.winfo_x() + self.winfo_x() - \
             (self.toolTip.winfo_reqwidth() / 2)
         yPos = self.tooltipParent.winfo_height() - self.master.winfo_height() - \
             self.toolTip.winfo_reqheight() - 20
         self.toolTip.place(x=xPos, y=yPos)
 
+    @abstractmethod
+    def _createLabel(self, data) -> KLabel:
+        pass
+
     def __removeToolTip(self) -> None:
         self.toolTip.destroy()
+
+
+class GrammarLabelTooltip(LabelTooltip):
+
+    def __init__(self, master: Misc, tooltipParent: Misc, **kwargs) -> None:
+        super().__init__(master, tooltipParent, **kwargs)
+
+    def _createLabel(self, data) -> KLabel:
+        text = "Pinyin : {pinyin}\nCharacter : {character}{num}\nMeaning : {meaning}".format(
+            pinyin=data["pinyin"],
+            character=data["character"],
+            num=data["number"],
+            meaning=data["usage"])
+        return KLabel(self.tooltipParent, text=text, borderwidth=2,
+                      padx=10, pady=10, relief="solid", background="lightyellow")
