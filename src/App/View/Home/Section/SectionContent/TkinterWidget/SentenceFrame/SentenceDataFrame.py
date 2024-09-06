@@ -55,6 +55,9 @@ class SentenceFrameWrapper(Frame):
 class SentenceFrame(Frame):
 
     TEXT_LABEL = "textLabel"
+    GRAMMAR_LABEL = "grammarLabel"
+    WORD_LABEL = "wordLabel"
+    TOOLTIP = "tooltip"
 
     def __init__(self, master: Misc, font: Font = None,  dictionaryData: list[dict[str, str]] = None, grammarData: list[dict[str, str]] = None, manager: TkManager = None, **kwargs) -> None:
         super().__init__(master, **kwargs)
@@ -66,16 +69,24 @@ class SentenceFrame(Frame):
             self.dictionaryData)
 
     def _createLabels(self, text: str) -> None:
+        grammarLabelCount = 0
+        wordLabelCount = 0
         for char in text:
             labelName = self.TEXT_LABEL + str(len(self.winfo_children()))
             if char in self.grammarChars:
+                labelTooltipName = self.GRAMMAR_LABEL + \
+                    self.TOOLTIP + str(grammarLabelCount)
                 label = GrammarLabelTooltip(
-                    self, tooltipParent=self.master,  name=labelName, text=char, font=self.font, background="OliveDrab1")
+                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName, text=char, font=self.font, background="OliveDrab1")
                 grammar = getGrammarDataFromCharacter(self.grammarData, char)
                 label.setToolTip(data=grammar)
+                grammarLabelCount += 1
             elif char in self.dictionaryChars:
+                labelTooltipName = self.WORD_LABEL + \
+                    self.TOOLTIP + str(wordLabelCount)
+                wordLabelCount += 1
                 label = DictionaryWordTooltip(
-                    self, tooltipParent=self.master,  name=labelName, text=char, font=self.font, background="SkyBlue1")
+                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName, text=char, font=self.font, background="SkyBlue1")
                 word = getDictionaryDataFromCharacter(
                     self.dictionaryData, char)
                 label.setToolTip(data=word)
@@ -143,18 +154,19 @@ class LabelTooltip(ABC, KLabel):
     ENTER_SEQUENCE = "<Enter>"
     LEAVE_SEQUENCE = "<Leave>"
 
-    def __init__(self, master: Misc, tooltipParent: Misc, **kwargs) -> None:
+    def __init__(self, master: Misc, tooltipParent: Misc, tooltipName: str, **kwargs) -> None:
         super().__init__(master, **kwargs)
         self.tooltipParent = tooltipParent
-        self.toolTip: KLabel = None
+        self.toolTip: KLabel = KLabel(self.tooltipParent, name=tooltipName, borderwidth=2,
+                                      padx=10, pady=10, relief="solid", background="lightyellow")
 
     def setToolTip(self, data) -> None:
-        self.bind(self.ENTER_SEQUENCE, func=lambda e: self.__createTooltip(
+        self.bind(self.ENTER_SEQUENCE, func=lambda e: self.__setTooltipText(
             data))
-        self.bind(self.LEAVE_SEQUENCE, func=lambda e: self.__removeToolTip())
+        self.bind(self.LEAVE_SEQUENCE, func=lambda e: self.__hideToolTip())
 
-    def __createTooltip(self, data) -> None:
-        self.toolTip = self._createLabel(data)
+    def __setTooltipText(self, data) -> None:
+        self._setText(data)
         toolTipfont = Font(font=self.cget("font"))
         toolTipWidth = toolTipfont.measure(self.cget("text"))
         xPos = self.master.winfo_x() + self.winfo_x() + int(toolTipWidth / 2) - \
@@ -164,26 +176,25 @@ class LabelTooltip(ABC, KLabel):
         self.toolTip.place(x=xPos, y=yPos)
 
     @abstractmethod
-    def _createLabel(self, data) -> KLabel:
+    def _setText(self, data) -> KLabel:
         pass
 
-    def __removeToolTip(self) -> None:
-        self.toolTip.destroy()
+    def __hideToolTip(self) -> None:
+        self.toolTip.place_forget()
 
 
 class GrammarLabelTooltip(LabelTooltip):
 
-    def __init__(self, master: Misc, tooltipParent: Misc, **kwargs) -> None:
-        super().__init__(master, tooltipParent, **kwargs)
+    def __init__(self, master: Misc, tooltipParent: Misc, tooltipName: str, **kwargs) -> None:
+        super().__init__(master, tooltipParent, tooltipName, **kwargs)
 
-    def _createLabel(self, data) -> KLabel:
+    def _setText(self, data) -> None:
         text = "Pinyin : {pinyin}\nCharacter : {character}{num}\nMeaning : {meaning}".format(
             pinyin=data["pinyin"],
             character=data["character"],
             num=data["number"],
             meaning=data["usage"])
-        return KLabel(self.tooltipParent, text=text, borderwidth=2,
-                      padx=10, pady=10, relief="solid", background="lightyellow")
+        self.toolTip.configure(text=text)
 
 
 class DictionaryWordTooltip(LabelTooltip):
@@ -191,11 +202,10 @@ class DictionaryWordTooltip(LabelTooltip):
     def __init__(self, master: Misc, tooltipParent: Misc, **kwargs) -> None:
         super().__init__(master, tooltipParent, **kwargs)
 
-    def _createLabel(self, data) -> KLabel:
+    def _setText(self, data) -> None:
         text = "Pinyin : {pinyin}\nCharacter : {character}\nType : {type}\nMeaning : {meaning}".format(
             pinyin=data["pinyin"],
             character=data["character"],
             type=data["type"],
             meaning=data["meaning"])
-        return KLabel(self.tooltipParent, text=text, borderwidth=2,
-                      padx=10, pady=10, relief="solid", background="lightyellow")
+        self.toolTip.configure(text=text)
