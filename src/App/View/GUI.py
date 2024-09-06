@@ -6,8 +6,8 @@ from .Home import NavigationFrame, HomeFrame, Window, getScreenWidthCtypes, getS
 
 class BasicView():
 
-    def __init__(self, window: Window = Window(padx=40, pady=20), windowsize: float = 0.5, scaling: float = 2):
-        self.window: Window = window
+    def __init__(self, window: None, windowsize: float = 0.5, scaling: float = 2):
+        self.window: Window = window if window != None else Window(padx=40, pady=20)
         setProcessDpiAwareness2()
         self._setWindowSize(windowsize)
         self._setWidgetScaling(scaling)
