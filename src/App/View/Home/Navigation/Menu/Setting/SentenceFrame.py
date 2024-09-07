@@ -4,7 +4,7 @@ from tkinter import W, HORIZONTAL
 
 
 from .SizeFrame import SizeFrame
-from .ToogleFrame import ToogleFrame
+from .ToggleFrame import ToogleFrame
 from ....Section import Window, GridFrame
 from ....Section import sentenceMeaningFont, sentenceTextFont, stepLabelFont, dictionaryWordTooltipDefault
 
