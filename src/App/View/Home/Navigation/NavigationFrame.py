@@ -21,7 +21,7 @@ class NavigationFrame(GridFrame):
         super().__init__(window, **kwargs)
         self.window: Window = window
         self.backImage = PhotoImage(file=self.ARROW_PATH)
-        self.window.bindForFrameChange(self.onFrameChanged)
+        self.bind_all("<<FrameChangeEvent>>", self.onFrameChanged)
         self.backButton = Button(self, image=self.backImage,
                                  command=self.backButtonPressed, width=50)
         self.frameLabel = Label(self, font=("Arial", 18), width=200)

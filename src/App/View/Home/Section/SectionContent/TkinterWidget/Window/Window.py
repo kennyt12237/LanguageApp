@@ -26,9 +26,6 @@ class Window(Tk):
     def __triggerFrameChangedEvent(self) -> None:
         self.event_generate(self.FRAME_CHANGED_EVENT)
 
-    def bindForFrameChange(self, event: Callable) -> None:
-        self.bind(self.FRAME_CHANGED_EVENT, event)
-
     def __changeFrame(self,  nextFrame: GridFrame, currentFrame: GridFrame = None) -> None:
         if currentFrame != None:
            currentFrame.grid_remove()
