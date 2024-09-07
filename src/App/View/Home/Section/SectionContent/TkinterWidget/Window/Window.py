@@ -19,7 +19,8 @@ class Window(Tk):
         self.config(padx=padx, pady=pady)
         self.widgetStyling : dict[str, dict] = {}
         self.bind("<Map>", lambda e : self.__onWidgetMapped(e))
-            
+        self.bind_all("<<WidgetCreatedEvent>>", lambda e : self.__onWidgetCreated(e))
+        
     def setDefaultFrame(self, defaultFrame: GridFrame) -> None:
         self.frameStack = [defaultFrame]
 
@@ -87,7 +88,18 @@ class Window(Tk):
         self.widgetStyling[name] = styling
         self.__setWidgetStyling(self)
         
+    def removeWidgetStyling(self, name : str) -> None:
+        self.widgetStyling.pop(name, None)
+        self.__setWidgetStyling(self)
+        
     def __onWidgetMapped(self, event : Event) -> None:
+        widget : Widget = event.widget
+        name = widget.winfo_name()
+        for key in self.widgetStyling.keys():
+            if key in name:
+                widget.configure(**self.widgetStyling[key])
+                
+    def __onWidgetCreated(self, event : Event) -> None:
         widget : Widget = event.widget
         name = widget.winfo_name()
         for key in self.widgetStyling.keys():
@@ -95,10 +107,9 @@ class Window(Tk):
                 widget.configure(**self.widgetStyling[key])
         
     def __setWidgetStyling(self, child : Widget) -> None:
-        reversedList = child.winfo_children()
-        for child in reversedList:
-            name = child.winfo_name()
+        for c in child.winfo_children():
+            name = c.winfo_name()
             for key in self.widgetStyling.keys():
                 if key in name:
-                    child.configure(**self.widgetStyling[key])
-            self.__setWidgetStyling(child)
+                    c.configure(**self.widgetStyling[key])
+            self.__setWidgetStyling(c)

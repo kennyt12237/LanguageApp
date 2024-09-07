@@ -4,6 +4,7 @@ from tkinter import W, HORIZONTAL
 
 
 from .SizeFrame import SizeFrame
+from .ToogleFrame import ToogleFrame
 from ....Section import Window, GridFrame
 from ....Section import sentenceMeaningFont, sentenceTextFont, stepLabelFont
 
@@ -19,14 +20,33 @@ class SentenceFrame(GridFrame):
             self, text="Sentence", width=40, padx=4, anchor=W)
         self.seperator = Separator(self, orient=HORIZONTAL)
         self.sizeFrame = SizeFrame(self)
+
         self.sizeFrame.setOnSmallButtonPressed(
             lambda: self.onButtonPressed(self.SMALL_SIZE))
         self.sizeFrame.setOnMediumButtonPressed(
             lambda: self.onButtonPressed(self.MEDIUM_SIZE))
         self.sizeFrame.setOnLargeButtonPressed(
             lambda: self.onButtonPressed(self.LARGE_SIZE))
+        
+        self.dictionaryTooltipLabel = Label(
+            self, text="Dictionary Tooltip", width=40, padx=4, anchor=W)
+        self.seperator2 = Separator(self, orient=HORIZONTAL)
+        self.toogleFrame = ToogleFrame(self)
+        self.toogleFrame.setOffRadioButtonPressed(lambda : self.onToogleOffPressed())
+        self.toogleFrame.setOnRadioButtonPressed(lambda : self.onToogleOnPressed())
         self._gridPlacement()
 
+    def onToogleOffPressed(self) -> None:
+        window : Window = self.winfo_toplevel()
+        window.addWidgetStyling("wordLabel", dict(background=window.cget("background")))
+        window.addWidgetStyling("wordLabeltooltip", dict(state="disabled"))
+        
+    def onToogleOnPressed(self) -> None:
+        window : Window = self.winfo_toplevel()
+        window.removeWidgetStyling("wordLabel")
+        window.removeWidgetStyling("wordLabeltooltip")
+        
+        
     def onButtonPressed(self, multiplier: float) -> None:
         window: Window = self.winfo_toplevel()
 
@@ -46,7 +66,13 @@ class SentenceFrame(GridFrame):
         self.sentenceLabel.grid(row=0, column=0, sticky="nsew")
         self.seperator.grid(row=1, column=0, sticky="ew", pady=(0, 2))
         self.sizeFrame.grid(row=2, column=0, sticky="nsew")
+        self.dictionaryTooltipLabel.grid(row=3, column=0, sticky="nsew")
+        self.seperator2.grid(row=4, column=0, sticky="ew", pady=(0, 2))
+        self.toogleFrame.grid(row=5, column=0, sticky="nsew")
         self.grid_rowconfigure(0, weight=1)
         self.grid_rowconfigure(1, weight=1)
         self.grid_rowconfigure(2, weight=1)
+        self.grid_rowconfigure(3, weight=1)
+        self.grid_rowconfigure(4, weight=1)
+        self.grid_rowconfigure(5, weight=1)
         self.grid_columnconfigure(0, weight=1)

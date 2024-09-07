@@ -1,5 +1,5 @@
 from tkinter import Frame, Misc
-from tkinter import CENTER, LEFT, S, N, E, W, BOTTOM
+from tkinter import CENTER, LEFT, S, N, E, W, BOTTOM, DISABLED
 from tkinter.font import Font
 from .KLabel import KLabel
 
@@ -77,7 +77,7 @@ class SentenceFrame(Frame):
                 labelTooltipName = self.GRAMMAR_LABEL + \
                     self.TOOLTIP + str(grammarLabelCount)
                 label = GrammarLabelTooltip(
-                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName, text=char, font=self.font, background="OliveDrab1")
+                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.GRAMMAR_LABEL, text=char, font=self.font, background="OliveDrab1")
                 grammar = getGrammarDataFromCharacter(self.grammarData, char)
                 label.setToolTip(data=grammar)
                 grammarLabelCount += 1
@@ -86,7 +86,7 @@ class SentenceFrame(Frame):
                     self.TOOLTIP + str(wordLabelCount)
                 wordLabelCount += 1
                 label = DictionaryWordTooltip(
-                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName, text=char, font=self.font, background="SkyBlue1")
+                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.WORD_LABEL, text=char, font=self.font, background="SkyBlue1")
                 word = getDictionaryDataFromCharacter(
                     self.dictionaryData, char)
                 label.setToolTip(data=word)
@@ -159,7 +159,8 @@ class LabelTooltip(ABC, KLabel):
         self.tooltipParent = tooltipParent
         self.toolTip: KLabel = KLabel(self.tooltipParent, name=tooltipName, borderwidth=2,
                                       padx=10, pady=10, relief="solid", background="lightyellow")
-
+        self.toolTip.event_generate(self.WIDGET_CREATED_EVENT)
+        
     def setToolTip(self, data) -> None:
         self.bind(self.ENTER_SEQUENCE, func=lambda e: self.__setTooltipText(
             data))
@@ -167,14 +168,15 @@ class LabelTooltip(ABC, KLabel):
 
     def __setTooltipText(self, data) -> None:
         self._setText(data)
-        toolTipfont = Font(font=self.cget("font"))
-        toolTipWidth = toolTipfont.measure(self.cget("text"))
-        xPos = self.master.winfo_x() + self.winfo_x() + int(toolTipWidth / 2) - \
-            (self.toolTip.winfo_reqwidth() / 2)
-        yPos = self.tooltipParent.winfo_height() - self.master.winfo_height() - \
-            self.toolTip.winfo_reqheight() - 20
-        self.toolTip.place(x=xPos, y=yPos)
-
+        if self.toolTip.cget("state") != DISABLED:
+            toolTipfont = Font(font=self.cget("font"))
+            toolTipWidth = toolTipfont.measure(self.cget("text"))
+            xPos = self.master.winfo_x() + self.winfo_x() + int(toolTipWidth / 2) - \
+                (self.toolTip.winfo_reqwidth() / 2)
+            yPos = self.tooltipParent.winfo_height() - self.master.winfo_height() - \
+                self.toolTip.winfo_reqheight() - 20
+            self.toolTip.place(x=xPos, y=yPos)
+            
     @abstractmethod
     def _setText(self, data) -> KLabel:
         pass
