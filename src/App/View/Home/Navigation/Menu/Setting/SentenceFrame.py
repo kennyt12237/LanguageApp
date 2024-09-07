@@ -6,7 +6,8 @@ from tkinter import W, HORIZONTAL
 from .SizeFrame import SizeFrame
 from .ToogleFrame import ToogleFrame
 from ....Section import Window, GridFrame
-from ....Section import sentenceMeaningFont, sentenceTextFont, stepLabelFont
+from ....Section import sentenceMeaningFont, sentenceTextFont, stepLabelFont, dictionaryWordTooltipDefault
+
 
 class SentenceFrame(GridFrame):
 
@@ -27,26 +28,28 @@ class SentenceFrame(GridFrame):
             lambda: self.onButtonPressed(self.MEDIUM_SIZE))
         self.sizeFrame.setOnLargeButtonPressed(
             lambda: self.onButtonPressed(self.LARGE_SIZE))
-        
+
         self.dictionaryTooltipLabel = Label(
             self, text="Dictionary Tooltip", width=40, padx=4, anchor=W)
         self.seperator2 = Separator(self, orient=HORIZONTAL)
         self.toogleFrame = ToogleFrame(self)
-        self.toogleFrame.setOffRadioButtonPressed(lambda : self.onToogleOffPressed())
-        self.toogleFrame.setOnRadioButtonPressed(lambda : self.onToogleOnPressed())
+        self.toogleFrame.setOffRadioButtonPressed(
+            lambda: self.onToogleOffPressed())
+        self.toogleFrame.setOnRadioButtonPressed(
+            lambda: self.onToogleOnPressed())
         self._gridPlacement()
 
     def onToogleOffPressed(self) -> None:
-        window : Window = self.winfo_toplevel()
-        window.addWidgetStyling("wordLabel", dict(background=window.cget("background")))
-        window.addWidgetStyling("wordLabeltooltip", dict(state="disabled"))
-        
+        window: Window = self.winfo_toplevel()
+        window.addWidgetStyling("wordLabel", dict(
+            background=window.cget("background")))
+        window.addWidgetStyling("wltooltip", dict(state="disabled"))
+
     def onToogleOnPressed(self) -> None:
-        window : Window = self.winfo_toplevel()
-        window.removeWidgetStyling("wordLabel")
-        window.removeWidgetStyling("wordLabeltooltip")
-        
-        
+        window: Window = self.winfo_toplevel()
+        window.addWidgetStyling("wordLabel", dictionaryWordTooltipDefault)
+        window.addWidgetStyling("wltooltip", dict(state="normal"))
+
     def onButtonPressed(self, multiplier: float) -> None:
         window: Window = self.winfo_toplevel()
 

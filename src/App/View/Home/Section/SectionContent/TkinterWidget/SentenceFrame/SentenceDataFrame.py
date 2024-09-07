@@ -3,7 +3,7 @@ from tkinter import CENTER, LEFT, S, N, E, W, BOTTOM, DISABLED
 from tkinter.font import Font
 from .KLabel import KLabel
 
-from .Styling import sentenceTextFont, sentenceMeaningFont
+from .Styling import sentenceTextFont, sentenceMeaningFont, dictionaryWordTooltipDefault, grammarTooltipDefault
 from .Utils import TkManager, getGrammarCharactersList, getGrammarDataFromCharacter, getDictionaryCharactersList, getDictionaryDataFromCharacter
 
 from ..AbstractFrame import GridFrame
@@ -57,7 +57,8 @@ class SentenceFrame(Frame):
     TEXT_LABEL = "textLabel"
     GRAMMAR_LABEL = "grammarLabel"
     WORD_LABEL = "wordLabel"
-    TOOLTIP = "tooltip"
+    GRAMMAR_LABEL_TOOLTIP = "grtooltip"
+    WORD_LABEL_TOOLTIP = "wltooltip"
 
     def __init__(self, master: Misc, font: Font = None,  dictionaryData: list[dict[str, str]] = None, grammarData: list[dict[str, str]] = None, manager: TkManager = None, **kwargs) -> None:
         super().__init__(master, **kwargs)
@@ -74,19 +75,19 @@ class SentenceFrame(Frame):
         for char in text:
             labelName = self.TEXT_LABEL + str(len(self.winfo_children()))
             if char in self.grammarChars:
-                labelTooltipName = self.GRAMMAR_LABEL + \
-                    self.TOOLTIP + str(grammarLabelCount)
+                labelTooltipName = self.GRAMMAR_LABEL_TOOLTIP + \
+                    str(grammarLabelCount)
                 label = GrammarLabelTooltip(
-                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.GRAMMAR_LABEL, text=char, font=self.font, background="OliveDrab1")
+                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.GRAMMAR_LABEL, text=char, font=self.font, **grammarTooltipDefault)
                 grammar = getGrammarDataFromCharacter(self.grammarData, char)
                 label.setToolTip(data=grammar)
                 grammarLabelCount += 1
             elif char in self.dictionaryChars:
-                labelTooltipName = self.WORD_LABEL + \
-                    self.TOOLTIP + str(wordLabelCount)
+                labelTooltipName = self.WORD_LABEL_TOOLTIP + \
+                    str(wordLabelCount)
                 wordLabelCount += 1
                 label = DictionaryWordTooltip(
-                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.WORD_LABEL, text=char, font=self.font, background="SkyBlue1")
+                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.WORD_LABEL, text=char, font=self.font, **dictionaryWordTooltipDefault)
                 word = getDictionaryDataFromCharacter(
                     self.dictionaryData, char)
                 label.setToolTip(data=word)
@@ -160,7 +161,7 @@ class LabelTooltip(ABC, KLabel):
         self.toolTip: KLabel = KLabel(self.tooltipParent, name=tooltipName, borderwidth=2,
                                       padx=10, pady=10, relief="solid", background="lightyellow")
         self.toolTip.event_generate(self.WIDGET_CREATED_EVENT)
-        
+
     def setToolTip(self, data) -> None:
         self.bind(self.ENTER_SEQUENCE, func=lambda e: self.__setTooltipText(
             data))
@@ -176,7 +177,7 @@ class LabelTooltip(ABC, KLabel):
             yPos = self.tooltipParent.winfo_height() - self.master.winfo_height() - \
                 self.toolTip.winfo_reqheight() - 20
             self.toolTip.place(x=xPos, y=yPos)
-            
+
     @abstractmethod
     def _setText(self, data) -> KLabel:
         pass
