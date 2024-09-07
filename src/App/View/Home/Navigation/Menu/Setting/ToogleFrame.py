@@ -11,15 +11,10 @@ class ToogleFrame(GridFrame):
         self.off = LabeledRadioButton(self, labelText="Off", radioVariable=stringVar, radioValue="Off")
         self._gridPlacement()
         
-    def _setGridProperties(self) -> None:
-        self.grid_propagate(False)
-        
     def _gridPlacement(self) -> None:
-        self.on.grid(row=0, column=0, sticky="nsew")
+        self.on.grid(row=0, column=0, padx=(0,20), sticky="nsew")
         self.off.grid(row=0, column=1, sticky="nsew")
         self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
     
     def setOnRadioButtonPressed(self, command : Callable) -> None:
         self.on.setRadioButtonPressed(command=command)
@@ -41,13 +36,8 @@ class LabeledRadioButton(GridFrame):
         
     def __getRadioValue(self) -> str:
         return self.variable.get()
-    
-    def _setGridProperties(self) -> None:
-        self.grid_propagate(False)
         
     def _gridPlacement(self) -> None:
         self.radioButton.grid(row=0, column=0, sticky="nsew")
         self.label.grid(row=0, column=1, sticky="nsew")
         self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
