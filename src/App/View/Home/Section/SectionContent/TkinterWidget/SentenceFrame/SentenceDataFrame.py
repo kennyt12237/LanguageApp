@@ -57,7 +57,7 @@ class SentenceFrame(Frame):
     TEXT_LABEL = "textLabel"
     GRAMMAR_LABEL = "grammarLabel"
     WORD_LABEL = "wordLabel"
-    GRAMMAR_LABEL_TOOLTIP = "grtooltip"
+    GRAMMAR_LABEL_TOOLTIP = "gltooltip"
     WORD_LABEL_TOOLTIP = "wltooltip"
 
     def __init__(self, master: Misc, font: Font = None,  dictionaryData: list[dict[str, str]] = None, grammarData: list[dict[str, str]] = None, manager: TkManager = None, **kwargs) -> None:
