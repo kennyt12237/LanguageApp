@@ -3,7 +3,7 @@ from ....Section import GridFrame
 
 from typing import Callable
 
-class ToogleFrame(GridFrame):
+class ToggleFrame(GridFrame):
     def __init__(self, master : Misc, **kwargs):
         super().__init__(master, **kwargs)
         stringVar = StringVar(value="On")

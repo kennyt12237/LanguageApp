@@ -19,15 +19,6 @@ class SizeFrame(GridFrame):
     def _setGridProperties(self) -> None:
         pass
 
-    def _gridPlacement(self) -> None:
-        self.smallButton.grid(row=0, column=0, sticky="nsew")
-        self.mediumButton.grid(row=0, column=1, sticky="nsew")
-        self.largeButton.grid(row=0, column=2, sticky="nsew")
-        self.grid_rowconfigure(0, weight=1)
-        self.grid_columnconfigure(0, weight=1)
-        self.grid_columnconfigure(1, weight=1)
-        self.grid_columnconfigure(2, weight=1)
-
     def __setButtonSunkenAndRaisedRest(self, button: Button) -> None:
         button.configure(relief=SUNKEN)
         for cButton in self.winfo_children():
@@ -45,3 +36,12 @@ class SizeFrame(GridFrame):
     def setOnLargeButtonPressed(self, command) -> None:
         self.largeButton.config(command=lambda: (
             command(), self.__setButtonSunkenAndRaisedRest(self.largeButton)))
+
+    def _gridPlacement(self) -> None:
+        self.smallButton.grid(row=0, column=0, sticky="nsew")
+        self.mediumButton.grid(row=0, column=1, sticky="nsew")
+        self.largeButton.grid(row=0, column=2, sticky="nsew")
+        self.grid_rowconfigure(0, weight=1)
+        self.grid_columnconfigure(0, weight=1)
+        self.grid_columnconfigure(1, weight=1)
+        self.grid_columnconfigure(2, weight=1)
