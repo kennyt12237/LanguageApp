@@ -22,6 +22,9 @@ class DictionaryModel():
         meaning = data[3]
         return Word(character, pinyin, characterType, meaning)
         
+    def setWordList(self, words : list[Word]) -> None:
+        self.words = words
+        
     def addWord(self, word : Word) -> None:
         self.words.append(word)
         

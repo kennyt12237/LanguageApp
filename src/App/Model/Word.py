@@ -16,13 +16,18 @@ WordTypeMap = {
 
 class Grammar():
     
-    def __init__(self, word : Word, number : int, usage : str) -> None:
-        self.word : Word = word
+    def __init__(self, character : str, pinyin : str, number : int, usage : str, words : list[Word] = None) -> None:
+        self.character = character
+        self.pinyin = pinyin
         self.number : int = number
         self.usage : str = usage
+        self.words : list[Word] = words if words != None else []
     
-    def getGrammarWord(self) -> Word:
-        return self.word
+    def getCharacter(self) -> str:
+        return self.character
+    
+    def getPinyin(self) -> str:
+        return self.pinyin
     
     def getGrammarNumber(self) -> int:
         return self.number
@@ -30,6 +35,12 @@ class Grammar():
     def getUsage(self) -> str:
         return self.usage
     
+    def setGrammarWords(self, words : list[Word]) -> None:
+        self.words = words
+        
+    def getGrammarWords(self) -> Word:
+        return self.words
+
 class Word():
     
     def __init__(self, character : str, pinyin : str, type : WordType, meaning : str) -> None:

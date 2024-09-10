@@ -20,6 +20,11 @@ class ChineseLanguageModel:
     def loadGrammarDataFromTSV(self, filePath : str) -> None:
         self.grammarModel.loadDataFromCSVFile(filePath, self.dictionaryModel)
         
+    def loadAllFromSectionFolderTSV(self, filePath : str) -> None:
+        wl, gl, _ = self.sectionModel.loadSectionsDirectory1(filePath)
+        self.dictionaryModel.setWordList(wl)
+        self.grammarModel.setGrammarList(gl)
+        
     def getAllDictionaryWords(self) -> list[Word]:
         return self.dictionaryModel.getAllWords()
     

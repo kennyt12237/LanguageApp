@@ -25,6 +25,8 @@ class GrammarModel():
                 return g
         return None
             
+    def setGrammarList(self, grammars : list[Grammar]) -> None:
+        self.grammars = grammars
     def addGrammar(self, grammar : Grammar) -> None:
         self.grammars.append(grammar)
         

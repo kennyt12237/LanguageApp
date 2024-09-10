@@ -1,5 +1,5 @@
 from .Section import Section
-from .Word import Word, Grammar
+from .Word import Word, Grammar, WordTypeMap
 from .DictionaryModel import DictionaryModel
 from .GrammarModel import GrammarModel
 
@@ -71,3 +71,71 @@ class SectionModel():
     
     def getAllSections(self) -> list[Section]:
         return self.sections
+
+    def loadSectionsDirectory1(self, sectionPath : str) -> tuple:
+        sectionList : list[Section] = []
+        wordList : list[Word] = []
+        grammarList : list[Grammar] = []
+        
+        for section in os.listdir(sectionPath):
+            sec = self._loadSection1(os.path.join(sectionPath, section))
+            sectionList.append(sec)
+            wordList.extend(sec.getWords())
+            grammarList.extend(sec.getGrammars())
+        
+        self.sections = sectionList
+        return (wordList, grammarList, sectionList)
+            
+    def _loadSection1(self, sectionPath : str) -> Section:
+        fileToMethod = {
+            'words.tsv' : self._loadWords1,
+            'grammars.tsv' : self._loadGrammars1,
+            'sentences.tsv' : self._loadSentences1,
+        }
+                
+        fileToVariable = {
+            'words.tsv' : [],
+            'grammars.tsv' : [],
+            'sentences.tsv' : {}
+        }
+        
+        for file in os.listdir(sectionPath):
+            filename = str(file).lower()
+            method = fileToMethod[filename]
+            res = method(os.path.join(sectionPath, file))
+            fileToVariable[filename] = res
+        files = list(fileToVariable.keys())
+        newWords = fileToVariable[files[0]]
+        newGrammar = fileToVariable[files[1]]
+        newSentences = fileToVariable[files[2]]
+        return Section(sectionPath[sectionPath.rfind("\\")+1:], newWords, newGrammar, newSentences)
+            
+    def _loadWords1(self, filePath) -> list[Word]:
+        wordList : list[Word] = []
+        file = open(filePath, "r", encoding="utf-8")
+        file.readline()
+        for line in file:
+            content = line.strip().split("\t")
+            word = Word(content[0], content[1], WordTypeMap.get(content[2].lower()), content[3])
+            wordList.append(word)
+        return wordList
+        
+    def _loadGrammars1(self, filePath : str) -> list[Grammar]:
+        grammarList : list[Grammar] = []
+        file = open(filePath, "r", encoding="utf-8")
+        file.readline()
+        for line in file:
+            content = line.strip().split("\t")
+            g = Grammar(content[0], content[1], content[2], content[3])
+            if g:
+                grammarList.append(g)
+        return grammarList
+    
+    def _loadSentences1(self, filePath : str) -> dict[str,str]:
+        sentences : dict[str,str] = {}
+        file = open(filePath, "r", encoding="utf-8")
+        file.readline()
+        for line in file:
+            content = line.strip().split("\t")
+            sentences[content[0]] = content[1]
+        return sentences

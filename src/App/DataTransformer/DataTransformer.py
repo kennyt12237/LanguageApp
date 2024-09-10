@@ -18,8 +18,8 @@ class DataTransformer():
         grammarList : list[dict[str,str]] = []
         for g in grammars:
             grammarItem = {}
-            grammarItem["character"] = g.getGrammarWord().getCharacter()
-            grammarItem["pinyin"] = g.getGrammarWord().getPinyin()
+            grammarItem["character"] = g.getCharacter()
+            grammarItem["pinyin"] = g.getPinyin()
             grammarItem["number"] = g.getGrammarNumber()
             grammarItem["usage"] = g.getUsage()
             grammarList.append(grammarItem)
