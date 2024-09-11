@@ -1,4 +1,4 @@
-from .Word import Word, Grammar, GrammarV1
+from .Word import Grammar, GrammarV1, GrammarV2
 from .DictionaryModel import DictionaryModel
 
 from abc import ABC, abstractmethod
@@ -57,4 +57,4 @@ class GrammarModelV2(GrammarModel):
         super().__init__()
 
     def _generateGrammarData(self, content, dm: DictionaryModel = None) -> Grammar:
-        return Grammar(content[0], content[1], int(content[2]), content[3])
+        return GrammarV2(content[0], content[1], int(content[2]), content[3])
