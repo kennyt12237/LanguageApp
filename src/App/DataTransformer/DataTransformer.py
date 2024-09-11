@@ -18,9 +18,9 @@ class DataTransformer():
         grammarList : list[dict[str,str]] = []
         for g in grammars:
             grammarItem = {}
-            grammarItem["character"] = g.getGrammarWord().getCharacter()
-            grammarItem["pinyin"] = g.getGrammarWord().getPinyin()
-            grammarItem["number"] = g.getGrammarNumber()
+            grammarItem["character"] = g.getCharacter()
+            grammarItem["pinyin"] = g.getPinyin()
+            grammarItem["number"] = g.getNumber()
             grammarItem["usage"] = g.getUsage()
             grammarList.append(grammarItem)
         return json.dumps(grammarList)
