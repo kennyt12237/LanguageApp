@@ -15,15 +15,15 @@ class SectionModel(ABC):
     def loadSectionsDirectory(self, sectionsPath: str, dm: DictionaryModel = None, gm: GrammarModel = None) -> None:
         sectionList: list[Section] = []
         for section in os.listdir(sectionsPath):
-            sectionList.append(self._loadSection(
+            sectionList.append(self.__loadSection(
                 os.path.join(sectionsPath, section), dm, gm))
         self.sections = sectionList
 
-    def _loadSection(self, sectionPath: str, dm: DictionaryModel, gm: GrammarModel) -> Section:
+    def __loadSection(self, sectionPath: str, dm: DictionaryModel, gm: GrammarModel) -> Section:
         fileToMethod = {
-            'words.tsv': self._loadWords,
-            'grammars.tsv': self._loadGrammars,
-            'sentences.tsv': self._loadSentences,
+            'words.tsv': self.__loadWords,
+            'grammars.tsv': self.__loadGrammars,
+            'sentences.tsv': self.__loadSentences,
         }
 
         fileToVariable = {
@@ -42,16 +42,47 @@ class SectionModel(ABC):
         newSentences = fileToVariable[files[2]]
         return Section(sectionPath[sectionPath.rfind("\\")+1:], newWords, newGrammar, newSentences)
 
+    def __loadWords(self, filePath, dm: DictionaryModel = None, gm: GrammarModel = None) -> list[Word]:
+        wordList: list[Word] = []
+        file = open(filePath, "r", encoding="utf-8")
+        file.readline()
+        for line in file:
+            content = line.strip().split("\t")
+            word = self._createWord(content, dm, gm)
+            wordList.append(word)
+        return wordList
+
+    def __loadGrammars(self, filePath: str, dm: DictionaryModel = None, gm: GrammarModel = None) -> list[Grammar]:
+        grammarList: list[Grammar] = []
+        file = open(filePath, "r", encoding="utf-8")
+        file.readline()
+        for line in file:
+            content = line.strip().split("\t")
+            g = self._createGrammar(content, dm, gm)
+            if g:
+                grammarList.append(g)
+        return grammarList
+
+    def __loadSentences(self, filePath: str, dm: DictionaryModel = None, gm: GrammarModel = None) -> dict[str, str]:
+        sentences: dict[str, str] = {}
+        file = open(filePath, "r", encoding="utf-8")
+        file.readline()
+        for line in file:
+            content = line.strip().split("\t")
+            key, value = self._createSentence(content, dm, gm)
+            sentences[key] = value
+        return sentences
+
     @abstractmethod
-    def _loadWords(self, filePath, dm: DictionaryModel, gm: GrammarModel) -> list[Word]:
+    def _createWord(self, content, dm: DictionaryModel = None, gm: GrammarModel = None) -> Word:
         pass
 
     @abstractmethod
-    def _loadGrammars(self, filePath: str, dm: DictionaryModel, gm: GrammarModel) -> list[Grammar]:
+    def _createGrammar(self, content, dm: DictionaryModel = None, gm: GrammarModel = None) -> Grammar:
         pass
 
     @abstractmethod
-    def _loadSentences(self, filePath: str, dm: DictionaryModel, gm: GrammarModel) -> dict[str, str]:
+    def _createSentence(self, content, dm: DictionaryModel = None, gm: GrammarModel = None) -> tuple:
         pass
 
     def getAllSections(self) -> list[Section]:
@@ -63,39 +94,11 @@ class SectionModelV1(SectionModel):
     def __init__(self, sections: list[Section] = []) -> None:
         super().__init__(sections)
 
-    def loadSectionsDirectory(self, sectionsPath: str, dm: DictionaryModel = None, gm: GrammarModel = None) -> None:
-        sectionList: list[Section] = []
-        for section in os.listdir(sectionsPath):
-            sectionList.append(self._loadSection(
-                os.path.join(sectionsPath, section), dm, gm))
-        self.sections = sectionList
+    def _createWord(self, content, dm: DictionaryModel = None, gm: GrammarModel = None) -> Word:
+        return dm.findWordByCharacterAndPinyin(content[0], content[1])
 
-    def _loadWords(self, filePath, dm: DictionaryModel, gm: GrammarModel) -> list[Word]:
-        wordList: list[Word] = []
-        file = open(filePath, "r", encoding="utf-8")
-        file.readline()
-        for line in file:
-            content = line.strip().split("\t")
-            word = dm.findWordByCharacterAndPinyin(content[0], content[1])
-            wordList.append(word)
-        return wordList
+    def _createGrammar(self, content, dm: DictionaryModel = None, gm: GrammarModel = None) -> Grammar:
+        return gm.findGrammarByCharacterAndNumber(content[0], int(content[1]))
 
-    def _loadGrammars(self, filePath: str, dm: DictionaryModel, gm: GrammarModel) -> list[Grammar]:
-        grammarList: list[Grammar] = []
-        file = open(filePath, "r", encoding="utf-8")
-        file.readline()
-        for line in file:
-            content = line.strip().split("\t")
-            g = gm.findGrammarByCharacterAndNumber(content[0], int(content[1]))
-            if g:
-                grammarList.append(g)
-        return grammarList
-
-    def _loadSentences(self, filePath: str, dm: DictionaryModel, gm: GrammarModel) -> dict[str, str]:
-        sentences: dict[str, str] = {}
-        file = open(filePath, "r", encoding="utf-8")
-        file.readline()
-        for line in file:
-            content = line.strip().split("\t")
-            sentences[content[0]] = content[1]
-        return sentences
+    def _createSentence(self, content, dm: DictionaryModel = None, gm: GrammarModel = None) -> tuple:
+        return (content[0], content[1])
