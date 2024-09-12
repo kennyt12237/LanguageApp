@@ -1,5 +1,5 @@
-from .Word import Grammar, GrammarV1, GrammarV2
-from .DictionaryModel import DictionaryModel
+from ..Datatype import Grammar
+from ..DictionaryModel import DictionaryModel
 
 from abc import ABC, abstractmethod
 
@@ -40,24 +40,3 @@ class GrammarModel(ABC):
 
     def getAllGrammar(self) -> list[Grammar]:
         return self.grammars
-
-
-class GrammarModelV1(GrammarModel):
-
-    def __init__(self) -> None:
-        super().__init__()
-
-    def _generateGrammarData(self, content, dm: DictionaryModel = None) -> Grammar:
-        word = dm.findWordByCharacterAndPinyin(content[0], content[1])
-        newGrammar = GrammarV1(word.getCharacter(), word.getPinyin(), int(
-            content[2]), content[3], word)
-        word.addGrammar(newGrammar)
-        return newGrammar
-
-class GrammarModelV2(GrammarModel):
-
-    def __init__(self) -> None:
-        super().__init__()
-
-    def _generateGrammarData(self, content, dm: DictionaryModel = None) -> Grammar:
-        return GrammarV2(content[0], content[1], int(content[2]), content[3])

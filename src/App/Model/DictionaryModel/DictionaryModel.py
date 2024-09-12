@@ -1,4 +1,4 @@
-from .Word import Word, WordTypeMap
+from ..Datatype import Word, WordTypeMap
 
 class DictionaryModel():
     def __init__(self) -> None:

@@ -1,4 +1,4 @@
-from .Word import Word, Grammar
+from .Datatype import Word, Grammar
 
 class Section():
     
