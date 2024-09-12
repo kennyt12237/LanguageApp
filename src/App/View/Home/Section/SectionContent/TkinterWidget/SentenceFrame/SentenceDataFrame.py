@@ -71,8 +71,8 @@ class SentenceFrame(Frame):
             self.dictionaryData)
 
     def _createLabels(self, text: str) -> None:
-        grammarLabelCount = 0
-        wordLabelCount = 0
+        grammarTooltipGenerator = GrammarTooltipGenerator()
+        wordTooltipGenerator = WordTooltipGenerator()
         textPos = 0
         while textPos < len(text):
             labelLength = 0
@@ -81,13 +81,11 @@ class SentenceFrame(Frame):
                 grammar = self.grammarChars[gPos]
                 inTextAtPos = self.__findInText(text, grammar, textPos)
                 if inTextAtPos == True:
-                    labelTooltipName = self.GRAMMAR_LABEL_TOOLTIP + \
-                    str(grammarLabelCount)
-                    label = GrammarLabelTooltip(
-                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.GRAMMAR_LABEL, text=grammar, font=self.font, **grammarTooltipDefault)
-                    grammarData = getGrammarDataFromCharacter(self.grammarData, grammar)
+                    label = grammarTooltipGenerator.createTooltipLabel(
+                        master=self, tooltipParent=self.master, name=labelName + self.GRAMMAR_LABEL, text=grammar, font=self.font, **grammarTooltipDefault)
+                    grammarData = getGrammarDataFromCharacter(
+                        self.grammarData, grammar)
                     label.setToolTip(data=grammarData)
-                    grammarLabelCount += 1
                     labelLength = len(grammar)
                     break
             if labelLength > 0:
@@ -97,11 +95,8 @@ class SentenceFrame(Frame):
                 word = self.dictionaryChars[dPos]
                 inTextAtPos = self.__findInText(text, word, textPos)
                 if inTextAtPos == True:
-                    labelTooltipName = self.WORD_LABEL_TOOLTIP + \
-                        str(wordLabelCount)
-                    wordLabelCount += 1
-                    label = DictionaryWordTooltip(
-                        self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.WORD_LABEL, text=word, font=self.font, **dictionaryWordTooltipDefault)
+                    label = wordTooltipGenerator.createTooltipLabel(
+                        master=self, tooltipParent=self.master, name=labelName + self.WORD_LABEL, text=word, font=self.font, **dictionaryWordTooltipDefault)
                     wordData = getDictionaryDataFromCharacter(
                         self.dictionaryData, word)
                     label.setToolTip(data=wordData)
@@ -110,16 +105,16 @@ class SentenceFrame(Frame):
             if labelLength > 0:
                 textPos += labelLength
                 continue
-                
+
             KLabel(self, text=text[textPos], name=labelName, font=self.font)
             textPos += 1
 
-    def __findInText(self, text : str, sequence : str, textPos : int) -> bool:
+    def __findInText(self, text: str, sequence: str, textPos: int) -> bool:
         for sPos in range(len(sequence)):
             if textPos + sPos < len(text) and text[textPos + sPos] != sequence[sPos]:
                 return False
         return True
-    
+
     def _removeAllLabels(self) -> None:
         for label in self.winfo_children():
             label.destroy()
@@ -238,3 +233,45 @@ class DictionaryWordTooltip(LabelTooltip):
             type=data["type"],
             meaning=data["meaning"])
         self.toolTip.configure(text=text)
+
+class TooltipGenerator():
+
+    DEFAULT_TOOLTIP_TEXT = "tooltip"
+
+    def __init__(self, labelName: str = DEFAULT_TOOLTIP_TEXT, startingNumber: int = 0):
+        self.labelName = labelName
+        self.number = startingNumber
+
+    def createTooltipLabel(self, master: Misc, tooltipParent: Misc, **kwargs) -> LabelTooltip:
+        tooltipName = self.DEFAULT_TOOLTIP_TEXT + str(self.__getNumber())
+        self.__incrementNumber()
+        return self._createTooltipLabel(master, tooltipParent, tooltipName=tooltipName, **kwargs)
+
+    def __incrementNumber(self) -> None:
+        self.number += 1
+
+    def __getNumber(self) -> int:
+        return self.number
+
+    def _createTooltipLabel(self, master: Misc, tooltipParent: Misc, tooltipName: str, **kwargs):
+        return LabelTooltip(master, tooltipParent, tooltipName=tooltipName, **kwargs)
+    
+class WordTooltipGenerator(TooltipGenerator):
+    
+    WORD_LABEL_TOOLTIP = "wltooltip"
+    
+    def __init__(self, labelName : str = WORD_LABEL_TOOLTIP) -> None:
+        super().__init__(labelName=labelName)
+        
+    def _createTooltipLabel(self, master: Misc, tooltipParent: Misc, tooltipName: str, **kwargs):
+        return DictionaryWordTooltip(master, tooltipParent, tooltipName=tooltipName, **kwargs)
+    
+class GrammarTooltipGenerator(TooltipGenerator):
+    
+    GRAMMAR_LABEL_TOOLTIP = "gltooltip"
+    
+    def __init__(self, labelName : str = GRAMMAR_LABEL_TOOLTIP) -> None:
+        super().__init__(labelName=labelName)
+        
+    def _createTooltipLabel(self, master: Misc, tooltipParent: Misc, tooltipName: str, **kwargs):
+        return GrammarLabelTooltip(master, tooltipParent, tooltipName=tooltipName, **kwargs)
