@@ -31,6 +31,9 @@ class DictionaryModel():
     def getAllWords(self) -> list[Word]:
         return self.words
     
+    def setWords(self, words : list[Word]) -> None:
+        self.words = words
+    
     def findWordByCharacterAndPinyin(self, character : str, pinyin : str) -> Word:
         for word in self.words:
             if word.getCharacter() == character and word.getPinyin() == pinyin:

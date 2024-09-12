@@ -10,13 +10,11 @@ class Controller():
         self.dataTransformer = dataTransformer
         
     def start(self) -> None:
-        self._loadModels("src\ChineseWordList.tsv","src\ChineseGrammarList.tsv", "src\sections")
+        self._loadModels("src\sections")
         self._attachListeners()
         self.view.mainloop()
         
-    def _loadModels(self, wordPath : str, grammarPath : str, sectionPath : str) -> None:
-        self.model.loadDictionaryDataFromTSV(wordPath)
-        self.model.loadGrammarDataFromTSV(grammarPath)
+    def _loadModels(self, sectionPath : str) -> None:
         self.model.loadSectionsFolderFromTSV(sectionPath)
         
     def _attachListeners(self) -> None:

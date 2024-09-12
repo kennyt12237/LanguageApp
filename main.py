@@ -1,6 +1,6 @@
-from src import Controller, ChineseLanguageModel, BasicView, DataTransformer
+from src import Controller, ChineseLanguageModelV2, BasicView, DataTransformer
 
-model = ChineseLanguageModel()
+model = ChineseLanguageModelV2()
 view = BasicView(windowsize=0.7)
 dataTransformer = DataTransformer()
 
