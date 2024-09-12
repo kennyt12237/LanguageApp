@@ -1,7 +1,7 @@
 from tkinter import Frame, Misc
-from tkinter import CENTER, LEFT, S, N, E, W, BOTTOM, DISABLED
+from tkinter import CENTER, LEFT, S, N, E, W, BOTTOM
 from tkinter.font import Font
-from .KLabel import KLabel
+from .Tooltip import KLabel, WordTooltipGenerator, GrammarTooltipGenerator
 
 from .Styling import sentenceTextFont, sentenceMeaningFont, dictionaryWordTooltipDefault, grammarTooltipDefault
 from .Utils import TkManager, getGrammarCharactersList, getGrammarDataFromCharacter, getDictionaryCharactersList, getDictionaryDataFromCharacter
@@ -169,109 +169,3 @@ class SentenceFrame(Frame):
             self._placeAllLabels()
         else:
             self._packAllLabels()
-
-
-class LabelTooltip(ABC, KLabel):
-
-    ENTER_SEQUENCE = "<Enter>"
-    LEAVE_SEQUENCE = "<Leave>"
-
-    def __init__(self, master: Misc, tooltipParent: Misc, tooltipName: str, **kwargs) -> None:
-        super().__init__(master, **kwargs)
-        self.tooltipParent = tooltipParent
-        self.toolTip: KLabel = KLabel(self.tooltipParent, name=tooltipName, borderwidth=2,
-                                      padx=10, pady=10, relief="solid", background="lightyellow")
-        self.toolTip.event_generate(self.WIDGET_CREATED_EVENT)
-
-    def setToolTip(self, data) -> None:
-        self.bind(self.ENTER_SEQUENCE, func=lambda e: self.__setTooltipText(
-            data))
-        self.bind(self.LEAVE_SEQUENCE, func=lambda e: self.__hideToolTip())
-
-    def __setTooltipText(self, data) -> None:
-        self._setText(data)
-        if self.toolTip.cget("state") != DISABLED:
-            toolTipfont = Font(font=self.cget("font"))
-            toolTipWidth = toolTipfont.measure(self.cget("text"))
-            xPos = self.master.winfo_x() + self.winfo_x() + int(toolTipWidth / 2) - \
-                (self.toolTip.winfo_reqwidth() / 2)
-            yPos = self.tooltipParent.winfo_height() - self.master.winfo_height() - \
-                self.toolTip.winfo_reqheight() - 20
-            self.toolTip.place(x=xPos, y=yPos)
-
-    @abstractmethod
-    def _setText(self, data) -> KLabel:
-        pass
-
-    def __hideToolTip(self) -> None:
-        self.toolTip.place_forget()
-
-
-class GrammarLabelTooltip(LabelTooltip):
-
-    def __init__(self, master: Misc, tooltipParent: Misc, tooltipName: str, **kwargs) -> None:
-        super().__init__(master, tooltipParent, tooltipName, **kwargs)
-
-    def _setText(self, data) -> None:
-        text = "Pinyin : {pinyin}\nCharacter : {character}{num}\nMeaning : {meaning}".format(
-            pinyin=data["pinyin"],
-            character=data["character"],
-            num=data["number"],
-            meaning=data["usage"])
-        self.toolTip.configure(text=text)
-
-
-class DictionaryWordTooltip(LabelTooltip):
-
-    def __init__(self, master: Misc, tooltipParent: Misc, **kwargs) -> None:
-        super().__init__(master, tooltipParent, **kwargs)
-
-    def _setText(self, data) -> None:
-        text = "Pinyin : {pinyin}\nCharacter : {character}\nType : {type}\nMeaning : {meaning}".format(
-            pinyin=data["pinyin"],
-            character=data["character"],
-            type=data["type"],
-            meaning=data["meaning"])
-        self.toolTip.configure(text=text)
-
-class TooltipGenerator():
-
-    DEFAULT_TOOLTIP_TEXT = "tooltip"
-
-    def __init__(self, labelName: str = DEFAULT_TOOLTIP_TEXT, startingNumber: int = 0):
-        self.labelName = labelName
-        self.number = startingNumber
-
-    def createTooltipLabel(self, master: Misc, tooltipParent: Misc, **kwargs) -> LabelTooltip:
-        tooltipName = self.DEFAULT_TOOLTIP_TEXT + str(self.__getNumber())
-        self.__incrementNumber()
-        return self._createTooltipLabel(master, tooltipParent, tooltipName=tooltipName, **kwargs)
-
-    def __incrementNumber(self) -> None:
-        self.number += 1
-
-    def __getNumber(self) -> int:
-        return self.number
-
-    def _createTooltipLabel(self, master: Misc, tooltipParent: Misc, tooltipName: str, **kwargs):
-        return LabelTooltip(master, tooltipParent, tooltipName=tooltipName, **kwargs)
-    
-class WordTooltipGenerator(TooltipGenerator):
-    
-    WORD_LABEL_TOOLTIP = "wltooltip"
-    
-    def __init__(self, labelName : str = WORD_LABEL_TOOLTIP) -> None:
-        super().__init__(labelName=labelName)
-        
-    def _createTooltipLabel(self, master: Misc, tooltipParent: Misc, tooltipName: str, **kwargs):
-        return DictionaryWordTooltip(master, tooltipParent, tooltipName=tooltipName, **kwargs)
-    
-class GrammarTooltipGenerator(TooltipGenerator):
-    
-    GRAMMAR_LABEL_TOOLTIP = "gltooltip"
-    
-    def __init__(self, labelName : str = GRAMMAR_LABEL_TOOLTIP) -> None:
-        super().__init__(labelName=labelName)
-        
-    def _createTooltipLabel(self, master: Misc, tooltipParent: Misc, tooltipName: str, **kwargs):
-        return GrammarLabelTooltip(master, tooltipParent, tooltipName=tooltipName, **kwargs)
