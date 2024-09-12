@@ -59,6 +59,7 @@ class SentenceFrame(Frame):
     WORD_LABEL = "wordLabel"
     GRAMMAR_LABEL_TOOLTIP = "gltooltip"
     WORD_LABEL_TOOLTIP = "wltooltip"
+    CHAR_OFFSET = 2
 
     def __init__(self, master: Misc, font: Font = None,  dictionaryData: list[dict[str, str]] = None, grammarData: list[dict[str, str]] = None, manager: TkManager = None, **kwargs) -> None:
         super().__init__(master, **kwargs)
@@ -72,28 +73,53 @@ class SentenceFrame(Frame):
     def _createLabels(self, text: str) -> None:
         grammarLabelCount = 0
         wordLabelCount = 0
-        for char in text:
+        textPos = 0
+        while textPos < len(text):
+            labelLength = 0
             labelName = self.TEXT_LABEL + str(len(self.winfo_children()))
-            if char in self.grammarChars:
-                labelTooltipName = self.GRAMMAR_LABEL_TOOLTIP + \
+            for gPos in range(0, len(self.grammarChars)):
+                grammar = self.grammarChars[gPos]
+                inTextAtPos = self.__findInText(text, grammar, textPos)
+                if inTextAtPos == True:
+                    labelTooltipName = self.GRAMMAR_LABEL_TOOLTIP + \
                     str(grammarLabelCount)
-                label = GrammarLabelTooltip(
-                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.GRAMMAR_LABEL, text=char, font=self.font, **grammarTooltipDefault)
-                grammar = getGrammarDataFromCharacter(self.grammarData, char)
-                label.setToolTip(data=grammar)
-                grammarLabelCount += 1
-            elif char in self.dictionaryChars:
-                labelTooltipName = self.WORD_LABEL_TOOLTIP + \
-                    str(wordLabelCount)
-                wordLabelCount += 1
-                label = DictionaryWordTooltip(
-                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.WORD_LABEL, text=char, font=self.font, **dictionaryWordTooltipDefault)
-                word = getDictionaryDataFromCharacter(
-                    self.dictionaryData, char)
-                label.setToolTip(data=word)
-            else:
-                KLabel(self, text=char, name=labelName, font=self.font)
+                    label = GrammarLabelTooltip(
+                    self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.GRAMMAR_LABEL, text=grammar, font=self.font, **grammarTooltipDefault)
+                    grammarData = getGrammarDataFromCharacter(self.grammarData, grammar)
+                    label.setToolTip(data=grammarData)
+                    grammarLabelCount += 1
+                    labelLength = len(grammar)
+                    break
+            if labelLength > 0:
+                textPos += labelLength
+                continue
+            for dPos in range(0, len(self.dictionaryChars)):
+                word = self.dictionaryChars[dPos]
+                inTextAtPos = self.__findInText(text, word, textPos)
+                if inTextAtPos == True:
+                    labelTooltipName = self.WORD_LABEL_TOOLTIP + \
+                        str(wordLabelCount)
+                    wordLabelCount += 1
+                    label = DictionaryWordTooltip(
+                        self, tooltipParent=self.master, tooltipName=labelTooltipName, name=labelName + self.WORD_LABEL, text=word, font=self.font, **dictionaryWordTooltipDefault)
+                    wordData = getDictionaryDataFromCharacter(
+                        self.dictionaryData, word)
+                    label.setToolTip(data=wordData)
+                    labelLength += len(word)
+                    break
+            if labelLength > 0:
+                textPos += labelLength
+                continue
+                
+            KLabel(self, text=text[textPos], name=labelName, font=self.font)
+            textPos += 1
 
+    def __findInText(self, text : str, sequence : str, textPos : int) -> bool:
+        for sPos in range(len(sequence)):
+            if textPos + sPos < len(text) and text[textPos + sPos] != sequence[sPos]:
+                return False
+        return True
+    
     def _removeAllLabels(self) -> None:
         for label in self.winfo_children():
             label.destroy()
@@ -107,7 +133,7 @@ class SentenceFrame(Frame):
         for label in self.winfo_children():
             label.place(x=xPos, y=0)
             charWidth = self.font.measure(label.cget("text"))
-            xPos += charWidth + 2
+            xPos += charWidth + self.CHAR_OFFSET
             label.bind("<<PropertyChange>>", lambda e,
                        label=label: self.onPropertyChange(e, label))
         self.config(width=xPos, height=self.font.metrics("linespace"))
@@ -125,13 +151,13 @@ class SentenceFrame(Frame):
         prevLabelFont = Font(font=prevLabel.cget("font"))
         prevxPos = int(prevLabel.place_info()['x'])
         prevLabelWidth = prevLabelFont.measure(prevLabel.cget('text'))
-        newxPos = prevxPos + prevLabelWidth + 2
+        newxPos = prevxPos + prevLabelWidth + self.CHAR_OFFSET
         label.place_configure(x=newxPos, y=0)
 
         if labelInd == len(labelList) - 1:
             currentLabelFont = Font(font=label.cget('font'))
             currentCharWidth = currentLabelFont.measure(label.cget('text'))
-            newFrameWidth = newxPos + currentCharWidth + 2
+            newFrameWidth = newxPos + currentCharWidth + self.CHAR_OFFSET
             self.config(width=newFrameWidth,
                         height=currentLabelFont.metrics("linespace"))
         else:
