@@ -20,7 +20,7 @@ class DataTransformer():
             grammarItem = {}
             grammarItem["character"] = g.getCharacter()
             grammarItem["pinyin"] = g.getPinyin()
-            grammarItem["number"] = g.getNumber()
+            grammarItem["version"] = g.getVersion()
             grammarItem["usage"] = g.getUsage()
             grammarList.append(grammarItem)
         return json.dumps(grammarList)

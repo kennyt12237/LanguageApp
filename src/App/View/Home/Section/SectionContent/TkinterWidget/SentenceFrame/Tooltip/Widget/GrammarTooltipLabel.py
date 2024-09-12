@@ -10,6 +10,6 @@ class GrammarTooltipLabel(TooltipLabel):
         text = "Pinyin : {pinyin}\nCharacter : {character}{num}\nMeaning : {meaning}".format(
             pinyin=data["pinyin"],
             character=data["character"],
-            num=data["number"],
+            num=data["version"],
             meaning=data["usage"])
         self.toolTip.configure(text=text)

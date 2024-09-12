@@ -19,10 +19,10 @@ WordTypeMap = {
 
 class Grammar():
 
-    def __init__(self, character: str, pinyin: str, number: int, usage: str) -> None:
+    def __init__(self, character: str, pinyin: str, version: int, usage: str) -> None:
         self.character = character
         self.pinyin = pinyin
-        self.number: int = number
+        self.version: int = version
         self.usage: str = usage
 
     def getCharacter(self) -> Word:
@@ -31,8 +31,8 @@ class Grammar():
     def getPinyin(self) -> Word:
         return self.pinyin
 
-    def getNumber(self) -> int:
-        return self.number
+    def getVersion(self) -> int:
+        return self.version
 
     def getUsage(self) -> str:
         return self.usage
@@ -40,8 +40,8 @@ class Grammar():
 
 class GrammarV1(Grammar):
 
-    def __init__(self, character: str, pinyin: str, number: int, usage: str, word: Word = None) -> None:
-        super().__init__(character, pinyin, number, usage)
+    def __init__(self, character: str, pinyin: str, version: int, usage: str, word: Word = None) -> None:
+        super().__init__(character, pinyin, version, usage)
         self.word: Word = word
 
     def getWord(self) -> Word:
@@ -50,8 +50,8 @@ class GrammarV1(Grammar):
 
 class GrammarV2(Grammar):
 
-    def __init__(self, character: str, pinyin: str, number: int, usage: str, words: list[Word] = None) -> None:
-        super().__init__(character, pinyin, number, usage)
+    def __init__(self, character: str, pinyin: str, version: int, usage: str, words: list[Word] = None) -> None:
+        super().__init__(character, pinyin, version, usage)
         self.words: list[Word] = words if words != None else []
 
     def setWords(self, words: list[Word]) -> None:

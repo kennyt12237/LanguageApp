@@ -2,7 +2,7 @@ from tkinter import Label, Misc
 from .GridFrame import GridFrame
 import json
 
-from .Styling import getTableHeaderLabelSettings, getTableLabelSettings
+from .Styling import defaultHeaderLabelSettings, defaultLabelSettings
 
 class TableGridFrame(GridFrame):
 
@@ -13,44 +13,44 @@ class TableGridFrame(GridFrame):
     HEADER_SIZE = 100
     ENTRY_SIZE = 75
 
-    def __init__(self, master: Misc, data: json = None, headerStyling: dict[str, str] = getTableHeaderLabelSettings(), entryStyling: dict[str, str] = getTableLabelSettings(), **kwargs):
+    def __init__(self, master: Misc, data: json = None, **kwargs):
         super().__init__(master, **kwargs)
         self.data: list[dict[str, str]] = json.loads(data)
-        self.__createLabels(self.data, headerStyling, entryStyling)
+        self.__createLabels(self.data)
 
-    def __createLabels(self, data: list[dict[str, str]], headerStyling: dict[str, str], entryStyling: dict[str, str]) -> None:
+    def __createLabels(self, data: list[dict[str, str]]) -> None:
         headerItemCount = self._createHeader(
-            data, numberColumn=True, headerStyling=headerStyling)
+            data, numberColumn=True)
         labelCount = self._createEntries(
-            data, labelCount=1, backgroundOnEven=True, entryStyling=entryStyling)
+            data, labelCount=1, backgroundOnEven=True)
         self._additionalGridProperties(labelCount, headerItemCount)
 
-    def _createHeader(self, data: list[dict[str, str]], numberColumn: bool = False, headerStyling: dict[str, str] = {}) -> int:
+    def _createHeader(self, data: list[dict[str, str]], numberColumn: bool = False) -> int:
         headerList = list(data[0].keys())
         headerItemCount = 0
 
         if numberColumn == True:
-            Label(self, text=self.NUMBER, **headerStyling,
+            Label(self, text=self.NUMBER, **defaultHeaderLabelSettings,
                   ).grid(row=0, column=headerItemCount, sticky=self.GRID_STICKY)
             headerItemCount += 1
 
         for header in headerList:
             Label(self, text=header.strip().capitalize(
-            ), **headerStyling).grid(row=0, column=headerItemCount, sticky=self.GRID_STICKY)
+            ), **defaultHeaderLabelSettings).grid(row=0, column=headerItemCount, sticky=self.GRID_STICKY)
             headerItemCount += 1
 
         return headerItemCount
 
-    def _createEntries(self, data: list[dict[str, str]], labelCount: int = 0, backgroundOnEven: bool = False, entryStyling: dict[str, str] = {}) -> int:
+    def _createEntries(self, data: list[dict[str, str]], labelCount: int = 0, backgroundOnEven: bool = False) -> int:
         for entry in data:
             labelIndex = 0
             background = self.GRID_BACKGROUND if (
                 backgroundOnEven and labelCount % 2 == 0) else self.cget(self.BG)
-            Label(self, text=labelCount, background=background, **entryStyling).grid(
+            Label(self, text=labelCount, background=background, **defaultLabelSettings).grid(
                 row=labelCount, column=labelIndex, sticky=self.GRID_STICKY)
             labelIndex += 1
             for values in entry.values():
-                Label(self, text=str(values).strip(), background=background, **entryStyling).grid(
+                Label(self, text=str(values).strip(), background=background, **defaultLabelSettings).grid(
                     row=labelCount, column=labelIndex, sticky=self.GRID_STICKY)
                 labelIndex += 1
             labelCount = labelCount + 1
