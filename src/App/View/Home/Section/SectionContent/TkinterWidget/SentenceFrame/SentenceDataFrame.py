@@ -7,7 +7,6 @@ from .Styling import sentenceTextFont, sentenceMeaningFont, dictionaryWordToolti
 from .Utils import TkManager, getGrammarCharactersList, getGrammarDataFromCharacter, getDictionaryCharactersList, getDictionaryDataFromCharacter
 
 from ..AbstractFrame import GridFrame
-from abc import ABC, abstractmethod
 
 
 class SentenceDataFrame(GridFrame):
@@ -57,8 +56,6 @@ class SentenceFrame(Frame):
     TEXT_LABEL = "textLabel"
     GRAMMAR_LABEL = "grammarLabel"
     WORD_LABEL = "wordLabel"
-    GRAMMAR_LABEL_TOOLTIP = "gltooltip"
-    WORD_LABEL_TOOLTIP = "wltooltip"
     CHAR_OFFSET = 2
 
     def __init__(self, master: Misc, font: Font = None,  dictionaryData: list[dict[str, str]] = None, grammarData: list[dict[str, str]] = None, manager: TkManager = None, **kwargs) -> None:
