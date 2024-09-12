@@ -15,7 +15,7 @@ class NavigationFrame(GridFrame):
         SETTINGS = "settings"
 
     ARROW_PATH = os.path.join(
-        os.getcwd(), 'src\App\View\Home\Icons', 'arrow-left.png')
+        os.getcwd(), 'src\Icons', 'arrow-left.png')
 
     def __init__(self, window: Window, **kwargs) -> None:
         super().__init__(window, **kwargs)

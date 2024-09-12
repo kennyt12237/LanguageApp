@@ -8,9 +8,9 @@ import os
 class MenuFrame(GridFrame):
 
     HOME_PATH = os.path.join(
-        os.getcwd(), 'src\App\View\Home\Icons', 'home.png')
+        os.getcwd(), 'src\Icons', 'home.png')
     SETTINGS_PATH = os.path.join(
-        os.getcwd(), 'src\App\View\Home\Icons', 'settings.png')
+        os.getcwd(), 'src\Icons', 'settings.png')
 
     HOME_BUTTON = "home"
     SETTING_BUTTON = "setting"

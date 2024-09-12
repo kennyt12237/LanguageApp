@@ -4,3 +4,7 @@
 
 # Python Files
 **/__pycache__/
+
+# Build files
+/build
+/dist
