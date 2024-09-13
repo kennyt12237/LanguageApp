@@ -3,7 +3,7 @@ from tkinter import CENTER
 from typing import Callable
 
 from .Section import ScrollableDictionaryFrame, SectionFrame, GridFrame, Window, convertPixelsToTextUnit
-
+import json
 
 class HomeFrame(GridFrame):
 
@@ -34,7 +34,7 @@ class HomeFrame(GridFrame):
 
     def onDictionaryButtonPressed(self) -> None:
         self.window.newFrameNavigated(ScrollableDictionaryFrame(
-            self.window, self.getDictionaryData(), name="dictionary"))
+            self.window, json.loads(self.getDictionaryData()), name="dictionary"))
 
     def setGetSectionsData(self, method: Callable) -> None:
         self.getSectionsData = method
