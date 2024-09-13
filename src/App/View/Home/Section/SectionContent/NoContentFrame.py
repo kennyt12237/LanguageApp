@@ -14,6 +14,7 @@ class NoContentFrame(GridFrame):
         self._gridPlacement()
 
     def _setGridProperties(self) -> None:
+        self.grid_propagate(False)
         self.grid_anchor(CENTER)
 
     def _gridPlacement(self) -> None:
