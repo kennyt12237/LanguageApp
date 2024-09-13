@@ -3,11 +3,16 @@ from typing import Callable
 
 from .Home import NavigationFrame, HomeFrame, Window, getScreenWidthCtypes, getScreenHeightCtypes, setProcessDpiAwareness2
 
+import os
 
 class BasicView():
 
+    ICON_PATH = os.path.join(
+        os.getcwd(), 'src\Icons', 'icon.ico')
+    
     def __init__(self, window = None, windowsize: float = 0.5, scaling: float = 2):
         self.window: Window = window if window != None else Window(padx=40, pady=20)
+        self.window.iconbitmap(self.ICON_PATH)
         setProcessDpiAwareness2()
         self._setWindowSize(windowsize)
         self._setWidgetScaling(scaling)
