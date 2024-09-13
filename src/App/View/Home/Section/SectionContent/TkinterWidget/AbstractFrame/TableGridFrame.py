@@ -1,6 +1,5 @@
 from tkinter import Label, Misc
 from .GridFrame import GridFrame
-import json
 
 from .Styling import defaultHeaderLabelSettings, defaultLabelSettings
 
@@ -13,9 +12,9 @@ class TableGridFrame(GridFrame):
     HEADER_SIZE = 100
     ENTRY_SIZE = 75
 
-    def __init__(self, master: Misc, data: json = None, **kwargs):
+    def __init__(self, master: Misc, data = None, **kwargs):
         super().__init__(master, **kwargs)
-        self.data: list[dict[str, str]] = json.loads(data)
+        self.data: list[dict[str, str]] = data 
         self.__createLabels(self.data)
 
     def __createLabels(self, data: list[dict[str, str]]) -> None:

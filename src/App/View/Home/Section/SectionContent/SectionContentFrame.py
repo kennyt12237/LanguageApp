@@ -2,6 +2,9 @@ from tkinter import Button, Misc
 from tkinter import CENTER
 
 from .TkinterWidget import ScrollableDictionaryFrame, GrammarFrame, SentenceContainer, GridFrame, Window, convertPixelsToTextUnit
+from .NoContentFrame import NoContentFrame
+
+import json
 
 
 class SectionContentFrame(GridFrame):
@@ -18,25 +21,40 @@ class SectionContentFrame(GridFrame):
         self.window: Window = self.winfo_toplevel()
         self.data: dict[str, list[dict[str, str]]] = sectionData
         self.wordButton = Button(
-            self, text=self.WORDS.capitalize(), command=lambda: self.onWordButtonPressed(self.data[self.WORDS]))
+            self, text=self.WORDS.capitalize(), command=lambda: self.onWordButtonPressed(json.loads(self.data[self.WORDS])))
         self.grammarButton = Button(
-            self, text=self.GRAMMARS.capitalize(), command=lambda: self.onGrammarButtonPressed(self.data[self.GRAMMARS]))
+            self, text=self.GRAMMARS.capitalize(), command=lambda: self.onGrammarButtonPressed(json.loads(self.data[self.GRAMMARS])))
         self.sentenceButton = Button(
-            self, text=self.SENTENCES.capitalize(), command=lambda: self.onSentenceButtonPressed(self.data[self.SENTENCES], self.data[self.WORDS], self.data[self.GRAMMARS]))
+            self, text=self.SENTENCES.capitalize(), command=lambda: self.onSentenceButtonPressed(json.loads(self.data[self.SENTENCES]), json.loads(self.data[self.WORDS]), json.loads(self.data[self.GRAMMARS])))
         self.setAllButtonSizeRelativeToScreen(defaultWidgetSize)
         self._gridPlacement()
 
     def onWordButtonPressed(self, words: list[dict[str, str]]) -> None:
-        self.window.newFrameNavigated(ScrollableDictionaryFrame(
-            self.window, words, name=self.DICTIONARY))
+        windowSet = self._determineNoContentFrame(
+            "No Dictionary Content!", data=words)
+        if windowSet == False:
+            self.window.newFrameNavigated(ScrollableDictionaryFrame(
+                self.window, words, name=self.DICTIONARY))
 
     def onGrammarButtonPressed(self, grammars: list[dict[str, str]]) -> None:
-        self.window.newFrameNavigated(GrammarFrame(
-            self.window, grammars, name=self.GRAMMAR))
+        windowSet = self._determineNoContentFrame(
+            "No Grammar Content!", data=grammars)
+        if windowSet == False:
+            self.window.newFrameNavigated(GrammarFrame(
+                self.window, grammars, name=self.GRAMMAR))
 
-    def onSentenceButtonPressed(self, sentences: list[dict[str, str]], dictionary : list[dict[str,str]] = None, grammars : list[dict[str,str]] = None) -> None:
-        self.window.newFrameNavigated(SentenceContainer(
-            self.window, sentenceData=sentences, dictionaryData = dictionary, grammarData=grammars, name=self.SENTENCE))
+    def onSentenceButtonPressed(self, sentences: list[dict[str, str]], dictionary: list[dict[str, str]] = None, grammars: list[dict[str, str]] = None) -> None:
+        windowSet = self._determineNoContentFrame(
+            "No Sentence Content!", data=sentences)
+        if windowSet == False:
+            self.window.newFrameNavigated(SentenceContainer(
+                self.window, sentenceData=sentences, dictionaryData=dictionary, grammarData=grammars, name=self.SENTENCE))
+
+    def _determineNoContentFrame(self, text: str, data: any = None) -> bool:
+        if not data:
+            self.window.newFrameNavigated(NoContentFrame(self.window, text=text, name="no Content"))
+            return True
+        return False
 
     def setAllButtonSizeRelativeToScreen(self, relativeSize: float) -> None:
         widthSize = int(self.window.getWidth() * relativeSize)
