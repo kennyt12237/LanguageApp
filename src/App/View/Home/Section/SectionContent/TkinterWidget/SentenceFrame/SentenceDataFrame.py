@@ -3,7 +3,7 @@ from tkinter import CENTER, LEFT, S, N, E, W, BOTTOM
 from tkinter.font import Font
 from .Tooltip import KLabel, WordTooltipGenerator, GrammarTooltipGenerator
 
-from .Styling import sentenceTextFont, sentenceMeaningFont, dictionaryWordTooltipDefault, grammarTooltipDefault
+from .Styling import sentenceTextFont, dictionaryWordTooltipDefault, grammarTooltipDefault, sentenceMeaningLabelDefault
 from .Utils import TkManager, getGrammarCharactersList, getGrammarDataFromCharacter, getDictionaryCharactersList, getDictionaryDataFromCharacter
 
 from ..AbstractFrame import GridFrame
@@ -21,7 +21,7 @@ class SentenceDataFrame(GridFrame):
         self.sentenceFrame = SentenceFrameWrapper(
             self, font=Font(font=sentenceTextFont),  dictionaryData=self.dictionaryData, grammarData=self.grammarData)
         self.meaningLabel = KLabel(
-            self, name=self.MEANING_LABEL, font=Font(font=sentenceMeaningFont))
+            self, name=self.MEANING_LABEL, **sentenceMeaningLabelDefault)
         self._gridPlacement()
 
     def changeLabelTexts(self, sentence: str = None, meaning: str = None, manager: TkManager = None) -> None:
