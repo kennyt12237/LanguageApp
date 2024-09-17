@@ -7,13 +7,15 @@ class WordType(Enum):
     ADJECTIVE = "adjective"
     VERB = "verb"
     ADVERB = "adverb"
+    PREPOSITION = "preposition"
 
 
 WordTypeMap = {
     'noun': WordType.NOUN,
     'adjective': WordType.ADJECTIVE,
     'verb': WordType.VERB,
-    'adverb': WordType.ADVERB
+    'adverb': WordType.ADVERB,
+    'preposition' : WordType.PREPOSITION
 }
 
 
